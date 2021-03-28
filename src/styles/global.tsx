@@ -11,7 +11,6 @@ export default createGlobalStyle`
     --border-main-color: #D5D5D5;
   
     /* 1rem = 10px*/
- 
   }
 
   * {
