@@ -1,12 +1,108 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  
+export const Container = styled.form`
+  width: 100%;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  header {
+    width: calc(100% - 120px);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 70px;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    .arrow-back {
+      margin-right: 5px;
+      fill: #0caacd;
+      width: 27px;
+      height: 27px;
+    }
+
+    span {
+      font-family: var(--roboto-font-family);
+      color: var(--blue);
+      font-size: 1.125rem;
+      font-weight: 400;
+    }
+  }
 `;
-export const Header = styled.header`
-  
-`;
-export const Main = styled.main`
-  
+export const Content = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 100px;
+
+  h1 {
+    font-family: 'Pinyon Script', cursive;
+    font-size: 96px;
+    font-weight: 400;
+    color: #0caacd;
+  }
+
+  .inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding-top: 3.75rem;
+    min-width: 500px;
+    row-gap: 24px;
+
+    .input-row {
+      display: flex;
+
+      width: 100%;
+      column-gap: 20px;
+      align-items: center;
+    }
+  }
 `;
 
+export const SubmitButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+
+  align-items: center;
+  width: calc(100% - 240px);
+  height: 100%;
+
+  .back-button {
+    width: 120px;
+    height: 45px;
+
+    background: #ebebeb;
+    border-radius: 12px;
+
+    border: none;
+    margin-right: 20px;
+
+    color: #6a6a6a;
+    font-weight: 700;
+    font-size: 0.875rem;
+    font-family: var(--roboto-font-family);
+  }
+
+  .button {
+    width: 167px;
+    height: 45px;
+    background: var(--blue);
+
+    border-radius: 0.75rem;
+    color: white;
+    border: none;
+    font-weight: 700;
+    font-size: 0.875rem;
+    font-family: var(--roboto-font-family);
+  }
+`;
