@@ -4,3 +4,6 @@ export enum PublicRoutes {
   REGISTER_BIRTH_DATE = '/user-birth-date',
   REGISTER_PASSWORD = '/user-password',
 }
+export enum AuthRoutes {
+  POSTS = '/posts',
+}
