@@ -3,6 +3,7 @@ import { Container, Content, SubmitButtonContainer } from './styles';
 import { ReactComponent as ArrowBack } from '../../assets/RegisterPage/arrow_back.svg';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
+import { ToastContainer, toast } from 'react-toastify';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
 import * as UserServices from '../../Services/UserServices/UserServices';
 import { PublicRoutes } from '../../Routes/RoutesEnum';
@@ -12,7 +13,6 @@ import { ThirdStep } from './ThirdStep/ThirdStep';
 import { updateUserValues } from '../../store/actions/UserRegisterActions';
 import { RootState } from '../../store/reducers';
 import { UserRegisterValues } from '../../interfaces/UserRegister';
-import { ToastContainer, toast } from 'react-toastify';
 export interface FormsFields {
   name?: string;
   email?: string;
@@ -72,8 +72,7 @@ export function UserRegister() {
     try {
       const result = await UserServices.createUser(userRegisterValues);
 
-      console.log('created', result);
-      /* history.push('/'); */
+      history.push('/login');
     } catch (error: any) {
       toast.error(
         error?.response.data.error === 'User with that email already exists'
