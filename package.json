@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "@types/draft-js": "^0.11.6",
     "@types/jest": "^26.0.15",
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
@@ -14,6 +15,9 @@
     "@types/styled-components": "^5.1.9",
     "axios": "^0.21.1",
     "cep-promise": "^4.1.0",
+    "date-fns": "^2.25.0",
+    "es6-shim": "^0.35.6",
+    "prismic-dom": "^2.2.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.10.1",
@@ -53,6 +57,7 @@
     ]
   },
   "devDependencies": {
+    "@types/prismic-dom": "^2.1.1",
     "redux-devtools-extension": "^2.13.9"
   }
 }
