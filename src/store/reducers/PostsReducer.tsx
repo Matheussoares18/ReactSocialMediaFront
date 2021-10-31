@@ -19,6 +19,38 @@ export default function postsReducer(
         ...state,
         posts: [action.post, ...state.posts],
       };
+    case 'DELETE_POST_LIKE':
+      return {
+        ...state,
+        posts: [
+          ...state.posts.map((post) => {
+            if (post.id === action.postId) {
+              return {
+                ...post,
+                post_likes: post.post_likes.filter(
+                  (like) => like.id !== action.postLikeId
+                ),
+              };
+            }
+            return post;
+          }),
+        ],
+      };
+    case 'INSERT_POST_LIKE':
+      return {
+        ...state,
+        posts: [
+          ...state.posts.map((post) => {
+            if (post.id === action.postId) {
+              return {
+                ...post,
+                post_likes: [...post.post_likes, action.postLike],
+              };
+            }
+            return post;
+          }),
+        ],
+      };
 
     default:
       return state;

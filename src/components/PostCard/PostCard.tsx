@@ -3,7 +3,7 @@ import { Container } from './styles';
 import { ReactComponent as More } from '../../assets/Post/more.svg';
 import { ReactComponent as Share } from '../../assets/Post/share.svg';
 import { ReactComponent as Send } from '../../assets/Post/send.svg';
-import { ReactComponent as Favorite } from '../../assets/Post/favorite.svg';
+import { ReactComponent as FavoriteFilled } from '../../assets/Post/favoriteFilled.svg';
 import { ReactComponent as Arrow } from '../../assets/Post/arrow.svg';
 
 import { MakeAComment } from '../MakeAComment/MakeAComment';
@@ -13,13 +13,32 @@ import brazil from 'date-fns/locale/pt-BR';
 import { formatDistance } from 'date-fns';
 import { useState } from 'react';
 import { Post } from '../../interfaces/Posts';
+import { AuthUser } from '../../interfaces/AuthUser';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store/reducers';
+import * as PostServices from '../../Services/PostServices/PostServices';
+import {
+  deletePostLike,
+  insertPostLike,
+} from '../../store/actions/PostsActions';
 
 interface PostCardProps {
   post: Post;
 }
 
 export function PostCard({ post }: PostCardProps) {
+  const authUser: AuthUser = useSelector(
+    (state: RootState) => state.authUser.authUser
+  );
   const [selectedImage, setSelectedImage] = useState(0);
+  const [liked, setLiked] = useState(
+    post.post_likes.find(
+      (like) => like.post_id === post.id && like.user_id === authUser.id
+    )
+      ? 'liked'
+      : ''
+  );
+  const dispatch = useDispatch();
 
   function handleNextImage() {
     if (selectedImage < post.post_images.length) {
@@ -36,7 +55,59 @@ export function PostCard({ post }: PostCardProps) {
       new Date(a.created_at!).getTime() + new Date(b.created_at!).getTime()
     );
   });
-  const postLikesAmount = post.post_likes.length - 1;
+
+  function verifyLikes() {
+    if (post.post_likes.length === 1) {
+      return (
+        <>
+          <UserPicture source={post.post_likes[0].user.image} />
+          <span>
+            Curtido por{' '}
+            <label className="user-name">
+              {post.post_likes[0]?.user?.name}
+            </label>{' '}
+          </span>
+        </>
+      );
+    } else if (post.post_likes.length === 0) {
+      return <span>Nenhuma curtida</span>;
+    }
+    const likesAmount = post.post_likes.length - 1;
+    return (
+      <>
+        <UserPicture source={post.post_likes[0].user.image} />
+        <span>
+          Curtido por
+          <label className="user-name">{post.post_likes[0]?.user?.name}</label>e
+          mais {likesAmount}
+        </span>
+      </>
+    );
+  }
+  async function handleLikePost() {
+    const likeExists = post.post_likes.find(
+      (like) => like.post_id === post.id && like.user_id === authUser.id
+    );
+
+    if (likeExists) {
+      try {
+        await PostServices.deletePostLike(post.id);
+
+        dispatch(deletePostLike(likeExists.id, post.id));
+        setLiked('');
+      } catch (error) {
+        console.log('Failed');
+      }
+      return;
+    }
+    try {
+      const result = await PostServices.createPostLike(post.id);
+      setLiked('favorite-filled-animation');
+      dispatch(insertPostLike(result.data, post.id));
+    } catch (error) {
+      console.log('Failed');
+    }
+  }
 
   return (
     <>
@@ -80,20 +151,15 @@ export function PostCard({ post }: PostCardProps) {
           </div>
         )}
         <div className="likes-and-actions">
-          <div className="likes">
-            <UserPicture source={post.user?.image} />
-            <span>
-              Curtido por{' '}
-              <label className="user-name">
-                {post.post_likes[0]?.user?.name}
-              </label>{' '}
-              e mais {postLikesAmount}
-            </span>
-          </div>
+          <div className="likes">{verifyLikes()}</div>
           <div className="actions">
             <Share className="icon" />
-            <Send className="icon" />
-            <Favorite className="icon" />
+            <Send className="icon" style={{ marginRight: '-10px' }} />
+
+            <FavoriteFilled
+              className={`icon ${liked}`}
+              onClick={() => handleLikePost()}
+            />
           </div>
         </div>
         <div className="post-content">

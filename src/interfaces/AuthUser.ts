@@ -17,7 +17,7 @@ export interface InsertUser {
   user: AuthUser;
 }
 export interface AuthUserState {
-  authUser?: AuthUser;
+  authUser: AuthUser;
 }
 
 export type AuthUserActionTypes = InsertUser;

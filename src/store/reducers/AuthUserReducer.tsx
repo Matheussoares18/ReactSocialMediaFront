@@ -1,7 +1,11 @@
-import { AuthUserActionTypes, AuthUserState } from '../../interfaces/AuthUser';
+import {
+  AuthUser,
+  AuthUserActionTypes,
+  AuthUserState,
+} from '../../interfaces/AuthUser';
 
 const INITIAL_STATE: AuthUserState = {
-  authUser: undefined,
+  authUser: {} as AuthUser,
 };
 
 export default function authUserReducer(

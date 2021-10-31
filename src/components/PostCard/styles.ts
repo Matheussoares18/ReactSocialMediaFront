@@ -138,7 +138,7 @@ export const Container = styled.div`
       align-items: center;
       justify-content: flex-end;
 
-      /* column-gap: 2.75rem; */
+      column-gap: 2.75rem;
 
       .icon {
         fill: #0caacd;
@@ -148,12 +148,32 @@ export const Container = styled.div`
         &:hover {
           cursor: pointer;
         }
-        border-left: 0.063rem solid #e1e2e2;
-        padding-left: 1.25rem;
-        margin-left: 1.25rem;
+        /* border-left: 0.063rem solid #e1e2e2; */
+        /*   padding-left: 1.25rem;
+        margin-left: 1.25rem; */
 
         &:first-child {
           border: none;
+        }
+      }
+      .liked {
+        fill: rgba(255, 0, 0, 1);
+      }
+
+      .favorite-filled-animation {
+        display: flex;
+        animation: like 1s normal forwards;
+        @keyframes like {
+          25% {
+            transform: rotate(120deg);
+          }
+          50% {
+            fill: rgba(255, 0, 0, 0.5);
+          }
+          100% {
+            transform: rotate(-360deg);
+            fill: rgba(255, 0, 0, 1);
+          }
         }
       }
     }
