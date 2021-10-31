@@ -1,0 +1,34 @@
+import { AxiosResponse } from 'axios';
+import { Post } from '../../interfaces/Posts';
+
+export interface GetAllPostsResponse {
+  id: string;
+  content: string;
+  image: string;
+  created_at: string;
+  updated_at: string;
+  user_id: string;
+  post_images: Array<{
+    image: string;
+    created_at?: string;
+  }>;
+  post_likes: Array<{
+    id: string;
+    post_id: string;
+    user_id: string;
+  }>;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    birth_date: string;
+    gender: string;
+    password: string;
+    image: string;
+  };
+}
+
+export type CreatePostRequest = (
+  post: Pick<Post, 'post_images' | 'content'>
+) => Promise<AxiosResponse<{ post: Post }>>;
+export type GetAllPostRequest = () => Promise<AxiosResponse<Post[]>>;
