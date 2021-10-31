@@ -9,7 +9,7 @@ export const Container = styled.main`
   height: 100%;
 `;
 
-export const Content = styled.div`
+export const Content = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;
