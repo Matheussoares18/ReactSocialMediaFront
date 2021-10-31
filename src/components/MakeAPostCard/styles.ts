@@ -7,11 +7,12 @@ export const Container = styled.div`
 
   width: 85%;
   max-width: 43.75rem;
-  min-height: 8.2rem;
+  min-height: 8rem;
   margin-top: 2.125rem;
   margin-bottom: 1.625rem;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
@@ -82,6 +83,24 @@ export const Container = styled.div`
           filter: brightness(0.8);
         }
       }
+    }
+  }
+  .preview-image-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    width: calc(100% - 2rem);
+
+    padding-top: 0.938rem;
+    padding-bottom: 0.938rem;
+    column-gap: 10px;
+    .preview-image {
+      width: 50px;
+      border-radius: 12px;
+      height: 50px;
+      object-fit: cover;
+      object-position: center;
     }
   }
 `;
