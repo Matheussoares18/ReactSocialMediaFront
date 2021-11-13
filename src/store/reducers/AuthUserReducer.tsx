@@ -5,7 +5,7 @@ import {
 } from '../../interfaces/AuthUser';
 
 const INITIAL_STATE: AuthUserState = {
-  authUser: {} as AuthUser,
+  authUser: undefined,
 };
 
 export default function authUserReducer(
@@ -17,6 +17,11 @@ export default function authUserReducer(
       return {
         ...state,
         authUser: { ...action.user },
+      };
+    case 'LOGOUT':
+      return {
+        ...state,
+        authUser: undefined,
       };
 
     default:

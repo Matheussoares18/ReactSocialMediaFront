@@ -51,6 +51,21 @@ export default function postsReducer(
           }),
         ],
       };
+    case 'INSERT_POST_COMMENT':
+      return {
+        ...state,
+        posts: [
+          ...state.posts.map((post) => {
+            if (post.id === action.postId) {
+              return {
+                ...post,
+                post_comments: [...post.post_comments, action.postComment],
+              };
+            }
+            return post;
+          }),
+        ],
+      };
 
     default:
       return state;
