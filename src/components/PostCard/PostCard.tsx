@@ -182,6 +182,7 @@ export function PostCard({ post }: PostCardProps) {
           {post.post_comments.map((item) => (
             <Comment comment={item} />
           ))}
+          <button className="see-all-coments">Ver todos os comentários</button>
         </CommentsList>
       </Container>
     </>

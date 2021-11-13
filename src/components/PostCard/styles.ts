@@ -225,4 +225,11 @@ export const CommentsList = styled.div`
   row-gap: 15px;
   width: calc(100% - 2.25rem);
   padding-top: 1.5rem;
+
+  .see-all-coments {
+    border: none;
+    background: transparent;
+    color: #0caacd;
+    text-decoration: underline;
+  }
 `;
