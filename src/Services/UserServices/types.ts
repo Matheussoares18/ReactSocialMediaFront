@@ -17,3 +17,5 @@ interface User {
 export type CreateUserRequest = (
   user: UserRegisterValues
 ) => Promise<AxiosResponse<User>>;
+
+export type UpdateUserImageRequest = (image: string) => Promise<AxiosResponse>;

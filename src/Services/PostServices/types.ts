@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { Post, PostLikes } from '../../interfaces/Posts';
+import { Post, PostComment, PostLikes } from '../../interfaces/Posts';
 
 export interface GetAllPostsResponse {
   id: string;
@@ -39,3 +39,12 @@ export type CreatePostLike = (
 ) => Promise<AxiosResponse<PostLikes>>;
 
 export type DeletePostLike = (postId: string) => Promise<AxiosResponse>;
+
+export type GetAllPostLikesRequest = (
+  postId: string
+) => Promise<AxiosResponse<PostLikes[]>>;
+
+export type CreatePostComent = (
+  postId: string,
+  comment: string
+) => Promise<AxiosResponse<PostComment>>;
