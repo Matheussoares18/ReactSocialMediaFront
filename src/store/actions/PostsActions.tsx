@@ -1,9 +1,11 @@
 import {
   DeletePostLike,
   InsertPost,
+  InsertPostComment,
   InsertPostLike,
   InsertPosts,
   Post,
+  PostComment,
   PostLikes,
 } from '../../interfaces/Posts';
 
@@ -37,6 +39,16 @@ export function deletePostLike(
   return {
     type: 'DELETE_POST_LIKE',
     postLikeId,
+    postId,
+  };
+}
+export function insertPostComment(
+  postComment: PostComment,
+  postId: string
+): InsertPostComment {
+  return {
+    type: 'INSERT_POST_COMMENT',
+    postComment,
     postId,
   };
 }
