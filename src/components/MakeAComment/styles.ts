@@ -39,7 +39,7 @@ export const Container = styled.div`
     }
   }
   button {
-    width: 6.5rem;
+    width: 11rem;
     height: 2.063rem;
 
     border: none;

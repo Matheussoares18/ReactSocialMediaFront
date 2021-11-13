@@ -1,5 +1,5 @@
 import { UserPicture } from '../DefaultComponents/UserPicture/UserPicture';
-import { Container } from './styles';
+import { CommentsList, Container } from './styles';
 import { ReactComponent as More } from '../../assets/Post/more.svg';
 import { ReactComponent as Share } from '../../assets/Post/share.svg';
 import { ReactComponent as Send } from '../../assets/Post/send.svg';
@@ -21,23 +21,20 @@ import {
   deletePostLike,
   insertPostLike,
 } from '../../store/actions/PostsActions';
+import { LikesList } from './LikesList/LikesList';
 
 interface PostCardProps {
   post: Post;
 }
 
 export function PostCard({ post }: PostCardProps) {
-  const authUser: AuthUser = useSelector(
+  const authUser: AuthUser | undefined = useSelector(
     (state: RootState) => state.authUser.authUser
   );
   const [selectedImage, setSelectedImage] = useState(0);
-  const [liked, setLiked] = useState(
-    post.post_likes.find(
-      (like) => like.post_id === post.id && like.user_id === authUser.id
-    )
-      ? 'liked'
-      : ''
-  );
+  console.log(post.post_likes);
+  const [liked, setLiked] = useState('');
+  const [likesModalIsOpen, setLikesModalState] = useState(false);
   const dispatch = useDispatch();
 
   function handleNextImage() {
@@ -55,17 +52,17 @@ export function PostCard({ post }: PostCardProps) {
       new Date(a.created_at!).getTime() + new Date(b.created_at!).getTime()
     );
   });
-
+  console.log(post.post_likes);
   function verifyLikes() {
     if (post.post_likes.length === 1) {
       return (
         <>
           <UserPicture source={post.post_likes[0].user.image} />
           <span>
-            Curtido por{' '}
+            Curtido por
             <label className="user-name">
               {post.post_likes[0]?.user?.name}
-            </label>{' '}
+            </label>
           </span>
         </>
       );
@@ -86,7 +83,7 @@ export function PostCard({ post }: PostCardProps) {
   }
   async function handleLikePost() {
     const likeExists = post.post_likes.find(
-      (like) => like.post_id === post.id && like.user_id === authUser.id
+      (like) => like.post_id === post.id && like.user_id === authUser!.id
     );
 
     if (likeExists) {
@@ -111,6 +108,11 @@ export function PostCard({ post }: PostCardProps) {
 
   return (
     <>
+      <LikesList
+        handleCloseModal={() => setLikesModalState(false)}
+        modalIsOpen={likesModalIsOpen}
+        likesList={post.post_likes}
+      />
       <Container>
         <div className="top">
           <div className="user-and-post-infos">
@@ -151,13 +153,22 @@ export function PostCard({ post }: PostCardProps) {
           </div>
         )}
         <div className="likes-and-actions">
-          <div className="likes">{verifyLikes()}</div>
+          <div className="likes" onClick={() => setLikesModalState(true)}>
+            {verifyLikes()}
+          </div>
           <div className="actions">
             <Share className="icon" />
             <Send className="icon" style={{ marginRight: '-10px' }} />
 
             <FavoriteFilled
-              className={`icon ${liked}`}
+              className={`icon ${
+                post.post_likes.find(
+                  (like) =>
+                    like.post_id === post.id && like.user_id === authUser!.id
+                )
+                  ? 'favorite-filled-animation'
+                  : ''
+              }`}
               onClick={() => handleLikePost()}
             />
           </div>
@@ -166,8 +177,12 @@ export function PostCard({ post }: PostCardProps) {
           <h3>{post.user.name}</h3>
           <p>{post.content}</p>
         </div>
-        <MakeAComment />
-        <Comment />
+        <MakeAComment postId={post.id} />
+        <CommentsList>
+          {post.post_comments.map((item) => (
+            <Comment comment={item} />
+          ))}
+        </CommentsList>
       </Container>
     </>
   );

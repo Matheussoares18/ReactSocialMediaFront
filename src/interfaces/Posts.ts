@@ -10,6 +10,21 @@ export interface Post {
     created_at?: string;
   }>;
   post_likes: PostLikes[];
+  post_comments: PostComment[];
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    birth_date: string;
+    gender: string;
+    password: string;
+    image: string;
+  };
+}
+export interface PostComment {
+  comment: string;
+  post_id: string;
+  user_id: string;
   user: {
     id: string;
     name: string;
@@ -36,6 +51,8 @@ export const INSERT_POST = 'INSERT_POST';
 export const INSERT_POST_LIKE = 'INSERT_POST_LIKE';
 export const DELETE_POST_LIKE = 'DELETE_POST_LIKE';
 
+export const INSERT_POST_COMMENT = 'INSERT_POST_COMMENT';
+
 export interface InsertPosts {
   type: typeof INSERT_POSTS;
   posts: Post[];
@@ -54,6 +71,11 @@ export interface DeletePostLike {
   postLikeId: string;
   postId: string;
 }
+export interface InsertPostComment {
+  type: typeof INSERT_POST_COMMENT;
+  postComment: PostComment;
+  postId: string;
+}
 export interface PostsState {
   posts: Post[];
 }
@@ -62,4 +84,5 @@ export type PostsActionTypes =
   | InsertPosts
   | InsertPost
   | InsertPostLike
-  | DeletePostLike;
+  | DeletePostLike
+  | InsertPostComment;

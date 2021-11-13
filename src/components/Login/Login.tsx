@@ -26,16 +26,15 @@ export function Login() {
     reValidateMode: 'onChange',
   });
   const dispatch = useDispatch();
-  const history = useHistory();
 
   async function onSubmit(data: LoginFormFields) {
     const { email, password } = data;
     try {
       const result = await AuthService.authenticate({ email, password });
-      console.log(result.data);
+
       dispatch(insertUser({ ...result.data }));
       localStorage.setItem('token', result.data.token);
-      history.push(AuthRoutes.POSTS);
+      window.location.href = AuthRoutes.POSTS;
     } catch (error: any) {
       toast.error(
         error?.response.data.message === 'Invalid credentials'

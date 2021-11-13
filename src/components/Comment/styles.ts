@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   width: calc(100% - 2.25rem);
-  padding-top: 0.5rem;
 
   display: flex;
   justify-content: flex-start;
@@ -51,7 +50,7 @@ export const Container = styled.div`
 
         font-weight: 400;
         font-size: 0.813rem;
-        padding-right: 0;
+
         color: #7a7a7a;
       }
     }

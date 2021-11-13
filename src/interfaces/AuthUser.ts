@@ -11,13 +11,17 @@ export interface AuthUser {
 }
 
 export const INSERT_USER = 'INSERT_USER';
+export const LOGOUT = 'LOGOUT';
 
 export interface InsertUser {
   type: typeof INSERT_USER;
   user: AuthUser;
 }
+export interface Logout {
+  type: typeof LOGOUT;
+}
 export interface AuthUserState {
-  authUser: AuthUser;
+  authUser?: AuthUser;
 }
 
-export type AuthUserActionTypes = InsertUser;
+export type AuthUserActionTypes = InsertUser | Logout;

@@ -70,7 +70,7 @@ export function UserRegister() {
   }
   async function handleCreateUser() {
     try {
-      const result = await UserServices.createUser(userRegisterValues);
+      await UserServices.createUser(userRegisterValues);
 
       history.push('/login');
     } catch (error: any) {

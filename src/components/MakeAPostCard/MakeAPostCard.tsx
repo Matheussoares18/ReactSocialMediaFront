@@ -5,14 +5,21 @@ import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import * as PostsServices from '../../Services/PostServices/PostServices';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { insertPost } from '../../store/actions/PostsActions';
+import { AuthUser } from '../../interfaces/AuthUser';
+import { RootState } from '../../store/reducers';
+
 export function MakeAPostCard() {
+  const authUser: AuthUser | undefined = useSelector(
+    (state: RootState) => state.authUser.authUser
+  );
   const [images, setImages] = useState<string[]>([]);
   const [content, setContent] = useState('');
   const [imagesPreview, setImagesPreview] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+
   function getBase64(file: File) {
     let url = '';
 
@@ -96,7 +103,7 @@ export function MakeAPostCard() {
       <Container>
         <div className="content">
           <div className="top">
-            <UserPicture />
+            <UserPicture source={authUser?.image} />
 
             <textarea
               placeholder="O que está acontecendo?"

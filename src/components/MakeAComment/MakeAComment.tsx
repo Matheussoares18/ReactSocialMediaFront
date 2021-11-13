@@ -1,15 +1,57 @@
 import { UserPicture } from '../DefaultComponents/UserPicture/UserPicture';
 import { Container } from './styles';
 
-export function MakeAComment() {
+import * as PostServices from '../../Services/PostServices/PostServices';
+import { useState } from 'react';
+import { AuthUser } from '../../interfaces/AuthUser';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store/reducers';
+import { insertPostComment } from '../../store/actions/PostsActions';
+
+interface MakeACommentProps {
+  postId: string;
+}
+
+export function MakeAComment({ postId }: MakeACommentProps) {
+  const authUser: AuthUser | undefined = useSelector(
+    (state: RootState) => state.authUser.authUser
+  );
+  const [comment, setComment] = useState<string>('');
+  const dispatch = useDispatch();
+
+  async function handleCreateComment() {
+    try {
+      const result = await PostServices.createPostComment(postId, comment);
+
+      dispatch(insertPostComment(result.data, postId));
+      setComment('');
+    } catch (error) {
+      console.log('Failed');
+    }
+  }
   return (
     <>
-      <Container>
+      <Container
+        onKeyPress={(e) => {
+          if (e.key === 'Enter') {
+            handleCreateComment();
+          }
+        }}
+      >
         <div className="user-and-input">
-          <UserPicture />
-          <input placeholder="Escreva um comentário..."></input>
+          <UserPicture source={authUser?.image} />
+          <input
+            value={comment}
+            placeholder="Escreva um comentário..."
+            onChange={(e) => setComment(e.target.value)}
+          />
         </div>
-        <button>Comentar</button>
+        <button
+          disabled={comment.length === 0 || comment.length > 300}
+          onClick={() => handleCreateComment()}
+        >
+          {`(${comment.length}/300)`}Comentar
+        </button>
       </Container>
     </>
   );

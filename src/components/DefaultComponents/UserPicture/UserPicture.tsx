@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import userPhoto from '../../../assets/userPhoto.jpeg';
+import userPhoto from '../../../assets/userPhoto.png';
 
 interface UserPictureProps {
   source?: string;
@@ -16,7 +16,7 @@ export function UserPicture({
   const [imageSource, setImageSource] = useState<string>('');
 
   useEffect(() => {
-    if (source) {
+    if (source && source.length > 0) {
       setImageSource(source);
     } else {
       setImageSource(userPhoto);

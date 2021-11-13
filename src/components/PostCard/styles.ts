@@ -6,7 +6,7 @@ export const Container = styled.div`
   box-shadow: 0px 4px 4px rgba(90, 87, 87, 0.25);
   border-radius: 4px;
 
-  max-height: 66.9rem;
+  /*  max-height: 66.9rem; */
   width: 85%;
   max-width: 43.75rem;
   margin-bottom: 35px;
@@ -81,6 +81,10 @@ export const Container = styled.div`
       justify-content: center;
       align-items: center;
 
+      &:hover {
+        cursor: pointer;
+      }
+
       .arrow-icon {
         fill: #ffffff;
       }
@@ -112,6 +116,10 @@ export const Container = styled.div`
     .likes {
       display: flex;
       align-items: center;
+
+      &:hover {
+        cursor: pointer;
+      }
       img {
         width: 1.5rem;
         height: 1.438rem;
@@ -128,6 +136,8 @@ export const Container = styled.div`
         font-family: var(--roboto-font-family);
         color: #000000;
         font-weight: bold;
+        margin-left: 5px;
+        margin-right: 5px;
         &:hover {
           cursor: pointer;
         }
@@ -205,4 +215,14 @@ export const Container = styled.div`
       line-height: 0.938rem;
     }
   }
+`;
+export const CommentsList = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  row-gap: 15px;
+  width: calc(100% - 2.25rem);
+  padding-top: 1.5rem;
 `;

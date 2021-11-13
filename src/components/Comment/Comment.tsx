@@ -1,19 +1,29 @@
+import { useSelector } from 'react-redux';
+import { AuthUser } from '../../interfaces/AuthUser';
+import { PostComment } from '../../interfaces/Posts';
+import { RootState } from '../../store/reducers';
 import { UserPicture } from '../DefaultComponents/UserPicture/UserPicture';
 import { Container } from './styles';
 
-export function Comment() {
+interface CommentProps {
+  comment: PostComment;
+}
+
+export function Comment({ comment }: CommentProps) {
+  const authUser: AuthUser | undefined = useSelector(
+    (state: RootState) => state.authUser.authUser
+  );
   return (
     <Container>
-      <UserPicture />
+      <UserPicture source={authUser?.image} />
       <div className="name-and-comment">
-        <h3>Matheus Soares</h3>
+        <h3>
+          {comment.user?.name.length > 10
+            ? `${comment.user?.name.substring(0, 10)}`
+            : comment.user?.name}
+        </h3>
         <div className="comment-container">
-          <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen{' '}
-          </p>
+          <p>{comment.comment}</p>
         </div>
       </div>
     </Container>
