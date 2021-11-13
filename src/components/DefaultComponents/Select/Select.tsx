@@ -67,7 +67,7 @@ const Select: React.ForwardRefRenderFunction<HTMLInputElement, SelectProps> = (
           <ItemsList>
             <div className="content">
               {options?.map((item) => (
-                <Item onClick={() => setSelectedItem(item)}>
+                <Item onClick={() => setSelectedItem(item)} key={item.label}>
                   <span>{item.label}</span>
                 </Item>
               ))}

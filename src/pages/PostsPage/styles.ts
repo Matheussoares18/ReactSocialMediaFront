@@ -18,3 +18,12 @@ export const PostsList = styled.div`
   align-items: center;
   flex-wrap: wrap;
 `;
+export const SpinnerContainer = styled.div`
+  width: 100%;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+`;

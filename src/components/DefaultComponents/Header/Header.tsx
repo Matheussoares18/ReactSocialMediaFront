@@ -104,7 +104,7 @@ export function Header() {
             >
               <ExpandIcon className="icon" />
             </div>
-            ,0
+
             {/* </Link> */}
           </div>
         </Links>

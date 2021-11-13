@@ -32,7 +32,7 @@ export function PostCard({ post }: PostCardProps) {
     (state: RootState) => state.authUser.authUser
   );
   const [selectedImage, setSelectedImage] = useState(0);
-  console.log(post.post_likes);
+
   const [liked, setLiked] = useState('');
   const [likesModalIsOpen, setLikesModalState] = useState(false);
   const dispatch = useDispatch();
@@ -52,7 +52,7 @@ export function PostCard({ post }: PostCardProps) {
       new Date(a.created_at!).getTime() + new Date(b.created_at!).getTime()
     );
   });
-  console.log(post.post_likes);
+
   function verifyLikes() {
     if (post.post_likes.length === 1) {
       return (

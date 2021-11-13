@@ -18,8 +18,8 @@ export const createPost: CreatePostRequest = async (
   });
 };
 
-export const getAllPosts: GetAllPostRequest = async () => {
-  return api.get(ApiRoutes.POSTS);
+export const getAllPosts: GetAllPostRequest = async (skip: number) => {
+  return api.get(`${ApiRoutes.POSTS}/${skip}`);
 };
 
 export const createPostLike: CreatePostLike = async (postId: string) => {

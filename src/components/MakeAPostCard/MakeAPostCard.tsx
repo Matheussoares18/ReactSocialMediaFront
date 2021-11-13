@@ -135,7 +135,7 @@ export function MakeAPostCard() {
         {images.length > 0 && (
           <div className="preview-image-container">
             {images.map((image) => (
-              <img className="preview-image" src={image} alt="" />
+              <img className="preview-image" src={image} alt="" key={image} />
             ))}
           </div>
         )}

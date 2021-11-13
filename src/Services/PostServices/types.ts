@@ -32,7 +32,9 @@ export type CreatePostRequest = (
   post: Pick<Post, 'post_images' | 'content'>
 ) => Promise<AxiosResponse<{ post: Post }>>;
 
-export type GetAllPostRequest = () => Promise<AxiosResponse<Post[]>>;
+export type GetAllPostRequest = (
+  skip: number
+) => Promise<AxiosResponse<{ posts: Post[]; total: number }>>;
 
 export type CreatePostLike = (
   postId: string

@@ -54,7 +54,7 @@ export function LikesList({
         <ItemsList>
           {likesList.length > 0 ? (
             likesList.map((like) => (
-              <div className="item">
+              <div className="item" key={like.id}>
                 <div className="pic-and-name">
                   <UserPicture source={like.user.image} />
                   <span className="name">{like.user?.name}</span>
