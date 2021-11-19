@@ -1,3 +1,4 @@
+import { PostComment } from '../../interfaces/PostComment';
 import {
   DeletePostLike,
   InsertPost,
@@ -5,7 +6,6 @@ import {
   InsertPostLike,
   InsertPosts,
   Post,
-  PostComment,
   PostLikes,
 } from '../../interfaces/Posts';
 

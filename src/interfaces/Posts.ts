@@ -1,3 +1,5 @@
+import { PostComment } from './PostComment';
+
 export interface Post {
   id: string;
   content: string;
@@ -21,20 +23,7 @@ export interface Post {
     image: string;
   };
 }
-export interface PostComment {
-  comment: string;
-  post_id: string;
-  user_id: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    birth_date: string;
-    gender: string;
-    password: string;
-    image: string;
-  };
-}
+
 export interface PostLikes {
   id: string;
   post_id: string;

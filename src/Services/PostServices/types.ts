@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
-import { Post, PostComment, PostLikes } from '../../interfaces/Posts';
+import { PostComment } from '../../interfaces/PostComment';
+import { Post, PostLikes } from '../../interfaces/Posts';
 
 export interface GetAllPostsResponse {
   id: string;

@@ -22,6 +22,7 @@ import {
   insertPostLike,
 } from '../../store/actions/PostsActions';
 import { LikesList } from './LikesList/LikesList';
+import { AllCommentsModal } from '../AllCommentsModal/AllCommentsModal';
 
 interface PostCardProps {
   post: Post;
@@ -35,6 +36,8 @@ export function PostCard({ post }: PostCardProps) {
 
   const [liked, setLiked] = useState('');
   const [likesModalIsOpen, setLikesModalState] = useState(false);
+  const [allCommentsModalOpen, setAllCommentsModalOpen] =
+    useState<boolean>(false);
   const dispatch = useDispatch();
 
   function handleNextImage() {
@@ -81,7 +84,7 @@ export function PostCard({ post }: PostCardProps) {
       </>
     );
   }
-  async function handleLikePost() {
+  async function handleLikePost(): Promise<void> {
     const likeExists = post.post_likes.find(
       (like) => like.post_id === post.id && like.user_id === authUser!.id
     );
@@ -105,6 +108,12 @@ export function PostCard({ post }: PostCardProps) {
       console.log('Failed');
     }
   }
+  function handleOpenAllCommentsModal(): void {
+    setAllCommentsModalOpen(true);
+  }
+  function handleCloseAllCommentsModal(): void {
+    setAllCommentsModalOpen(false);
+  }
 
   return (
     <>
@@ -112,6 +121,11 @@ export function PostCard({ post }: PostCardProps) {
         handleCloseModal={() => setLikesModalState(false)}
         modalIsOpen={likesModalIsOpen}
         likesList={post.post_likes}
+      />
+      <AllCommentsModal
+        postId={post.id}
+        isOpen={allCommentsModalOpen}
+        onRequestClose={handleCloseAllCommentsModal}
       />
       <Container>
         <div className="top">
@@ -179,10 +193,20 @@ export function PostCard({ post }: PostCardProps) {
         </div>
         <MakeAComment postId={post.id} />
         <CommentsList>
-          {post.post_comments.map((item) => (
-            <Comment comment={item} />
-          ))}
-          <button className="see-all-coments">Ver todos os comentários</button>
+          {post.post_comments
+            .slice(post.post_comments.length - 3, post.post_comments.length)
+            .map((item) => (
+              <Comment comment={item} />
+            ))}
+
+          {post.post_comments.length > 3 && (
+            <button
+              className="see-all-coments"
+              onClick={handleOpenAllCommentsModal}
+            >
+              Ver todos os comentários
+            </button>
+          )}
         </CommentsList>
       </Container>
     </>

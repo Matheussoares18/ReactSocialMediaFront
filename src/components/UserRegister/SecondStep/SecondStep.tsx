@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { DeepMap, FieldError, UseFormRegister } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { UserRegisterValues } from '../../../interfaces/UserRegister';

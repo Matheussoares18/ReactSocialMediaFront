@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import { AuthUser } from '../../interfaces/AuthUser';
-import { PostComment } from '../../interfaces/Posts';
+import { PostComment } from '../../interfaces/PostComment';
+
 import { RootState } from '../../store/reducers';
 import { UserPicture } from '../DefaultComponents/UserPicture/UserPicture';
 import { Container } from './styles';
