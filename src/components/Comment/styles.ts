@@ -54,5 +54,25 @@ export const Container = styled.div`
         color: #7a7a7a;
       }
     }
+    .comment-actions {
+      display: flex;
+      column-gap: 10px;
+
+      .edit-button,
+      .delete-button {
+        border: none;
+        background: transparent;
+        color: #b4b4b5;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      .edit-button {
+      }
+      .delete-button {
+      }
+    }
   }
 `;

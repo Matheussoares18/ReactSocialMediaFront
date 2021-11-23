@@ -42,6 +42,8 @@ export const DELETE_POST_LIKE = 'DELETE_POST_LIKE';
 
 export const INSERT_POST_COMMENT = 'INSERT_POST_COMMENT';
 
+export const DELETE_POST_COMMENT = 'DELETE_POST_COMMENT';
+
 export interface InsertPosts {
   type: typeof INSERT_POSTS;
   posts: Post[];
@@ -65,6 +67,12 @@ export interface InsertPostComment {
   postComment: PostComment;
   postId: string;
 }
+
+export interface DeletePostComment {
+  type: typeof DELETE_POST_COMMENT;
+  postCommentId: string;
+  postId: string;
+}
 export interface PostsState {
   posts: Post[];
 }
@@ -74,4 +82,5 @@ export type PostsActionTypes =
   | InsertPost
   | InsertPostLike
   | DeletePostLike
-  | InsertPostComment;
+  | InsertPostComment
+  | DeletePostComment;

@@ -45,15 +45,16 @@ export function AllCommentsModal({
     const hasPostsYet = skip < totalComments;
 
     if (currentPosition >= postsListHeight! && hasPostsYet) {
-      console.log('chegou aq');
       setLoading(true);
       const updateSkipNumber = skip + 15;
 
-      PostCommentsServices.getAllPostComments(postId, skip).then((res) => {
-        setComments([...comments, ...res.data.postComments]);
-        setTotalComments(res.data.total);
-        setSkip(updateSkipNumber);
-      });
+      PostCommentsServices.getAllPostComments(postId, updateSkipNumber).then(
+        (res) => {
+          setComments([...comments, ...res.data.postComments]);
+          setTotalComments(res.data.total);
+          setSkip(updateSkipNumber);
+        }
+      );
       return;
     }
     setLoading(false);

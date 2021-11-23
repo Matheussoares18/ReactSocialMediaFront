@@ -1,5 +1,6 @@
 import { PostComment } from '../../interfaces/PostComment';
 import {
+  DeletePostComment,
   DeletePostLike,
   InsertPost,
   InsertPostComment,
@@ -50,5 +51,15 @@ export function insertPostComment(
     type: 'INSERT_POST_COMMENT',
     postComment,
     postId,
+  };
+}
+export function deletePostComment(
+  postId: string,
+  postCommentId: string
+): DeletePostComment {
+  return {
+    type: 'DELETE_POST_COMMENT',
+    postId,
+    postCommentId,
   };
 }
