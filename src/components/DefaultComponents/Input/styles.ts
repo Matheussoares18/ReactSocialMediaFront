@@ -17,7 +17,7 @@ export const InputContainer = styled.div<InputContainerProps>`
     font-family: var(--roboto-font-family);
     font-weight: 400;
     font-size: 0.875rem;
-    color: ${(prop) => (prop.hasError ? '#F02626' : '#929292')};
+    color: ${(prop) => (prop.hasError ? '#952c2c' : '#929292')};
     margin-bottom: 0.313rem;
   }
   .error-message-container {
@@ -27,7 +27,7 @@ export const InputContainer = styled.div<InputContainerProps>`
     span {
       position: absolute;
       font-family: var(--roboto-font-family);
-      color: #f02626;
+      color: #952c2c;
       font-size: 0.75rem;
     }
   }
@@ -37,18 +37,14 @@ interface CustomInputProps {
 }
 
 export const CustomInput = styled.input<CustomInputProps>`
-  /* display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start; */
-
   width: 100%;
   height: 2.5rem;
   border-radius: 0.375rem;
+  background: ${({ theme }) => theme.inputBackground};
 
-  border: solid 1px ${(prop) => (prop.hasError ? '#F02626' : '#CECECE')};
+  border: solid 1px ${(prop) => (prop.hasError ? '#952c2c' : prop.theme.lines)};
   padding-left: 5px;
-  color: #606060;
+  color: ${({ theme }) => theme.inputTextColor};
 
   font-family: var(--roboto-font-family);
   font-style: italic;

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  border: 1px solid #eadede;
+  border: 1px solid ${({ theme }) => theme.lines};
   box-shadow: 0px 4px 4px rgba(90, 87, 87, 0.25);
   border-radius: 4px;
 
@@ -26,7 +26,7 @@ export const Container = styled.div`
       align-items: center;
       padding-bottom: 0.5rem;
       margin-bottom: 0.5rem;
-      border-bottom: 1px solid #e1e2e2;
+      border-bottom: 1px solid ${({ theme }) => theme.lines};
 
       img {
         width: 2.25rem;
@@ -39,7 +39,8 @@ export const Container = styled.div`
         border: none;
         resize: none;
         padding-top: 0.5rem;
-
+        background: ${(prop) => prop.theme.inputBackground};
+        color: ${({ theme }) => theme.inputTextColor};
         font-family: var(--roboto-font-family);
         font-weight: 200;
         font-style: italic;

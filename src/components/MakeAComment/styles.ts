@@ -2,9 +2,9 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   width: calc(100% - 2.25rem);
-  border-top: 0.063rem solid #e1e2e2;
+  border-top: 0.063rem solid ${({ theme }) => theme.lines};
 
-  border-bottom: 0.063rem solid #e1e2e2;
+  border-bottom: 0.063rem solid ${({ theme }) => theme.lines};
   padding: 1.25rem 0;
 
   display: flex;
@@ -24,7 +24,8 @@ export const Container = styled.div`
     input {
       border: none;
       width: 100%;
-
+      background: ${({ theme }) => theme.inputBackground};
+      color: ${({ theme }) => theme.inputTextColor};
       &:focus {
         outline: none;
       }

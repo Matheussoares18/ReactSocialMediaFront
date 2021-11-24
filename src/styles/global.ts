@@ -8,6 +8,7 @@ export default createGlobalStyle`
   }
   :root{
     --blue: #0CAACD;
+    --orange:#ffa500;
   }
   html{
         @media(max-width:1080px){
@@ -21,10 +22,8 @@ export default createGlobalStyle`
     height: 100%;
     scroll-behavior: smooth;
     --roboto-font-family: 'Roboto', sans-serif;
-
-    
-
     font-family: var(--roboto-font-family);
+    background:${({ theme }) => theme.body};
   }
 
 
@@ -52,20 +51,16 @@ export default createGlobalStyle`
         bottom: 0;
         right: 0;
         left:0;
-
         display: flex;
         align-items: center;
         justify-content:center;
     }
     .react-modal-content{
         width: 100%;
-
         max-width: 576px;
-        background: #ffffff;
-
+        background: ${({ theme }) => theme.body};
         padding: 3rem;
         position: relative;
-
         border-radius:0.25rem ;
         
     }
@@ -77,6 +72,7 @@ export default createGlobalStyle`
         border: 0;
         background: transparent;
         transition: filter 0.2s;
+        fill: ${({ theme }) => theme.lines};
 
         &:hover{
             filter: brightness(0.8);

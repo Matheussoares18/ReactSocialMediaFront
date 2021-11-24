@@ -23,6 +23,14 @@ export default function authUserReducer(
         ...state,
         authUser: undefined,
       };
+    case 'CHANGE_THEME':
+      return {
+        ...state,
+        authUser: {
+          ...state?.authUser,
+          theme: action.theme,
+        },
+      };
 
     default:
       return state;

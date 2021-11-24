@@ -21,7 +21,8 @@ export const SearchContainer = styled.div`
   width: 13.75rem;
   height: 2.188rem;
 
-  background: #f0f2f5;
+  background: ${({ theme }) => theme.commentBox};
+  color: ${({ theme }) => theme.inputTextColor};
   border-radius: 23px;
 
   display: flex;
@@ -42,7 +43,7 @@ export const SearchContainer = styled.div`
     input {
       width: 100%;
       height: 74%;
-
+      color: ${({ theme }) => theme.inputTextColor};
       background: transparent;
       border: none;
       padding-left: 0.375rem;
@@ -115,6 +116,7 @@ export const Links = styled.div`
 
     .commom-icons {
       background: #0caacd;
+      border: none;
       border-radius: 23px;
       height: 2.188rem;
       width: 2.188rem;
@@ -127,4 +129,31 @@ export const Links = styled.div`
       }
     }
   }
+`;
+export const DropMenuContainer = styled.div`
+  position: absolute;
+  right: 30px;
+  top: 68px;
+`;
+
+export const DropMenu = styled.div`
+  background: ${({ theme }) => theme.body};
+  box-shadow: 0px 3px 4px 5px rgb(153 153 153 / 25%);
+  width: 13.5rem;
+  height: 18.75rem;
+
+  position: relative;
+  border-radius: 8px;
+
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+`;
+export const Dimmer = styled.div`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 1;
 `;

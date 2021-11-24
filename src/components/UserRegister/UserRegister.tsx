@@ -114,6 +114,7 @@ export function UserRegister() {
                 ? 'visible'
                 : 'hidden',
             }}
+            onClick={() => history.push(PublicRoutes.LOGIN)}
           >
             Voltar
           </span>

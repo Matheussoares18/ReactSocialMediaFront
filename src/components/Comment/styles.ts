@@ -26,7 +26,7 @@ export const Container = styled.div`
       font-family: var(--roboto-font-family);
       font-weight: bold;
       font-size: 0.813rem;
-      color: #000000;
+      color: ${({ theme }) => theme.primaryText};
     }
     .comment-container {
       width: 100%;
@@ -38,7 +38,8 @@ export const Container = styled.div`
       align-items: center;
       justify-content: flex-start;
 
-      background: #edebeb;
+      background: ${({ theme }) => theme.commentBox};
+
       border-radius: 0.375rem;
 
       p {
@@ -51,7 +52,7 @@ export const Container = styled.div`
         font-weight: 400;
         font-size: 0.813rem;
 
-        color: #7a7a7a;
+        color: ${({ theme }) => theme.labelText};
       }
     }
     .comment-actions {

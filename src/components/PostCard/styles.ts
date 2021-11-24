@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  border: 1px solid #eadede;
+  border: 1px solid ${({ theme }) => theme.lines};
 
   box-shadow: 0px 4px 4px rgba(90, 87, 87, 0.25);
   border-radius: 4px;
@@ -24,7 +24,7 @@ export const Container = styled.div`
     padding-top: 0.875rem;
     justify-content: space-between;
 
-    border-bottom: 0.063rem solid #e1e2e2;
+    border-bottom: 0.063rem solid ${({ theme }) => theme.lines};
     padding-bottom: 0.625rem;
 
     margin-bottom: 0.938rem;
@@ -40,9 +40,9 @@ export const Container = styled.div`
       }
       .name {
         font-family: var(--roboto-font-family);
-        color: #000000;
+        color: ${({ theme }) => theme.primaryText};
         font-size: 0.813rem;
-        border-right: 1px solid #e1e2e2;
+        border-right: 1px solid ${({ theme }) => theme.lines};
         padding-right: 15px;
         margin-right: 15px;
       }
@@ -111,7 +111,7 @@ export const Container = styled.div`
     justify-content: space-between;
     padding-bottom: 1.25rem;
     margin-bottom: 0.938rem;
-    border-bottom: 0.063rem solid #e1e2e2;
+    border-bottom: 0.063rem solid ${({ theme }) => theme.lines};
 
     .likes {
       display: flex;
@@ -134,7 +134,7 @@ export const Container = styled.div`
       }
       .user-name {
         font-family: var(--roboto-font-family);
-        color: #000000;
+        color: ${({ theme }) => theme.primaryText};
         font-weight: bold;
         margin-left: 5px;
         margin-right: 5px;
@@ -158,9 +158,6 @@ export const Container = styled.div`
         &:hover {
           cursor: pointer;
         }
-        /* border-left: 0.063rem solid #e1e2e2; */
-        /*   padding-left: 1.25rem;
-        margin-left: 1.25rem; */
 
         &:first-child {
           border: none;
@@ -203,7 +200,7 @@ export const Container = styled.div`
       font-family: var(--roboto-font-family);
       font-weight: bold;
       font-size: 0.813rem;
-      color: #000000;
+      color: ${({ theme }) => theme.primaryText};
     }
 
     p {

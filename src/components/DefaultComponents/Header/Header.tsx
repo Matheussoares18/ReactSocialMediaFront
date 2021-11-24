@@ -1,22 +1,42 @@
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Content, Links, Logo, SearchContainer } from './styles';
+import Switch from 'react-switch';
+import { useDispatch, useSelector } from 'react-redux';
+import { IoExitOutline } from 'react-icons/io5';
+import {
+  Container,
+  Content,
+  Dimmer,
+  DropMenu,
+  DropMenuContainer,
+  Links,
+  Logo,
+  SearchContainer,
+} from './styles';
 import { ReactComponent as Search } from '../../../assets/Menu/search.svg';
 import { ReactComponent as NotificationIcon } from '../../../assets/Menu/notificationIcon.svg';
 import { ReactComponent as Messages } from '../../../assets/Menu/messages.svg';
 import { ReactComponent as ExpandIcon } from '../../../assets/Menu/expandIcon.svg';
 import { UserPicture } from '../UserPicture/UserPicture';
-import { AuthUser } from '../../../interfaces/AuthUser';
-import { useDispatch, useSelector } from 'react-redux';
+import { AuthUser, Themes } from '../../../interfaces/AuthUser';
 import { RootState } from '../../../store/reducers';
 import * as UserServices from '../../../Services/UserServices/UserServices';
-import { useCallback, useEffect, useState } from 'react';
-import { insertUser, logout } from '../../../store/actions/AuthUserAction';
+import {
+  changeTheme,
+  insertUser,
+  logout,
+} from '../../../store/actions/AuthUserAction';
+import DropMenuItem from './DropMenuItem/DropMenuItem';
 
 export function Header() {
   const authUser: AuthUser | undefined = useSelector(
     (state: RootState) => state.authUser.authUser
   );
   const [image, setImage] = useState('');
+  const [menuIsVisible, setMenuIsVisible] = useState<boolean>(false);
+  const [theme, setTheme] = useState<Themes>(
+    localStorage.getItem('theme') as Themes
+  );
   const dispatch = useDispatch();
 
   function getBase64(file: File) {
@@ -57,6 +77,19 @@ export function Header() {
     }
   }, [image]);
 
+  function changeTheme(theme?: Themes) {
+    if (theme && theme === 'dark') {
+      localStorage.setItem('theme', Themes.LIGHT);
+      setTheme(Themes.LIGHT);
+      window.location.reload();
+      return;
+    }
+    localStorage.setItem('theme', Themes.DARK);
+
+    setTheme(Themes.DARK);
+    window.location.reload();
+  }
+
   return (
     <Container>
       <Content>
@@ -69,7 +102,6 @@ export function Header() {
         <Logo>Social Media</Logo>
         <Links>
           <label className="profile" htmlFor="user-image-input">
-            {/*  <Link  to="#"> */}
             <div className="profile-icon">
               <UserPicture source={authUser?.image} />
               <input
@@ -82,12 +114,11 @@ export function Header() {
                 }}
               />
               <span>
-                {authUser!.name.length > 6
-                  ? authUser!.name.substring(0, 7)
+                {authUser && authUser!.name!.length > 6
+                  ? authUser!.name!.substring(0, 7)
                   : authUser!.name}
               </span>
             </div>
-            {/* </Link> */}
           </label>
           <div className="container">
             <Link className="commom-icons" to="/notifications">
@@ -96,16 +127,42 @@ export function Header() {
             <Link className="commom-icons" to="#">
               <Messages className="icon" />
             </Link>
-            {/* <Link  to="#"> */}
-            <div
+
+            <button
+              type="button"
               className="commom-icons"
               style={{ cursor: 'pointer' }}
-              onClick={() => dispatch(logout())}
+              onClick={() => setMenuIsVisible(!menuIsVisible)}
             >
               <ExpandIcon className="icon" />
-            </div>
-
-            {/* </Link> */}
+            </button>
+            {menuIsVisible && (
+              <DropMenuContainer>
+                <DropMenu>
+                  <DropMenuItem label="Modo escuro">
+                    <Switch
+                      onChange={() =>
+                        changeTheme(
+                          localStorage.getItem('theme') as Themes | undefined
+                        )
+                      }
+                      checked={theme === Themes.DARK ? true : false}
+                      height={20}
+                      uncheckedIcon={false}
+                      checkedIcon={false}
+                      onColor="#0caacd"
+                      width={40}
+                    />
+                  </DropMenuItem>
+                  <DropMenuItem
+                    label="Sair"
+                    icon={IoExitOutline}
+                    onClick={() => dispatch(logout())}
+                  />
+                </DropMenu>
+                <Dimmer onClick={() => setMenuIsVisible(false)} />
+              </DropMenuContainer>
+            )}
           </div>
         </Links>
       </Content>
