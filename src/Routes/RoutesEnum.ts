@@ -7,4 +7,5 @@ export enum PublicRoutes {
 }
 export enum AuthRoutes {
   POSTS = '/posts',
+  PROFILE = '/profile',
 }
