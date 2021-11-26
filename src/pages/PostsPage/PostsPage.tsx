@@ -10,65 +10,76 @@ import { insertPosts } from '../../store/actions/PostsActions';
 import { RootState } from '../../store/reducers';
 import { Post } from '../../interfaces/Posts';
 import { Spinner } from '../../components/DefaultComponents/Spinner/Spinner';
+import { useQuery } from '../../hooks/useQuery';
+import { ApiRoutes } from '../../Services/ApiRoutes';
 
 export function PostsPage() {
   const posts: Post[] = useSelector((state: RootState) => state.posts.posts);
-
-  const dispatch = useDispatch();
-  const postListsRef = useRef<HTMLDivElement>(null);
-  const [loading, setLoading] = useState<boolean>(false);
   const [skip, setSkip] = useState<number>(0);
-  const [totalPosts, setTotalPosts] = useState<number>(0);
+  const { isLoading, data } = useQuery<{ total: number; posts: Post[] }>({
+    path: `${ApiRoutes.POSTS}/${skip}`,
 
-  const getPosts = useCallback(() => {
-    PostServices.getAllPosts(0)
-      .then((res) => {
-        dispatch(insertPosts(res.data.posts));
-        setTotalPosts(res.data.total);
-      })
-      .catch((err) => {
-        console.log('Falha ao carregar os posts');
-      });
-  }, [dispatch]);
+    onComplete: (result) => {
+      console.log(result);
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
+  /*  const dispatch = useDispatch(); */
+  // const postListsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    getPosts();
-  }, [getPosts]);
+  /*   const [totalPosts, setTotalPosts] = useState<number>(0); */
 
-  const getDivHeight = useCallback(() => {
-    const currentPosition = window.scrollY + window.innerHeight;
-    const postsListHeight = postListsRef.current?.offsetHeight;
+  // const getPosts = useCallback(() => {
+  //   PostServices.getAllPosts(0)
+  //     .then((res) => {
+  //       dispatch(insertPosts(res.data.posts));
+  //       setTotalPosts(res.data.total);
+  //     })
+  //     .catch((err) => {
+  //       console.log('Falha ao carregar os posts');
+  //     });
+  // }, [dispatch]);
 
-    const hasPostsYet = skip < totalPosts;
+  // useEffect(() => {
+  //   getPosts();
+  // }, [getPosts]);
 
-    if (currentPosition >= postsListHeight! && hasPostsYet) {
-      setLoading(true);
-      const updateSkipNumber = skip + 15;
+  // const getDivHeight = useCallback(() => {
+  //   const currentPosition = window.scrollY + window.innerHeight;
+  //   const postsListHeight = postListsRef.current?.offsetHeight;
 
-      PostServices.getAllPosts(updateSkipNumber).then((res) => {
-        dispatch(insertPosts([...posts, ...res.data.posts]));
-        setTotalPosts(res.data.total);
-        setSkip(updateSkipNumber);
-      });
-      return;
-    }
-    setLoading(false);
-  }, [setLoading, dispatch, posts, skip, totalPosts]);
+  //   const hasPostsYet = skip < totalPosts;
 
-  useEffect(() => {
-    window.onscroll = getDivHeight;
-  }, [getDivHeight]);
+  //   if (currentPosition >= postsListHeight! && hasPostsYet) {
+  //     // setLoading(true);
+  //     const updateSkipNumber = skip + 15;
+
+  //     PostServices.getAllPosts(updateSkipNumber).then((res) => {
+  //       dispatch(insertPosts([...posts, ...res.data.posts]));
+  //       setTotalPosts(res.data.total);
+  //       setSkip(updateSkipNumber);
+  //     });
+  //     return;
+  //   }
+  //   // setLoading(false);
+  // }, [setLoading, dispatch, posts, skip, totalPosts]);
+
+  // useEffect(() => {
+  //   window.onscroll = getDivHeight;
+  // }, [getDivHeight]);
 
   return (
     <Container>
       <Header />
       <MakeAPostCard />
-      <PostsList ref={postListsRef}>
-        {posts.map((item) => (
+      <PostsList /* ref={postListsRef} */>
+        {data?.posts.map((item) => (
           <PostCard post={item} key={item.id} />
         ))}
       </PostsList>
-      {loading && (
+      {isLoading && (
         <SpinnerContainer>
           <Spinner />
         </SpinnerContainer>
