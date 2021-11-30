@@ -1,10 +1,11 @@
 import { Provider } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Modal from 'react-modal';
 import { PersistGate } from 'redux-persist/integration/react';
 import Routes from './Routes/public.routes';
 import store, { persistor } from './store';
 import GlobalStyle from './styles/global';
+
 import 'react-toastify/dist/ReactToastify.css';
 import { lightTheme, darkTheme } from './styles/themes';
 import { ThemeProvider } from 'styled-components';

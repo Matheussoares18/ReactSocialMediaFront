@@ -5,8 +5,11 @@ import api from '../Services/api';
 interface UseQueryReturnType<RequestReturnType = any> {
   isError: boolean;
   isLoading: boolean;
-  data?: RequestReturnType;
-  refetch?: () => Promise<RequestReturnType | null>;
+  data: RequestReturnType | null;
+  refetch: (
+    newPath: string,
+    newParams?: Params[]
+  ) => Promise<RequestReturnType | null>;
 }
 interface Params {
   name: string;
@@ -32,71 +35,56 @@ export function useQuery<RequestReturnType = any>({
 }: UseQueryProps<RequestReturnType>): UseQueryReturnType<RequestReturnType> {
   const [isError, setError] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [data, setData] = useState<RequestReturnType>();
+  const [data, setData] = useState<RequestReturnType | null>(null);
 
-  /* const makeRequest = useCallback(
-    async (path: string, params: Params[]) => {
-      setLoading(true);
+  const makeRequest = useCallback(
+    async (pathParam: string, params?: Params[]) => {
       try {
+        setLoading(true);
         const result = await api.get<any, AxiosResponse<RequestReturnType>>(
-          path,
+          pathParam,
           {
             params: {
-              ...params.map((param) => ({
+              ...params?.map((param) => ({
                 [param.name]: [param.value],
               })),
             },
           }
         );
         onComplete(result.data);
-        setData(result.data);
         setLoading(false);
-
         return result.data;
-      } catch (error: unknown) {
+      } catch (error) {
         setError(true);
         setLoading(false);
         onError(error);
         return null;
       }
     },
-    [onComplete, onError]
-  ); */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   useEffect(() => {
-    /*  async function doRequest() {
-      await makeRequest(path, params);
+    async function doRequest() {
+      const result = await makeRequest(path, params);
+
+      setData(result);
     }
-    doRequest(); */
+    doRequest();
+  }, [params, path, makeRequest]);
 
-    api
-      .get<any, AxiosResponse<RequestReturnType>>(path, {
-        params: {
-          ...params?.map((param) => ({
-            [param.name]: [param.value],
-          })),
-        },
-      })
-      .then((res) => {
-        onComplete(res.data);
-        setData(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(true);
-        setLoading(false);
-        onError(err);
-      });
-  }, [params, path /* , makeRequest */]);
-
-  /* async function refetch(): Promise<RequestReturnType | null> {
-    return await makeRequest(path, params);
-  } */
+  async function refetch(
+    newPath: string,
+    newParams?: Params[]
+  ): Promise<RequestReturnType | null> {
+    return await makeRequest(newPath, newParams);
+  }
 
   return {
     isError,
     isLoading,
     data,
-    /*  refetch, */
+    refetch,
   };
 }

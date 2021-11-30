@@ -1,89 +1,107 @@
 import { Header } from '../../components/DefaultComponents/Header/Header';
 import { MakeAPostCard } from '../../components/MakeAPostCard/MakeAPostCard';
 import { PostCard } from '../../components/PostCard/PostCard';
-import { Container, PostsList, SpinnerContainer } from './styles';
-import * as PostServices from '../../Services/PostServices/PostServices';
+import { Container, LoadingPostsError, PostsList } from './styles';
 import { useCallback, useEffect, useRef, useState } from 'react';
-
 import { useDispatch, useSelector } from 'react-redux';
 import { insertPosts } from '../../store/actions/PostsActions';
+import { ReactComponent as PostErrorEmote } from '../../assets/postErrorEmote.svg';
 import { RootState } from '../../store/reducers';
 import { Post } from '../../interfaces/Posts';
-import { Spinner } from '../../components/DefaultComponents/Spinner/Spinner';
 import { useQuery } from '../../hooks/useQuery';
+import { Instagram } from 'react-content-loader';
 import { ApiRoutes } from '../../Services/ApiRoutes';
+import { LoadingOrError } from '../../components/DefaultComponents/LoadingOrError/LoadingOrError';
+
+const Loader = () => (
+  <Instagram className="loading" backgroundColor="transparent" />
+);
+const PostsError = () => (
+  <LoadingPostsError>
+    <div className="text-and-emote">
+      <PostErrorEmote className="emote" />
+      <p>
+        Estamos com dificuldades em exibir esse conteúdo, alguém derrubou o
+        servidor, porém não se preocupe! estamos em processo de levantamento.
+      </p>
+    </div>
+  </LoadingPostsError>
+);
 
 export function PostsPage() {
   const posts: Post[] = useSelector((state: RootState) => state.posts.posts);
   const [skip, setSkip] = useState<number>(0);
-  const { isLoading, data } = useQuery<{ total: number; posts: Post[] }>({
-    path: `${ApiRoutes.POSTS}/${skip}`,
-
+  const dispatch = useDispatch();
+  const [totalPosts, setTotalPosts] = useState<number>(0);
+  const { isLoading, isError, refetch } = useQuery<{
+    total: number;
+    posts: Post[];
+  }>({
+    path: `${ApiRoutes.POSTS}/0`,
     onComplete: (result) => {
-      console.log(result);
+      setTotalPosts(result.total);
+      setSkip(skip + 15);
+      dispatch(insertPosts([...posts, ...result.posts]));
     },
     onError: (err) => {
       console.log(err);
     },
   });
-  /*  const dispatch = useDispatch(); */
-  // const postListsRef = useRef<HTMLDivElement>(null);
+  const postListsRef = useRef<HTMLDivElement>(null);
 
-  /*   const [totalPosts, setTotalPosts] = useState<number>(0); */
+  const getDivHeight = useCallback(async () => {
+    const currentPosition = window.scrollY + window.innerHeight;
+    const postsListHeight = postListsRef.current?.offsetHeight;
 
-  // const getPosts = useCallback(() => {
-  //   PostServices.getAllPosts(0)
-  //     .then((res) => {
-  //       dispatch(insertPosts(res.data.posts));
-  //       setTotalPosts(res.data.total);
-  //     })
-  //     .catch((err) => {
-  //       console.log('Falha ao carregar os posts');
-  //     });
-  // }, [dispatch]);
+    const hasPostsYet = skip < totalPosts;
 
-  // useEffect(() => {
-  //   getPosts();
-  // }, [getPosts]);
+    if (currentPosition >= postsListHeight! && hasPostsYet) {
+      const result = await refetch(`${ApiRoutes.POSTS}/${skip}`);
 
-  // const getDivHeight = useCallback(() => {
-  //   const currentPosition = window.scrollY + window.innerHeight;
-  //   const postsListHeight = postListsRef.current?.offsetHeight;
+      if (result && !isError) {
+        const updateSkipNumber = skip + 15;
+        setSkip(updateSkipNumber);
+      }
 
-  //   const hasPostsYet = skip < totalPosts;
+      return;
+    }
+  }, [skip, totalPosts, isError, refetch]);
 
-  //   if (currentPosition >= postsListHeight! && hasPostsYet) {
-  //     // setLoading(true);
-  //     const updateSkipNumber = skip + 15;
+  useEffect(() => {
+    window.onscroll = getDivHeight;
+  }, [getDivHeight]);
 
-  //     PostServices.getAllPosts(updateSkipNumber).then((res) => {
-  //       dispatch(insertPosts([...posts, ...res.data.posts]));
-  //       setTotalPosts(res.data.total);
-  //       setSkip(updateSkipNumber);
-  //     });
-  //     return;
-  //   }
-  //   // setLoading(false);
-  // }, [setLoading, dispatch, posts, skip, totalPosts]);
-
-  // useEffect(() => {
-  //   window.onscroll = getDivHeight;
-  // }, [getDivHeight]);
+  useEffect(() => {
+    console.log(isLoading);
+  }, [isLoading]);
 
   return (
     <Container>
       <Header />
       <MakeAPostCard />
-      <PostsList /* ref={postListsRef} */>
-        {data?.posts.map((item) => (
-          <PostCard post={item} key={item.id} />
-        ))}
+      <PostsList ref={postListsRef}>
+        <LoadingOrError
+          error={{
+            isError,
+            component: <PostsError />,
+          }}
+          loading={{
+            isLoading,
+            component: (
+              <>
+                <Loader />
+                <Loader />
+              </>
+            ),
+          }}
+        >
+          <>
+            {posts?.map((item) => (
+              <PostCard post={item} key={item.id} />
+            ))}
+          </>
+        </LoadingOrError>
       </PostsList>
-      {isLoading && (
-        <SpinnerContainer>
-          <Spinner />
-        </SpinnerContainer>
-      )}
     </Container>
   );
 }
