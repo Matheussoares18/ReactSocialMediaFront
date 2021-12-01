@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { lightTheme, darkTheme } from './styles/themes';
 import { ThemeProvider } from 'styled-components';
 import { Themes } from './interfaces/AuthUser';
+import api from './Services/api';
 
 function App() {
   useEffect(() => {
@@ -20,6 +21,7 @@ function App() {
     [Themes.LIGHT]: lightTheme,
     [Themes.DARK]: darkTheme,
   };
+
   return (
     <>
       <Provider store={store}>

@@ -71,10 +71,6 @@ export function PostsPage() {
     window.onscroll = getDivHeight;
   }, [getDivHeight]);
 
-  useEffect(() => {
-    console.log(isLoading);
-  }, [isLoading]);
-
   return (
     <Container>
       <Header />

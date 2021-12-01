@@ -53,6 +53,7 @@ export function useQuery<RequestReturnType = any>({
         );
         onComplete(result.data);
         setLoading(false);
+
         return result.data;
       } catch (error) {
         setError(true);

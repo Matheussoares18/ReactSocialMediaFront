@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { ApiErrorsListener } from '../components/DefaultComponents/ApiErrorsListener/ApiErrorsListener';
 import { AuthUser } from '../interfaces/AuthUser';
 import HomePage from '../pages/HomePage/HomePage';
 import LoginPage from '../pages/LoginPage/LoginPage';
@@ -18,15 +19,19 @@ const Routes: React.FC = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/" component={HomePage}>
-          <Redirect to="/posts" />
-        </Route>
-        <Route path="/login" component={LoginPage} />
-        <Route path={PublicRoutes.REGISTER} component={UserRegisterPage} />
-        <Route path={AuthRoutes.POSTS} component={PostsPage}>
-          {!authUser && <Redirect to="/login" />}
-        </Route>
-        <Route path={`${AuthRoutes.PROFILE}/:id`} component={ProfilePage} />
+        <ApiErrorsListener>
+          <>
+            <Route exact path="/" component={HomePage}>
+              <Redirect to="/posts" />
+            </Route>
+            <Route path="/login" component={LoginPage} />
+            <Route path={PublicRoutes.REGISTER} component={UserRegisterPage} />
+            <Route path={AuthRoutes.POSTS} component={PostsPage}>
+              {!authUser && <Redirect to="/login" />}
+            </Route>
+            <Route path={`${AuthRoutes.PROFILE}/:id`} component={ProfilePage} />
+          </>
+        </ApiErrorsListener>
       </Switch>
     </BrowserRouter>
   );
