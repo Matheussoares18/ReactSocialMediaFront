@@ -1,11 +1,13 @@
 import { Header } from '../../components/DefaultComponents/Header/Header';
-import { useQuery } from '../../hooks/useQuery';
+import { Profile } from '../../components/Profile/Profile';
+
 import { Container } from './styles';
 
 export function ProfilePage() {
   return (
     <Container>
       <Header />
+      <Profile />
     </Container>
   );
 }
