@@ -58,7 +58,7 @@ export function Header() {
             <input type="text" placeholder="Pesquisar na SocialMedia" />
           </div>
         </SearchContainer>
-        <Logo onClick={() => history.push(`${AuthRoutes.POSTS}`)}>
+        <Logo onClick={() => (window.location.href = `${AuthRoutes.POSTS}`)}>
           Social Media
         </Logo>
         <Links>

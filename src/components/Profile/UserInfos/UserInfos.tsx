@@ -54,15 +54,17 @@ export function UserInfos({
 
   return (
     <Container>
-      <EditProfileModal
-        isOpen={modalIsOpen}
-        onRequestClose={handleCloseModal}
-        refetch={refetch}
-        refetchPosts={refetchPosts}
-        userInfos={{ name, biography, image, id }}
-      />
+      {authUser?.id === id && (
+        <EditProfileModal
+          isOpen={modalIsOpen}
+          onRequestClose={handleCloseModal}
+          refetch={refetch}
+          refetchPosts={refetchPosts}
+          userInfos={{ name, biography, image, id }}
+        />
+      )}
       <LeftSide>
-        <UserPicture classname="user-img" source={authUser?.image} />
+        <UserPicture classname="user-img" source={image} />
         <div className="followers-container">
           <FollowersInfo value={0} text="Posts" />
           <FollowersInfo value={0} text="Seguidores" />
@@ -72,10 +74,12 @@ export function UserInfos({
       <RightSide>
         <div className="username">
           <h2>{name}</h2>{' '}
-          <MdOutlineModeEditOutline
-            className="icon"
-            onClick={handleOpenModal}
-          />
+          {authUser?.id === id && (
+            <MdOutlineModeEditOutline
+              className="icon"
+              onClick={handleOpenModal}
+            />
+          )}
         </div>
         <p>
           {biography && biography?.length > 0

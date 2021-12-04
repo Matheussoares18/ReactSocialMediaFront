@@ -47,7 +47,9 @@ export function MakeAComment({ postId }: MakeACommentProps) {
           />
         </div>
         <button
-          disabled={comment.length === 0 || comment.length > 300}
+          disabled={
+            comment.length === 0 || comment.length > 300 || !authUser?.token
+          }
           onClick={() => handleCreateComment()}
         >
           {`(${comment.length}/300)`}Comentar

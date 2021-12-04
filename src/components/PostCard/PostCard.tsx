@@ -85,6 +85,9 @@ export function PostCard({ post }: PostCardProps) {
     );
   }
   async function handleLikePost(): Promise<void> {
+    if (!authUser?.token) {
+      return;
+    }
     const likeExists = post.post_likes.find(
       (like) => like.post_id === post.id && like.user_id === authUser!.id
     );
@@ -176,6 +179,8 @@ export function PostCard({ post }: PostCardProps) {
 
             <FavoriteFilled
               className={`icon ${
+                authUser &&
+                authUser?.token &&
                 post.post_likes.find(
                   (like) =>
                     like.post_id === post.id && like.user_id === authUser!.id

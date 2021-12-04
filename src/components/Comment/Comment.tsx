@@ -51,7 +51,7 @@ export function Comment({ comment }: CommentProps) {
         confirmationModalText="Deseja excluir o comentário?"
         next={handleDeleteComment}
       />
-      <UserPicture source={authUser?.image} />
+      <UserPicture source={comment.user?.image} />
       <div className="name-and-comment">
         <h3>
           {comment.user?.name.length > 10

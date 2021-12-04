@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { GrClose } from 'react-icons/gr';
 import Modal from 'react-modal';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 import { RequestHttpType, useMutation } from '../../../../hooks/useMutation';
 import { AuthUser } from '../../../../interfaces/AuthUser';
 import { Post } from '../../../../interfaces/Posts';
 import { ApiRoutes } from '../../../../Services/ApiRoutes';
 import { insertUser } from '../../../../store/actions/AuthUserAction';
+import { RootState } from '../../../../store/reducers';
 import { getBase64 } from '../../../../utils/imageToBase54';
 import Input from '../../../DefaultComponents/Input/Input';
 import { Spinner } from '../../../DefaultComponents/Spinner/Spinner';
@@ -65,6 +66,9 @@ export function EditProfileModal({
   refetch,
   refetchPosts,
 }: EditProfileModalProps) {
+  const authUser: AuthUser | undefined = useSelector(
+    (state: RootState) => state.authUser.authUser
+  );
   const dispatch = useDispatch();
   const {
     register,
@@ -81,7 +85,7 @@ export function EditProfileModal({
     path: `${ApiRoutes.USERS}`,
     requestType: RequestHttpType.patch,
     onComplete: (result) => {
-      dispatch(insertUser({ ...result }));
+      dispatch(insertUser({ ...authUser, ...result }));
       refetch(`${ApiRoutes.USERS}/${userInfos.id}`);
       refetchPosts(`${ApiRoutes.GET_POSTS_BY_USER}/${userInfos.id}/${0}`);
       onRequestClose();

@@ -1,12 +1,18 @@
+import { useSelector } from 'react-redux';
 import { Header } from '../../components/DefaultComponents/Header/Header';
 import { Profile } from '../../components/Profile/Profile';
+import { AuthUser } from '../../interfaces/AuthUser';
+import { RootState } from '../../store/reducers';
 
 import { Container } from './styles';
 
 export function ProfilePage() {
+  const authUser: AuthUser | undefined = useSelector(
+    (state: RootState) => state.authUser.authUser
+  );
   return (
     <Container>
-      <Header />
+      {authUser?.token && <Header />}
       <Profile />
     </Container>
   );
