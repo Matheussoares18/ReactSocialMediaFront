@@ -29,7 +29,10 @@ const Routes: React.FC = () => {
             <Route path={AuthRoutes.POSTS} component={PostsPage}>
               {!authUser && <Redirect to="/login" />}
             </Route>
-            <Route path={`${AuthRoutes.PROFILE}/:id`} component={ProfilePage} />
+            <Route
+              path={`${PublicRoutes.PROFILE}/:id`}
+              component={ProfilePage}
+            />
           </>
         </ApiErrorsListener>
       </Switch>

@@ -1,32 +1,17 @@
 import { Header } from '../../components/DefaultComponents/Header/Header';
 import { MakeAPostCard } from '../../components/MakeAPostCard/MakeAPostCard';
 import { PostCard } from '../../components/PostCard/PostCard';
-import { Container, LoadingPostsError, PostsList } from './styles';
+import { Container, PostsList } from './styles';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { insertPosts } from '../../store/actions/PostsActions';
-import { ReactComponent as PostErrorEmote } from '../../assets/postErrorEmote.svg';
 import { RootState } from '../../store/reducers';
 import { Post } from '../../interfaces/Posts';
 import { useQuery } from '../../hooks/useQuery';
-import { Instagram } from 'react-content-loader';
 import { ApiRoutes } from '../../Services/ApiRoutes';
 import { LoadingOrError } from '../../components/DefaultComponents/LoadingOrError/LoadingOrError';
-
-const Loader = () => (
-  <Instagram className="loading" backgroundColor="transparent" />
-);
-const PostsError = () => (
-  <LoadingPostsError>
-    <div className="text-and-emote">
-      <PostErrorEmote className="emote" />
-      <p>
-        Estamos com dificuldades em exibir esse conteúdo, alguém derrubou o
-        servidor, porém não se preocupe! estamos em processo de levantamento.
-      </p>
-    </div>
-  </LoadingPostsError>
-);
+import { PostsLoader } from '../../components/DefaultComponents/PostsLoader/PostsLoader';
+import { GenericPostsError } from '../../components/DefaultComponents/GenericPostsError/GenericPostsError';
 
 export function PostsPage() {
   const posts: Post[] = useSelector((state: RootState) => state.posts.posts);
@@ -79,14 +64,14 @@ export function PostsPage() {
         <LoadingOrError
           error={{
             isError,
-            component: <PostsError />,
+            component: <GenericPostsError />,
           }}
           loading={{
             isLoading,
             component: (
               <>
-                <Loader />
-                <Loader />
+                <PostsLoader />
+                <PostsLoader />
               </>
             ),
           }}

@@ -1,47 +1,83 @@
-import { useParams } from 'react-router-dom';
-import { useQuery } from '../../hooks/useQuery';
-import { LoadingPostsError } from '../../pages/PostsPage/styles';
-import { ReactComponent as PostErrorEmote } from '../../assets/postErrorEmote.svg';
+import { Route, useParams, useRouteMatch } from 'react-router-dom';
+
 import { LoadingOrError } from '../DefaultComponents/LoadingOrError/LoadingOrError';
 import { ProfileMenu } from './ProfileMenu/ProfileMenu';
 import { ProfilePosts } from './ProfilePosts/ProfilePosts';
 import { Container } from './styles';
 import { UserInfos } from './UserInfos/UserInfos';
 import { Spinner } from '../DefaultComponents/Spinner/Spinner';
+import { ApiRoutes } from '../../Services/ApiRoutes';
+import { GenericPostsError } from '../DefaultComponents/GenericPostsError/GenericPostsError';
+import { useQuery } from '../../hooks/useQuery';
+import { Post } from '../../interfaces/Posts';
 
 interface ProfileParams {
   id: string;
 }
 
-const PostsError = () => (
-  <LoadingPostsError>
-    <div className="text-and-emote">
-      <PostErrorEmote className="emote" />
-      <p>
-        Estamos com dificuldades em exibir esse conteúdo, alguém derrubou o
-        servidor, porém não se preocupe! estamos em processo de levantamento.
-      </p>
-    </div>
-  </LoadingPostsError>
-);
-
 export function Profile() {
   const pageParams = useParams<ProfileParams>();
-  const { data, isError, isLoading } = useQuery<{ name: string }>({
-    path: `/users/${pageParams.id}`,
+  const { url } = useRouteMatch();
+  const { data, isError, isLoading, refetch } = useQuery<{
+    id: string;
+    name: string;
+    biography?: string;
+    image?: string;
+  }>({
+    path: `${ApiRoutes.USERS}/${pageParams.id}`,
   });
+  const {
+    data: postsResult,
+    isError: isErrorPosts,
+    isLoading: isLoadingPosts,
+    refetch: refetchPosts,
+  } = useQuery<{
+    total: number;
+    posts: Post[];
+  }>({
+    path: `${ApiRoutes.GET_POSTS_BY_USER}/${pageParams.id}/${0}`,
+  });
+
   return (
     <Container>
       <LoadingOrError
-        error={{ component: <PostsError />, isError }}
+        error={{ component: <GenericPostsError />, isError }}
         loading={{ component: <Spinner />, isLoading }}
       >
         <>
-          <UserInfos username={data?.name as string} />
-          <ProfileMenu />
-          <ProfilePosts />
+          <UserInfos
+            id={data?.id as string}
+            name={data?.name as string}
+            biography={data?.biography}
+            image={data?.image}
+            refetch={refetch}
+            refetchPosts={refetchPosts}
+          />
         </>
       </LoadingOrError>
+      <ProfileMenu />
+
+      <Route path={`${url}/posts`}>
+        <LoadingOrError
+          error={{ component: <GenericPostsError />, isError: isErrorPosts }}
+          loading={{
+            component: (
+              <div style={{ marginTop: '30px' }}>
+                <Spinner />
+              </div>
+            ),
+            isLoading: isLoadingPosts,
+          }}
+        >
+          <>
+            <ProfilePosts
+              posts={postsResult?.posts as Post[]}
+              totalPosts={postsResult?.total as number}
+              refetch={refetchPosts}
+            />
+          </>
+        </LoadingOrError>
+      </Route>
     </Container>
   );
 }

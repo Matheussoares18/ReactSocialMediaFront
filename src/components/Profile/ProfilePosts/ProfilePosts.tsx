@@ -1,36 +1,62 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { RefetchType } from '../../../hooks/useQuery';
+
+import { Post } from '../../../interfaces/Posts';
+import { ApiRoutes } from '../../../Services/ApiRoutes';
+
 import { PostCard } from '../../PostCard/PostCard';
 import { Container } from './styles';
 
-export function ProfilePosts() {
-  const post = {
-    id: '1234',
-    content: 'content 123',
-    image: 'https://www.imagemhost.com.br/images/2021/09/30/images.jpg',
-    created_at: String(new Date()),
-    updated_at: String(new Date()),
-    user_id: '123213-12312-3123-123-123',
-    post_images: [
-      {
-        image: 'https://www.imagemhost.com.br/images/2021/09/30/images.jpg',
-        created_at: String(new Date()),
-      },
-    ],
-    post_likes: [],
-    post_comments: [],
-    user: {
-      id: '1231231-231231-2312-31-23-1',
-      name: 'awdawdawd',
-      email: 'soawakdjawkd@fmaiawdka.com',
-      birth_date: '22/11/2001',
-      gender: 'F',
-      password: '123123',
-      image: 'https://www.imagemhost.com.br/images/2021/09/30/images.jpg',
-    },
-  };
+interface ProfilePostsProps {
+  posts: Post[];
+  totalPosts: number;
+  refetch: RefetchType;
+}
+
+export function ProfilePosts({
+  posts,
+  totalPosts,
+  refetch,
+}: ProfilePostsProps) {
+  const [skip, setSkip] = useState<number>(posts?.length);
+  const [paginatedPosts, setPaginatedPosts] = useState<Post[] | undefined>(
+    posts
+  );
+
+  const postListsRef = useRef<HTMLDivElement>(null);
+
+  const getDivHeight = useCallback(async () => {
+    const currentPosition = window.scrollY + window.innerHeight;
+    const postsListHeight = postListsRef.current?.offsetHeight;
+
+    const hasPostsYet = skip < totalPosts;
+
+    if (currentPosition >= postsListHeight! && hasPostsYet) {
+      const result = await refetch(
+        `${ApiRoutes.POSTS}/${skip}`,
+        undefined,
+        false
+      );
+
+      if (result) {
+        const updateSkipNumber = skip + 15;
+        setSkip(updateSkipNumber);
+        setPaginatedPosts([...posts, ...result.posts]);
+      }
+
+      return;
+    }
+  }, [skip, totalPosts, refetch, posts]);
+
+  useEffect(() => {
+    window.onscroll = getDivHeight;
+  }, [getDivHeight]);
 
   return (
-    <Container>
-      <PostCard post={post} />
+    <Container ref={postListsRef}>
+      {paginatedPosts?.map((post) => (
+        <PostCard post={post} key={post.id} />
+      ))}
     </Container>
   );
 }

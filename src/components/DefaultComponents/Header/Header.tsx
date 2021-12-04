@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Switch from 'react-switch';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoExitOutline } from 'react-icons/io5';
@@ -20,62 +20,21 @@ import { ReactComponent as ExpandIcon } from '../../../assets/Menu/expandIcon.sv
 import { UserPicture } from '../UserPicture/UserPicture';
 import { AuthUser, Themes } from '../../../interfaces/AuthUser';
 import { RootState } from '../../../store/reducers';
-import * as UserServices from '../../../Services/UserServices/UserServices';
-import {
-  changeTheme,
-  insertUser,
-  logout,
-} from '../../../store/actions/AuthUserAction';
+import { logout } from '../../../store/actions/AuthUserAction';
 import DropMenuItem from './DropMenuItem/DropMenuItem';
+import { AuthRoutes, PublicRoutes } from '../../../Routes/RoutesEnum';
 
 export function Header() {
   const authUser: AuthUser | undefined = useSelector(
     (state: RootState) => state.authUser.authUser
   );
-  const [image, setImage] = useState('');
+
   const [menuIsVisible, setMenuIsVisible] = useState<boolean>(false);
   const [theme, setTheme] = useState<Themes>(
     localStorage.getItem('theme') as Themes
   );
+  const history = useHistory();
   const dispatch = useDispatch();
-
-  function getBase64(file: File) {
-    let url = '';
-
-    const reader = new FileReader();
-
-    reader.readAsDataURL(file);
-
-    reader.onload = () => {
-      url = reader.result as string;
-      setImage(url);
-    };
-  }
-  async function handleUpdateUserImage(e?: File) {
-    if (!e) {
-      return;
-    }
-    getBase64(e);
-  }
-  const updateImage = useCallback(
-    async (url: string) => {
-      if (image.length > 0) {
-        try {
-          await UserServices.updateUserImage(url);
-          dispatch(insertUser({ ...authUser!, image: image }));
-          window.location.reload();
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    },
-    [dispatch, authUser, image]
-  );
-  useEffect(() => {
-    if (image.length > 0) {
-      updateImage(image);
-    }
-  }, [image]);
 
   function changeTheme(theme?: Themes) {
     if (theme && theme === 'dark') {
@@ -99,19 +58,26 @@ export function Header() {
             <input type="text" placeholder="Pesquisar na SocialMedia" />
           </div>
         </SearchContainer>
-        <Logo>Social Media</Logo>
+        <Logo onClick={() => history.push(`${AuthRoutes.POSTS}`)}>
+          Social Media
+        </Logo>
         <Links>
           <label className="profile" htmlFor="user-image-input">
-            <div className="profile-icon">
+            <div
+              className="profile-icon"
+              onClick={() =>
+                history.push(`${PublicRoutes.PROFILE}/${authUser?.id}/posts`)
+              }
+            >
               <UserPicture source={authUser?.image} />
               <input
                 type="file"
                 style={{ display: 'none' }}
                 id="user-image-input"
-                onChange={(e) => {
+                /* onChange={(e) => {
                   console.log(e);
                   handleUpdateUserImage(e.target!.files![0]!);
-                }}
+                }} */
               />
               <span>
                 {authUser && authUser!.name!.length > 6

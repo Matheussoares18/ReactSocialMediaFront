@@ -59,12 +59,14 @@ export const SearchContainer = styled.div`
     }
   }
 `;
-export const Logo = styled.h1`
+export const Logo = styled.button`
   font-family: 'Pinyon Script', sans-serif;
   font-weight: 400;
   font-size: 2.25rem;
   color: #0caacd;
   align-self: end;
+  background: transparent;
+  border: none;
 `;
 export const Links = styled.div`
   display: flex;

@@ -50,5 +50,6 @@ export const RightSide = styled.div`
     color: ${({ theme }) => theme.labelText};
     max-width: 23.75rem;
     line-height: 1.375rem;
+    min-width: 380px;
   }
 `;

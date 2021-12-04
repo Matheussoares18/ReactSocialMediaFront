@@ -2,14 +2,16 @@ import { AxiosResponse } from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import api from '../Services/api';
 
+export type RefetchType<RequestReturnType = any> = (
+  newPath: string,
+  newParams?: Params[],
+  changeState?: boolean
+) => Promise<RequestReturnType | null>;
 interface UseQueryReturnType<RequestReturnType = any> {
   isError: boolean;
   isLoading: boolean;
   data: RequestReturnType | null;
-  refetch: (
-    newPath: string,
-    newParams?: Params[]
-  ) => Promise<RequestReturnType | null>;
+  refetch: RefetchType<RequestReturnType>;
 }
 interface Params {
   name: string;
@@ -38,9 +40,11 @@ export function useQuery<RequestReturnType = any>({
   const [data, setData] = useState<RequestReturnType | null>(null);
 
   const makeRequest = useCallback(
-    async (pathParam: string, params?: Params[]) => {
+    async (pathParam: string, params?: Params[], changeState = true) => {
       try {
-        setLoading(true);
+        if (changeState) {
+          setLoading(true);
+        }
         const result = await api.get<any, AxiosResponse<RequestReturnType>>(
           pathParam,
           {
@@ -52,7 +56,9 @@ export function useQuery<RequestReturnType = any>({
           }
         );
         onComplete(result.data);
-        setLoading(false);
+        if (changeState) {
+          setLoading(false);
+        }
 
         return result.data;
       } catch (error) {
@@ -77,9 +83,12 @@ export function useQuery<RequestReturnType = any>({
 
   async function refetch(
     newPath: string,
-    newParams?: Params[]
+    newParams?: Params[],
+    changeState: boolean = true
   ): Promise<RequestReturnType | null> {
-    return await makeRequest(newPath, newParams);
+    const result = await makeRequest(newPath, newParams, changeState);
+    setData(result);
+    return result;
   }
 
   return {
