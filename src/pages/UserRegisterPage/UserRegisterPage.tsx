@@ -1,7 +1,5 @@
 import React from 'react';
-import { UserRegister } from '../../components/UserRegister/UserRegister';
-
-// import { Container } from './styles';
+import { UserRegister } from 'components/UserRegister/UserRegister';
 
 export function UserRegisterPage() {
   return <UserRegister />;

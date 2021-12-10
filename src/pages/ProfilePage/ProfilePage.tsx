@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
-import { Header } from '../../components/DefaultComponents/Header/Header';
-import { Profile } from '../../components/Profile/Profile';
-import { AuthUser } from '../../interfaces/AuthUser';
-import { RootState } from '../../store/reducers';
+import { Header } from 'components/DefaultComponents/Header/Header';
+import { Profile } from 'components/Profile/Profile';
+import { AuthUser } from 'interfaces/AuthUser';
+import { RootState } from 'store/reducers';
 
 import { Container } from './styles';
 

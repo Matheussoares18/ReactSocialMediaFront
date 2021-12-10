@@ -1,5 +1,5 @@
 import { LoadingPostsError } from './styles';
-import { ReactComponent as PostErrorEmote } from '../../../assets/postErrorEmote.svg';
+import { ReactComponent as PostErrorEmote } from 'assets/postErrorEmote.svg';
 
 export function GenericPostsError() {
   return (

@@ -1,12 +1,12 @@
-import { UserPicture } from '../DefaultComponents/UserPicture/UserPicture';
+import { UserPicture } from 'components/DefaultComponents/UserPicture/UserPicture';
 import { Container } from './styles';
 
-import * as PostServices from '../../Services/PostServices/PostServices';
+import * as PostServices from 'Services/PostServices/PostServices';
 import { useState } from 'react';
-import { AuthUser } from '../../interfaces/AuthUser';
+import { AuthUser } from 'interfaces/AuthUser';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store/reducers';
-import { insertPostComment } from '../../store/actions/PostsActions';
+import { RootState } from 'store/reducers';
+import { insertPostComment } from 'store/actions/PostsActions';
 
 interface MakeACommentProps {
   postId: string;

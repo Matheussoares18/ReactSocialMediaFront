@@ -1,14 +1,14 @@
-import { UserPicture } from '../DefaultComponents/UserPicture/UserPicture';
+import { UserPicture } from 'components/DefaultComponents/UserPicture/UserPicture';
 import { Container } from './styles';
-import { ReactComponent as CollectionsIcons } from '../../assets/MakeAPost/collectionsIcons.svg';
+import { ReactComponent as CollectionsIcons } from 'assets/MakeAPost/collectionsIcons.svg';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import * as PostsServices from '../../Services/PostServices/PostServices';
+import * as PostsServices from 'Services/PostServices/PostServices';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { insertPost } from '../../store/actions/PostsActions';
-import { AuthUser } from '../../interfaces/AuthUser';
-import { RootState } from '../../store/reducers';
+import { insertPost } from 'store/actions/PostsActions';
+import { AuthUser } from 'interfaces/AuthUser';
+import { RootState } from 'store/reducers';
 
 export function MakeAPostCard() {
   const authUser: AuthUser | undefined = useSelector(

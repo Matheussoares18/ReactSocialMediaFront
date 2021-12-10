@@ -1,14 +1,14 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useHistory } from 'react-router-dom';
-import { AuthRoutes, PublicRoutes } from '../../Routes/RoutesEnum';
-import Input from '../DefaultComponents/Input/Input';
-import * as AuthService from '../../Services/AuthServices/AuthServices';
+import { Link } from 'react-router-dom';
+import { AuthRoutes, PublicRoutes } from 'Routes/RoutesEnum';
+import Input from 'components/DefaultComponents/Input/Input';
+import * as AuthService from 'Services/AuthServices/AuthServices';
 import { ToastContainer, toast } from 'react-toastify';
 
 import { Container, Content } from './styles';
 import { useDispatch } from 'react-redux';
-import { insertUser } from '../../store/actions/AuthUserAction';
+import { insertUser } from 'store/actions/AuthUserAction';
 
 interface LoginFormFields {
   email: string;

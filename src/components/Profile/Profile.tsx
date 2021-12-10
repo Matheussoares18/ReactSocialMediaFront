@@ -1,15 +1,15 @@
 import { Route, useParams, useRouteMatch } from 'react-router-dom';
 
-import { LoadingOrError } from '../DefaultComponents/LoadingOrError/LoadingOrError';
-import { ProfileMenu } from './ProfileMenu/ProfileMenu';
-import { ProfilePosts } from './ProfilePosts/ProfilePosts';
+import { LoadingOrError } from 'components/DefaultComponents/LoadingOrError/LoadingOrError';
+import { ProfileMenu } from 'components/Profile/ProfileMenu/ProfileMenu';
+import { ProfilePosts } from 'components/Profile/ProfilePosts/ProfilePosts';
 import { Container } from './styles';
-import { UserInfos } from './UserInfos/UserInfos';
-import { Spinner } from '../DefaultComponents/Spinner/Spinner';
-import { ApiRoutes } from '../../Services/ApiRoutes';
-import { GenericPostsError } from '../DefaultComponents/GenericPostsError/GenericPostsError';
-import { useQuery } from '../../hooks/useQuery';
-import { Post } from '../../interfaces/Posts';
+import { UserInfos } from 'components/Profile/UserInfos/UserInfos';
+import { Spinner } from 'components/DefaultComponents/Spinner/Spinner';
+import { ApiRoutes } from 'Services/ApiRoutes';
+import { GenericPostsError } from 'components/DefaultComponents/GenericPostsError/GenericPostsError';
+import { useQuery } from 'hooks/useQuery';
+import { Post } from 'interfaces/Posts';
 
 interface ProfileParams {
   id: string;

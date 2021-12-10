@@ -1,28 +1,25 @@
-import { UserPicture } from '../DefaultComponents/UserPicture/UserPicture';
+import { UserPicture } from 'components/DefaultComponents/UserPicture/UserPicture';
 import { CommentsList, Container } from './styles';
-import { ReactComponent as More } from '../../assets/Post/more.svg';
-import { ReactComponent as Share } from '../../assets/Post/share.svg';
-import { ReactComponent as Send } from '../../assets/Post/send.svg';
-import { ReactComponent as FavoriteFilled } from '../../assets/Post/favoriteFilled.svg';
-import { ReactComponent as Arrow } from '../../assets/Post/arrow.svg';
+import { ReactComponent as More } from 'assets/Post/more.svg';
+import { ReactComponent as Share } from 'assets/Post/share.svg';
+import { ReactComponent as Send } from 'assets/Post/send.svg';
+import { ReactComponent as FavoriteFilled } from 'assets/Post/favoriteFilled.svg';
+import { ReactComponent as Arrow } from 'assets/Post/arrow.svg';
 
-import { MakeAComment } from '../MakeAComment/MakeAComment';
-import { Comment } from '../Comment/Comment';
+import { MakeAComment } from 'components/MakeAComment/MakeAComment';
+import { Comment } from 'components/Comment/Comment';
 
 import brazil from 'date-fns/locale/pt-BR';
 import { formatDistance } from 'date-fns';
 import { useState } from 'react';
-import { Post } from '../../interfaces/Posts';
-import { AuthUser } from '../../interfaces/AuthUser';
+import { Post } from 'interfaces/Posts';
+import { AuthUser } from 'interfaces/AuthUser';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store/reducers';
-import * as PostServices from '../../Services/PostServices/PostServices';
-import {
-  deletePostLike,
-  insertPostLike,
-} from '../../store/actions/PostsActions';
-import { LikesList } from './LikesList/LikesList';
-import { AllCommentsModal } from '../AllCommentsModal/AllCommentsModal';
+import { RootState } from 'store/reducers';
+import * as PostServices from 'Services/PostServices/PostServices';
+import { deletePostLike, insertPostLike } from 'store/actions/PostsActions';
+import { LikesList } from 'components/PostCard/LikesList/LikesList';
+import { AllCommentsModal } from 'components/AllCommentsModal/AllCommentsModal';
 
 interface PostCardProps {
   post: Post;
@@ -34,6 +31,7 @@ export function PostCard({ post }: PostCardProps) {
   );
   const [selectedImage, setSelectedImage] = useState(0);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [liked, setLiked] = useState('');
   const [likesModalIsOpen, setLikesModalState] = useState(false);
   const [allCommentsModalOpen, setAllCommentsModalOpen] =

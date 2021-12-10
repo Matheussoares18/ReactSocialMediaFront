@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import userPhoto from '../../../assets/userPhoto.png';
+import userPhoto from 'assets/userPhoto.png';
 
 interface UserPictureProps {
   source?: string;

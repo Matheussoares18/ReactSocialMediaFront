@@ -1,3 +1,3 @@
 export const config = {
-  host: 'https://social-meedia.com',
+  host: process.env.REACT_APP_API_URL,
 };

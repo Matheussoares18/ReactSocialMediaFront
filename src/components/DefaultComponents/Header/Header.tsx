@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import Switch from 'react-switch';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,16 +13,16 @@ import {
   Logo,
   SearchContainer,
 } from './styles';
-import { ReactComponent as Search } from '../../../assets/Menu/search.svg';
-import { ReactComponent as NotificationIcon } from '../../../assets/Menu/notificationIcon.svg';
-import { ReactComponent as Messages } from '../../../assets/Menu/messages.svg';
-import { ReactComponent as ExpandIcon } from '../../../assets/Menu/expandIcon.svg';
-import { UserPicture } from '../UserPicture/UserPicture';
-import { AuthUser, Themes } from '../../../interfaces/AuthUser';
-import { RootState } from '../../../store/reducers';
-import { logout } from '../../../store/actions/AuthUserAction';
+import { ReactComponent as Search } from 'assets/Menu/search.svg';
+import { ReactComponent as NotificationIcon } from 'assets/Menu/notificationIcon.svg';
+import { ReactComponent as Messages } from 'assets/Menu/messages.svg';
+import { ReactComponent as ExpandIcon } from 'assets/Menu/expandIcon.svg';
+import { UserPicture } from 'components/DefaultComponents/UserPicture/UserPicture';
+import { AuthUser, Themes } from 'interfaces/AuthUser';
+import { RootState } from 'store/reducers';
+import { logout } from 'store/actions/AuthUserAction';
 import DropMenuItem from './DropMenuItem/DropMenuItem';
-import { AuthRoutes, PublicRoutes } from '../../../Routes/RoutesEnum';
+import { AuthRoutes, PublicRoutes } from 'Routes/RoutesEnum';
 
 export function Header() {
   const authUser: AuthUser | undefined = useSelector(

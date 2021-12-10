@@ -1,18 +1,18 @@
 import React from 'react';
 import { Container, Content, SubmitButtonContainer } from './styles';
-import { ReactComponent as ArrowBack } from '../../assets/RegisterPage/arrow_back.svg';
+import { ReactComponent as ArrowBack } from 'assets/RegisterPage/arrow_back.svg';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
-import * as UserServices from '../../Services/UserServices/UserServices';
-import { PublicRoutes } from '../../Routes/RoutesEnum';
-import { FirstStep } from './FirstStep/FirstStep';
-import { SecondStep } from './SecondStep/SecondStep';
-import { ThirdStep } from './ThirdStep/ThirdStep';
-import { updateUserValues } from '../../store/actions/UserRegisterActions';
-import { RootState } from '../../store/reducers';
-import { UserRegisterValues } from '../../interfaces/UserRegister';
+import * as UserServices from 'Services/UserServices/UserServices';
+import { PublicRoutes } from 'Routes/RoutesEnum';
+import { FirstStep } from 'components/UserRegister/FirstStep/FirstStep';
+import { SecondStep } from 'components/UserRegister/SecondStep/SecondStep';
+import { ThirdStep } from 'components/UserRegister/ThirdStep/ThirdStep';
+import { updateUserValues } from 'store/actions/UserRegisterActions';
+import { RootState } from 'store/reducers';
+import { UserRegisterValues } from 'interfaces/UserRegister';
 export interface FormsFields {
   name?: string;
   email?: string;

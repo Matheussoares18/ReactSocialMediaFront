@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { useState } from 'react';
-import api from '../Services/api';
+import api from 'Services/api';
 
 interface UseMutationProps<FunctionReturn = any> {
   path: string;

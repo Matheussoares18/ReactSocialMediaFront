@@ -1,15 +1,15 @@
 import { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AuthUser } from '../../interfaces/AuthUser';
-import { PostComment } from '../../interfaces/PostComment';
+import { AuthUser } from 'interfaces/AuthUser';
+import { PostComment } from 'interfaces/PostComment';
 
-import { RootState } from '../../store/reducers';
-import { ConfirmModal } from '../ConfirmModal/ConfirmModal';
+import { RootState } from 'store/reducers';
+import { ConfirmModal } from 'components/ConfirmModal/ConfirmModal';
 
-import { UserPicture } from '../DefaultComponents/UserPicture/UserPicture';
+import { UserPicture } from 'components/DefaultComponents/UserPicture/UserPicture';
 import { Container } from './styles';
-import * as PostCommentServices from '../../Services/PostCommentsServices/PostCommentsServices';
-import { deletePostComment } from '../../store/actions/PostsActions';
+import * as PostCommentServices from 'Services/PostCommentsServices/PostCommentsServices';
+import { deletePostComment } from 'store/actions/PostsActions';
 
 interface CommentProps {
   comment: PostComment;

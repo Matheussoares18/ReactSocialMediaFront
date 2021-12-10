@@ -1,17 +1,17 @@
-import { Header } from '../../components/DefaultComponents/Header/Header';
-import { MakeAPostCard } from '../../components/MakeAPostCard/MakeAPostCard';
-import { PostCard } from '../../components/PostCard/PostCard';
+import { Header } from 'components/DefaultComponents/Header/Header';
+import { MakeAPostCard } from 'components/MakeAPostCard/MakeAPostCard';
+import { PostCard } from 'components/PostCard/PostCard';
 import { Container, PostsList } from './styles';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { insertPosts } from '../../store/actions/PostsActions';
-import { RootState } from '../../store/reducers';
-import { Post } from '../../interfaces/Posts';
-import { useQuery } from '../../hooks/useQuery';
-import { ApiRoutes } from '../../Services/ApiRoutes';
-import { LoadingOrError } from '../../components/DefaultComponents/LoadingOrError/LoadingOrError';
-import { PostsLoader } from '../../components/DefaultComponents/PostsLoader/PostsLoader';
-import { GenericPostsError } from '../../components/DefaultComponents/GenericPostsError/GenericPostsError';
+import { insertPosts } from 'store/actions/PostsActions';
+import { RootState } from 'store/reducers';
+import { Post } from 'interfaces/Posts';
+import { useQuery } from 'hooks/useQuery';
+import { ApiRoutes } from 'Services/ApiRoutes';
+import { LoadingOrError } from 'components/DefaultComponents/LoadingOrError/LoadingOrError';
+import { PostsLoader } from 'components/DefaultComponents/PostsLoader/PostsLoader';
+import { GenericPostsError } from 'components/DefaultComponents/GenericPostsError/GenericPostsError';
 
 export function PostsPage() {
   const posts: Post[] = useSelector((state: RootState) => state.posts.posts);

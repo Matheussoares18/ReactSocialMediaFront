@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
-import api from '../Services/api';
+import api from 'Services/api';
 
 export type RefetchType<RequestReturnType = any> = (
   newPath: string,

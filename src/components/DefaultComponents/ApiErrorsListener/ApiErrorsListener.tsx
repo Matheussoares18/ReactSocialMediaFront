@@ -1,12 +1,12 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { config } from '../../../config';
-import { AuthUser } from '../../../interfaces/AuthUser';
-import { PublicRoutes } from '../../../Routes/RoutesEnum';
-import api from '../../../Services/api';
-import { insertUser, logout } from '../../../store/actions/AuthUserAction';
-import { RootState } from '../../../store/reducers';
+import { config } from 'config';
+import { AuthUser } from 'interfaces/AuthUser';
+import { PublicRoutes } from 'Routes/RoutesEnum';
+import api from 'Services/api';
+import { insertUser, logout } from 'store/actions/AuthUserAction';
+import { RootState } from 'store/reducers';
 import axios from 'axios';
 interface ApiErrorsListenerProps {
   children?: React.ReactElement;

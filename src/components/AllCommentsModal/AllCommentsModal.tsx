@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Modal from 'react-modal';
 import { GrClose } from 'react-icons/gr';
-import { PostComment } from '../../interfaces/PostComment';
-import * as PostCommentsServices from '../../Services/PostCommentsServices/PostCommentsServices';
-import { Comment } from '../Comment/Comment';
+import { PostComment } from 'interfaces/PostComment';
+import * as PostCommentsServices from 'Services/PostCommentsServices/PostCommentsServices';
+import { Comment } from 'components/Comment/Comment';
 import { PostCommentsContainer } from './styles';
-import { SpinnerContainer } from '../../pages/PostsPage/styles';
-import { Spinner } from '../DefaultComponents/Spinner/Spinner';
+import { SpinnerContainer } from 'pages/PostsPage/styles';
+import { Spinner } from 'components/DefaultComponents/Spinner/Spinner';
 
 interface AllCommentsModalProps {
   postId: string;

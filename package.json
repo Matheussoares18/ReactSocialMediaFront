@@ -16,6 +16,7 @@
     "axios": "^0.21.1",
     "cep-promise": "^4.1.0",
     "date-fns": "^2.25.0",
+    "dotenv": "^10.0.0",
     "es6-shim": "^0.35.6",
     "prismic-dom": "^2.2.6",
     "react": "^17.0.2",
@@ -33,7 +34,7 @@
     "redux": "^4.1.2",
     "redux-persist": "^6.0.0",
     "styled-components": "^5.2.1",
-    "typescript": "^4.1.2",
+    "typescript": "^4.5.3",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
@@ -63,6 +64,7 @@
   "devDependencies": {
     "@types/prismic-dom": "^2.1.1",
     "@types/react-modal": "^3.13.1",
+    "babel-plugin-module-resolver": "^4.1.0",
     "redux-devtools-extension": "^2.13.9"
   }
 }
