@@ -5,8 +5,9 @@ const INITIAL_STATE: AuthUserState = {
 };
 
 export default function authUserReducer(
-  action: AuthUserActionTypes,
-  state = INITIAL_STATE
+  // eslint-disable-next-line default-param-last
+  state = INITIAL_STATE,
+  action: AuthUserActionTypes
 ): AuthUserState {
   switch (action.type) {
     case 'INSERT_USER':

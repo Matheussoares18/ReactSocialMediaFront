@@ -5,8 +5,9 @@ const INITIAL_STATE: PostsState = {
 };
 
 export default function postsReducer(
-  action: PostsActionTypes,
-  state = INITIAL_STATE
+  // eslint-disable-next-line default-param-last
+  state = INITIAL_STATE,
+  action: PostsActionTypes
 ): PostsState {
   switch (action.type) {
     case 'INSERT_POSTS':

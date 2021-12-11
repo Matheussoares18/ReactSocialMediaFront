@@ -15,8 +15,9 @@ const INITIAL_STATE: UserRegisterState = {
 };
 
 export default function userRegisterValuesReducer(
-  action: UserRegisterActionTypes,
-  state = INITIAL_STATE
+  // eslint-disable-next-line default-param-last
+  state = INITIAL_STATE,
+  action: UserRegisterActionTypes
 ): UserRegisterState {
   switch (action.type) {
     case 'UPDATE_VALUES':
