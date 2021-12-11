@@ -1,6 +1,5 @@
-import React from 'react';
 import { UserRegister } from 'components/UserRegister/UserRegister';
 
-export function UserRegisterPage() {
+export function UserRegisterPage(): JSX.Element {
   return <UserRegister />;
 }

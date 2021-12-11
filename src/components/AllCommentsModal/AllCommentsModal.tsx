@@ -4,9 +4,9 @@ import { GrClose } from 'react-icons/gr';
 import { PostComment } from 'interfaces/PostComment';
 import * as PostCommentsServices from 'Services/PostCommentsServices/PostCommentsServices';
 import { Comment } from 'components/Comment/Comment';
-import { PostCommentsContainer } from './styles';
 import { SpinnerContainer } from 'pages/PostsPage/styles';
 import { Spinner } from 'components/DefaultComponents/Spinner/Spinner';
+import { PostCommentsContainer } from './styles';
 
 interface AllCommentsModalProps {
   postId: string;
@@ -18,7 +18,7 @@ export function AllCommentsModal({
   isOpen,
   onRequestClose,
   postId,
-}: AllCommentsModalProps) {
+}: AllCommentsModalProps): JSX.Element {
   const [comments, setComments] = useState<PostComment[]>([]);
   const [skip, setSkip] = useState<number>(0);
   const [totalComments, setTotalComments] = useState<number>(0);
@@ -44,6 +44,7 @@ export function AllCommentsModal({
 
     const hasPostsYet = skip < totalComments;
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     if (currentPosition >= postsListHeight! && hasPostsYet) {
       setLoading(true);
       const updateSkipNumber = skip + 15;
@@ -68,13 +69,13 @@ export function AllCommentsModal({
     <Modal
       isOpen={isOpen}
       onRequestClose={onRequestClose}
-      overlayClassName="react-modal-overlay"
-      className="react-modal-content"
+      overlayClassName='react-modal-overlay'
+      className='react-modal-content'
     >
       <button
-        className="react-modal-close"
+        className='react-modal-close'
         onClick={() => onRequestClose()}
-        type="button"
+        type='button'
       >
         <GrClose />
       </button>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import userPhoto from 'assets/userPhoto.png';
+import userPhoto from '../../../assets/userPhoto.png';
 
 interface UserPictureProps {
   source?: string;
@@ -12,7 +12,7 @@ export function UserPicture({
   classname,
   onMouseEnter,
   onClick,
-}: UserPictureProps) {
+}: UserPictureProps): JSX.Element {
   const [imageSource, setImageSource] = useState<string>('');
 
   useEffect(() => {
@@ -25,11 +25,11 @@ export function UserPicture({
   return (
     <img
       src={imageSource}
-      alt=" "
+      alt=' '
       onClick={onClick}
       onKeyPress={() => onClick}
-      loading="lazy"
-      role="presentation"
+      loading='lazy'
+      role='presentation'
       style={{ objectFit: `${source ? 'cover' : 'initial'}` }}
       className={classname}
       onMouseEnter={onMouseEnter}

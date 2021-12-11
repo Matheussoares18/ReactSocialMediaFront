@@ -1,8 +1,8 @@
-import Input from '../../DefaultComponents/Input/Input';
+import { useSelector } from 'react-redux';
 import { DeepMap, FieldError, UseFormRegister } from 'react-hook-form';
+import Input from '../../DefaultComponents/Input/Input';
 import { FormsFields } from '../UserRegister';
 import { UserRegisterValues } from '../../../interfaces/UserRegister';
-import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/reducers';
 
 interface FirstStepProps {
@@ -10,15 +10,15 @@ interface FirstStepProps {
   errors: DeepMap<FormsFields, FieldError>;
 }
 
-export function FirstStep({ register, errors }: FirstStepProps) {
+export function FirstStep({ register, errors }: FirstStepProps): JSX.Element {
   const userRegisterValues: UserRegisterValues = useSelector(
     (state: RootState) => state.userRegisterValues.userRegisterValues
   );
   return (
     <>
       <Input
-        label="Nome:"
-        placeholder="Seu nome"
+        label='Nome:'
+        placeholder='Seu nome'
         defaultValue={userRegisterValues.name}
         hasError={!!errors?.name}
         {...register('name', {
@@ -27,8 +27,8 @@ export function FirstStep({ register, errors }: FirstStepProps) {
         errorMessage={errors?.name?.message}
       />
       <Input
-        label="E-mail:"
-        placeholder="Seu email"
+        label='E-mail:'
+        placeholder='Seu email'
         defaultValue={userRegisterValues.email}
         hasError={!!errors?.email}
         errorMessage={errors?.email?.message}

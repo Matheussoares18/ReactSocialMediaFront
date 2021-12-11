@@ -1,16 +1,12 @@
-import {
-  AuthUser,
-  AuthUserActionTypes,
-  AuthUserState,
-} from '../../interfaces/AuthUser';
+import { AuthUserActionTypes, AuthUserState } from '../../interfaces/AuthUser';
 
 const INITIAL_STATE: AuthUserState = {
   authUser: undefined,
 };
 
 export default function authUserReducer(
-  state = INITIAL_STATE,
-  action: AuthUserActionTypes
+  action: AuthUserActionTypes,
+  state = INITIAL_STATE
 ): AuthUserState {
   switch (action.type) {
     case 'INSERT_USER':

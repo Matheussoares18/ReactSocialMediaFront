@@ -13,13 +13,17 @@ interface ThirdStepProps {
   getValues: UseFormGetValues<FormsFields>;
 }
 
-export function ThirdStep({ register, errors, getValues }: ThirdStepProps) {
+export function ThirdStep({
+  register,
+  errors,
+  getValues,
+}: ThirdStepProps): JSX.Element {
   return (
     <>
       <Input
-        label="Senha:"
-        placeholder="Senha"
-        type="password"
+        label='Senha:'
+        placeholder='Senha'
+        type='password'
         hasError={!!errors?.password}
         {...register('password', {
           required: 'Este campo é obrigatório',
@@ -27,9 +31,9 @@ export function ThirdStep({ register, errors, getValues }: ThirdStepProps) {
         errorMessage={errors?.password?.message}
       />
       <Input
-        label="Confirme a senha"
-        placeholder="Confirme a senha"
-        type="password"
+        label='Confirme a senha'
+        placeholder='Confirme a senha'
+        type='password'
         hasError={!!errors?.confirm_password}
         errorMessage={errors?.confirm_password?.message}
         {...register('confirm_password', {

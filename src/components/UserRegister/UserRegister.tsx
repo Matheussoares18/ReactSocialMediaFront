@@ -1,5 +1,5 @@
+/* eslint-disable camelcase */
 import React from 'react';
-import { Container, Content, SubmitButtonContainer } from './styles';
 import { ReactComponent as ArrowBack } from 'assets/RegisterPage/arrow_back.svg';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +13,8 @@ import { ThirdStep } from 'components/UserRegister/ThirdStep/ThirdStep';
 import { updateUserValues } from 'store/actions/UserRegisterActions';
 import { RootState } from 'store/reducers';
 import { UserRegisterValues } from 'interfaces/UserRegister';
+import { Container, Content, SubmitButtonContainer } from './styles';
+
 export interface FormsFields {
   name?: string;
   email?: string;
@@ -23,7 +25,7 @@ export interface FormsFields {
   confirm_password?: string;
 }
 
-export function UserRegister() {
+export function UserRegister(): JSX.Element {
   const {
     register,
     handleSubmit,
@@ -36,6 +38,30 @@ export function UserRegister() {
   );
   const { url } = useRouteMatch();
   const dispatch = useDispatch();
+
+  async function handleCreateUser() {
+    try {
+      await UserServices.createUser(userRegisterValues);
+
+      history.push('/login');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast.error(
+        error?.response.data.error === 'User with that email already exists'
+          ? 'Email já cadastrado'
+          : 'Falha ao realizar o cadastro',
+        {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      );
+    }
+  }
 
   const routesGuideTranslate = {
     [`${PublicRoutes.REGISTER}${PublicRoutes.REGISTER_USER_INFOS}`]: {
@@ -68,28 +94,6 @@ export function UserRegister() {
   function handleSubmitCustom(data: FormsFields) {
     routesGuideTranslate[window.location.pathname].forward(data);
   }
-  async function handleCreateUser() {
-    try {
-      await UserServices.createUser(userRegisterValues);
-
-      history.push('/login');
-    } catch (error: any) {
-      toast.error(
-        error?.response.data.error === 'User with that email already exists'
-          ? 'Email já cadastrado'
-          : 'Falha ao realizar o cadastro',
-        {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        }
-      );
-    }
-  }
 
   return (
     <>
@@ -97,7 +101,7 @@ export function UserRegister() {
       <Container onSubmit={handleSubmit(handleSubmitCustom)}>
         <header>
           <ArrowBack
-            className="arrow-back"
+            className='arrow-back'
             style={{
               visibility: window.location.pathname.includes(
                 PublicRoutes.REGISTER_USER_INFOS
@@ -106,7 +110,7 @@ export function UserRegister() {
                 : 'hidden',
             }}
           />{' '}
-          <span
+          <button
             style={{
               visibility: window.location.pathname.includes(
                 PublicRoutes.REGISTER_USER_INFOS
@@ -114,15 +118,16 @@ export function UserRegister() {
                 ? 'visible'
                 : 'hidden',
             }}
+            type='button'
             onClick={() => history.push(PublicRoutes.LOGIN)}
           >
             Voltar
-          </span>
+          </button>
         </header>
         <Content>
           <h1>Cadastre-se</h1>
 
-          <div className="inputs">
+          <div className='inputs'>
             <Route path={`${url}${PublicRoutes.REGISTER_USER_INFOS}`}>
               <FirstStep register={register} errors={errors} />
             </Route>
@@ -143,15 +148,15 @@ export function UserRegister() {
             PublicRoutes.REGISTER_USER_INFOS
           ) && (
             <button
-              className="back-button"
-              type="button"
+              className='back-button'
+              type='button'
               onClick={() => handleBack()}
             >
               {' '}
               Voltar
             </button>
           )}
-          <button type="submit" className="button">
+          <button type='submit' className='button'>
             {' '}
             {url.includes(PublicRoutes.REGISTER_PASSWORD)
               ? 'Finalizar'

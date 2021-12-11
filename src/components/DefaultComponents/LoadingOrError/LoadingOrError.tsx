@@ -1,4 +1,5 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+/* eslint-disable react/jsx-no-useless-fragment */
+import React, { ReactNode, useEffect, useState } from 'react';
 
 enum States {
   DEFAULT = 'default',
@@ -9,20 +10,20 @@ enum States {
 interface LoadingOrErrorProps {
   error: {
     isError: boolean;
-    component: ReactElement;
+    component: JSX.Element;
   };
   loading: {
     isLoading: boolean;
-    component: ReactElement;
+    component: JSX.Element;
   };
-  children: JSX.Element;
+  children: ReactNode | undefined;
 }
 
 export function LoadingOrError({
   error,
   loading,
   children,
-}: LoadingOrErrorProps) {
+}: LoadingOrErrorProps): JSX.Element {
   const [state, setState] = useState<States>(States.LOADING);
 
   useEffect(() => {
@@ -37,9 +38,15 @@ export function LoadingOrError({
       setState(States.DEFAULT);
     }
   }, [error, loading]);
-  return {
-    [States.DEFAULT]: children,
-    [States.LOADING]: loading.component,
-    [States.ERROR]: error.component,
-  }[state];
+  return (
+    <>
+      {
+        {
+          [States.DEFAULT]: children,
+          [States.LOADING]: loading.component,
+          [States.ERROR]: error.component,
+        }[state]
+      }
+    </>
+  );
 }

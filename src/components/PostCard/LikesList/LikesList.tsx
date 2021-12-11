@@ -14,7 +14,7 @@ export function LikesList({
   modalIsOpen,
   handleCloseModal,
   likesList,
-}: LikesListProps) {
+}: LikesListProps): JSX.Element {
   const customStyles = {
     content: {
       top: '50%',
@@ -54,12 +54,14 @@ export function LikesList({
         <ItemsList>
           {likesList.length > 0 ? (
             likesList.map((like) => (
-              <div className="item" key={like.id}>
-                <div className="pic-and-name">
+              <div className='item' key={like.id}>
+                <div className='pic-and-name'>
                   <UserPicture source={like.user.image} />
-                  <span className="name">{like.user?.name}</span>
+                  <span className='name'>{like.user?.name}</span>
                 </div>
-                <button disabled>Seguir</button>
+                <button type='button' disabled>
+                  Seguir
+                </button>
               </div>
             ))
           ) : (

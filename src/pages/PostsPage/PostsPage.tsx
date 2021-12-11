@@ -1,7 +1,6 @@
 import { Header } from 'components/DefaultComponents/Header/Header';
 import { MakeAPostCard } from 'components/MakeAPostCard/MakeAPostCard';
 import { PostCard } from 'components/PostCard/PostCard';
-import { Container, PostsList } from './styles';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { insertPosts } from 'store/actions/PostsActions';
@@ -12,8 +11,9 @@ import { ApiRoutes } from 'Services/ApiRoutes';
 import { LoadingOrError } from 'components/DefaultComponents/LoadingOrError/LoadingOrError';
 import { PostsLoader } from 'components/DefaultComponents/PostsLoader/PostsLoader';
 import { GenericPostsError } from 'components/DefaultComponents/GenericPostsError/GenericPostsError';
+import { Container, PostsList } from './styles';
 
-export function PostsPage() {
+export function PostsPage(): JSX.Element {
   const posts: Post[] = useSelector((state: RootState) => state.posts.posts);
   const [skip, setSkip] = useState<number>(0);
   const dispatch = useDispatch();
@@ -28,9 +28,6 @@ export function PostsPage() {
       setSkip(skip + 15);
       dispatch(insertPosts([...posts, ...result.posts]));
     },
-    onError: (err) => {
-      console.log(err);
-    },
   });
   const postListsRef = useRef<HTMLDivElement>(null);
 
@@ -40,6 +37,7 @@ export function PostsPage() {
 
     const hasPostsYet = skip < totalPosts;
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     if (currentPosition >= postsListHeight! && hasPostsYet) {
       const result = await refetch(`${ApiRoutes.POSTS}/${skip}`);
 
@@ -47,8 +45,6 @@ export function PostsPage() {
         const updateSkipNumber = skip + 15;
         setSkip(updateSkipNumber);
       }
-
-      return;
     }
   }, [skip, totalPosts, isError, refetch]);
 
@@ -76,11 +72,9 @@ export function PostsPage() {
             ),
           }}
         >
-          <>
-            {posts?.map((item) => (
-              <PostCard post={item} key={item.id} />
-            ))}
-          </>
+          {posts.map((item) => (
+            <PostCard post={item} key={item.id} />
+          ))}
         </LoadingOrError>
       </PostsList>
     </Container>

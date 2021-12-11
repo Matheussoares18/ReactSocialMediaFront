@@ -17,7 +17,7 @@ export function ProfilePosts({
   posts,
   totalPosts,
   refetch,
-}: ProfilePostsProps) {
+}: ProfilePostsProps): JSX.Element {
   const [skip, setSkip] = useState<number>(posts?.length);
   const [paginatedPosts, setPaginatedPosts] = useState<Post[] | undefined>(
     posts
@@ -31,6 +31,7 @@ export function ProfilePosts({
 
     const hasPostsYet = skip < totalPosts;
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     if (currentPosition >= postsListHeight! && hasPostsYet) {
       const result = await refetch(
         `${ApiRoutes.POSTS}/${skip}`,
@@ -43,8 +44,6 @@ export function ProfilePosts({
         setSkip(updateSkipNumber);
         setPaginatedPosts([...posts, ...result.posts]);
       }
-
-      return;
     }
   }, [skip, totalPosts, refetch, posts]);
 

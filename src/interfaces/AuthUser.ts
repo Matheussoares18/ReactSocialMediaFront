@@ -1,7 +1,12 @@
+export enum Themes {
+  DARK = 'dark',
+  LIGHT = 'light',
+}
 export interface AuthUser {
   name?: string;
   email?: string;
   phone?: string;
+  // eslint-disable-next-line camelcase
   birth_date?: string;
   gender?: string;
   id?: string;
@@ -9,10 +14,6 @@ export interface AuthUser {
   theme?: Themes;
   token?: string;
   refreshToken?: string;
-}
-export enum Themes {
-  DARK = 'dark',
-  LIGHT = 'light',
 }
 
 export const INSERT_USER = 'INSERT_USER';

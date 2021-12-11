@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useForm } from 'react-hook-form';
 import { GrClose } from 'react-icons/gr';
 import Modal from 'react-modal';
@@ -25,7 +25,7 @@ import {
 
 interface UpdateUserFormFields {
   name: string;
-  image: any;
+  image: FileList;
   biography: string;
 }
 
@@ -51,7 +51,7 @@ interface EditProfileModalProps {
     id: string;
     name: string;
     biography?: string;
-    image?: any;
+    image?: string;
   };
 }
 type UpdateUserRequestReturn = Omit<
@@ -65,7 +65,7 @@ export function EditProfileModal({
   userInfos,
   refetch,
   refetchPosts,
-}: EditProfileModalProps) {
+}: EditProfileModalProps): JSX.Element {
   const authUser: AuthUser | undefined = useSelector(
     (state: RootState) => state.authUser.authUser
   );
@@ -114,7 +114,7 @@ export function EditProfileModal({
   };
 
   async function onSubmit(data: UpdateUserFormFields) {
-    let image = undefined;
+    let image;
     if (data.image[0]) {
       const file = data.image[0];
 
@@ -127,16 +127,16 @@ export function EditProfileModal({
     <Modal
       isOpen={isOpen}
       onRequestClose={onRequestClose}
-      overlayClassName="react-modal-overlay"
-      className="react-modal-content"
+      overlayClassName='react-modal-overlay'
+      className='react-modal-content'
       style={customStyles}
     >
       <ToastContainer />
       <ModalContainer>
         <button
-          className="react-modal-close"
+          className='react-modal-close'
           onClick={() => onRequestClose()}
-          type="button"
+          type='button'
         >
           <GrClose />
         </button>
@@ -144,26 +144,26 @@ export function EditProfileModal({
           <h1>Editar dados</h1>
         </ModalHeader>
         <ModalContent onSubmit={handleSubmit(onSubmit)}>
-          <div className="content">
+          <div className='content'>
             <label
-              htmlFor="user-image-input"
+              htmlFor='user-image-input'
               style={{ display: 'flex', flexDirection: 'column' }}
             >
-              <UserPicture classname="user-img" source={userInfos.image} />
+              <UserPicture classname='user-img' source={userInfos.image} />
 
               <InputFile
-                type="file"
-                id="user-image-input"
+                type='file'
+                id='user-image-input'
                 {...register('image')}
                 /*  style={{ display: 'none' }} */
               />
             </label>
 
-            <div className="inputs">
+            <div className='inputs'>
               <Input
-                label="Nome:"
-                placeholder="Seu Nome"
-                type="text"
+                label='Nome:'
+                placeholder='Seu Nome'
+                type='text'
                 hasError={!!errors.name}
                 defaultValue={userInfos.name}
                 errorMessage={errors?.name?.message}
@@ -176,11 +176,11 @@ export function EditProfileModal({
                 })}
               />
               <BiographInputContainer hasError={!!errors?.biography}>
-                <label htmlFor="">Biografia</label>
+                <label htmlFor=''>Biografia</label>
                 <textarea
-                  className="biography"
-                  id=""
-                  placeholder="Sua biografia aqui..."
+                  className='biography'
+                  id=''
+                  placeholder='Sua biografia aqui...'
                   defaultValue={userInfos.biography}
                   {...register('biography', {
                     maxLength: {
@@ -191,7 +191,7 @@ export function EditProfileModal({
                 />
               </BiographInputContainer>
               {errors?.biography && (
-                <div className="error-message-container">
+                <div className='error-message-container'>
                   <span>{errors?.biography?.message}</span>
                 </div>
               )}
@@ -199,15 +199,15 @@ export function EditProfileModal({
           </div>
           <ModalActions>
             <button
-              type="button"
-              className="cancel-button"
+              type='button'
+              className='cancel-button'
               onClick={onRequestClose}
             >
               Cancelar
             </button>
             <button
-              type="submit"
-              className="confirm-button"
+              type='submit'
+              className='confirm-button'
               disabled={isLoading}
             >
               {isLoading ? <Spinner /> : 'Confirmar'}

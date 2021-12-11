@@ -5,10 +5,13 @@ interface FollowersInfoProps {
   text: string;
 }
 
-export function FollowersInfo({ value, text }: FollowersInfoProps) {
+export function FollowersInfo({
+  value,
+  text,
+}: FollowersInfoProps): JSX.Element {
   return (
     <Container>
-      <strong className="value">{value}</strong>
+      <strong className='value'>{value}</strong>
       {text}
     </Container>
   );

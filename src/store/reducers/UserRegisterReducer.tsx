@@ -15,8 +15,8 @@ const INITIAL_STATE: UserRegisterState = {
 };
 
 export default function userRegisterValuesReducer(
-  state = INITIAL_STATE,
-  action: UserRegisterActionTypes
+  action: UserRegisterActionTypes,
+  state = INITIAL_STATE
 ): UserRegisterState {
   switch (action.type) {
     case 'UPDATE_VALUES':

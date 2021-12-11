@@ -6,20 +6,19 @@ import Input from 'components/DefaultComponents/Input/Input';
 import * as AuthService from 'Services/AuthServices/AuthServices';
 import { ToastContainer, toast } from 'react-toastify';
 
-import { Container, Content } from './styles';
 import { useDispatch } from 'react-redux';
 import { insertUser } from 'store/actions/AuthUserAction';
+import { Container, Content } from './styles';
 
 interface LoginFormFields {
   email: string;
   password: string;
 }
 
-export function Login() {
+export function Login(): JSX.Element {
   const {
     register,
     handleSubmit,
-
     formState: { errors },
   } = useForm<LoginFormFields>({
     mode: 'onSubmit',
@@ -35,6 +34,7 @@ export function Login() {
       dispatch(insertUser({ ...result.data }));
       localStorage.setItem('token', result.data.token);
       window.location.href = AuthRoutes.POSTS;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(
         error?.response.data.message === 'Invalid credentials'
@@ -59,12 +59,12 @@ export function Login() {
 
       <Content onSubmit={handleSubmit(onSubmit)}>
         <h1>Social Media</h1>
-        <div className="inputs">
+        <div className='inputs'>
           <Input
-            label="E-mail ou usuário:"
-            placeholder="Login"
-            type="text"
-            maxWidth="23.75rem"
+            label='E-mail ou usuário:'
+            placeholder='Login'
+            type='text'
+            maxWidth='23.75rem'
             hasError={!!errors?.email}
             errorMessage={errors?.email?.message}
             {...register('email', {
@@ -77,10 +77,10 @@ export function Login() {
             })}
           />
           <Input
-            label="Senha"
-            placeholder="Senha"
-            type="password"
-            maxWidth="23.75rem"
+            label='Senha'
+            placeholder='Senha'
+            type='password'
+            maxWidth='23.75rem'
             hasError={!!errors?.password}
             {...register('password', {
               required: 'Este campo é obrigatório',
@@ -88,12 +88,12 @@ export function Login() {
             errorMessage={errors?.password?.message}
           />
         </div>
-        <button type="submit">Logar</button>
-        <div className="link-container">
+        <button type='submit'>Logar</button>
+        <div className='link-container'>
           <span>
             Ainda não possui conta?{' '}
             <Link
-              className="register-link"
+              className='register-link'
               to={`${PublicRoutes.REGISTER}${PublicRoutes.REGISTER_USER_INFOS}`}
             >
               Cadastre-se

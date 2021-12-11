@@ -94,6 +94,8 @@ export const Links = styled.div`
       height: calc(100% - 0.375rem);
       align-items: center;
       text-decoration: none;
+      border: none;
+      background: transparent;
 
       img {
         width: 2.063rem;

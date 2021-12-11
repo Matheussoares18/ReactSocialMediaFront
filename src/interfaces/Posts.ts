@@ -1,5 +1,14 @@
 import { PostComment } from './PostComment';
 
+export interface PostLikes {
+  id: string;
+  post_id: string;
+  user_id: string;
+  user: {
+    name: string;
+    image: string;
+  };
+}
 export interface Post {
   id: string;
   content: string;
@@ -20,16 +29,6 @@ export interface Post {
     birth_date: string;
     gender: string;
     password: string;
-    image: string;
-  };
-}
-
-export interface PostLikes {
-  id: string;
-  post_id: string;
-  user_id: string;
-  user: {
-    name: string;
     image: string;
   };
 }

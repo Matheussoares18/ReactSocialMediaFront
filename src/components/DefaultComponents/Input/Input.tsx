@@ -14,7 +14,7 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
 ) => {
   return (
     <InputContainer hasError={hasError} maxWidth={maxWidth}>
-      <label htmlFor=""> {label} </label>
+      <span> {label} </span>
       <CustomInput
         {...rest}
         hasError={hasError}
@@ -23,7 +23,7 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
         onChange={rest.onChange}
       />
       {hasError && (
-        <div className="error-message-container">
+        <div className='error-message-container'>
           <span>{errorMessage}</span>
         </div>
       )}

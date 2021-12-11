@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { UserPicture } from 'components/DefaultComponents/UserPicture/UserPicture';
-import { Container } from './styles';
 import { ReactComponent as CollectionsIcons } from 'assets/MakeAPost/collectionsIcons.svg';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
@@ -9,8 +9,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { insertPost } from 'store/actions/PostsActions';
 import { AuthUser } from 'interfaces/AuthUser';
 import { RootState } from 'store/reducers';
+import { Container } from './styles';
 
-export function MakeAPostCard() {
+export function MakeAPostCard(): JSX.Element {
   const authUser: AuthUser | undefined = useSelector(
     (state: RootState) => state.authUser.authUser
   );
@@ -69,7 +70,7 @@ export function MakeAPostCard() {
     setLoading(true);
     try {
       const result = await PostsServices.createPost({
-        content: content,
+        content,
         post_images: [
           ...images.map((item) => {
             return {
@@ -101,22 +102,22 @@ export function MakeAPostCard() {
     <>
       <ToastContainer />
       <Container>
-        <div className="content">
-          <div className="top">
+        <div className='content'>
+          <div className='top'>
             <UserPicture source={authUser?.image} />
 
             <textarea
-              placeholder="O que está acontecendo?"
+              placeholder='O que está acontecendo?'
               value={content}
               onChange={(e) => setContent(e.target.value)}
             />
           </div>
-          <div className="bottom">
-            <label htmlFor="upload-image">
-              <CollectionsIcons className="collections-icon" />
+          <div className='bottom'>
+            <label htmlFor='upload-image'>
+              <CollectionsIcons className='collections-icon' />
               <input
-                type="file"
-                id="upload-image"
+                type='file'
+                id='upload-image'
                 multiple
                 style={{ display: 'none' }}
                 onChange={(e) => validatePhoto(e.target.files![0]!)}
@@ -124,7 +125,7 @@ export function MakeAPostCard() {
             </label>
 
             <button
-              type="button"
+              type='button'
               onClick={() => handleSubmit()}
               disabled={content.length === 0 || loading}
             >
@@ -133,9 +134,9 @@ export function MakeAPostCard() {
           </div>
         </div>
         {images.length > 0 && (
-          <div className="preview-image-container">
+          <div className='preview-image-container'>
             {images.map((image) => (
-              <img className="preview-image" src={image} alt="" key={image} />
+              <img className='preview-image' src={image} alt='' key={image} />
             ))}
           </div>
         )}

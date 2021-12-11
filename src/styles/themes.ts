@@ -1,4 +1,14 @@
-import { CustomTheme } from '../@types/styled-components';
+// eslint-disable-next-line import/no-unresolved
+type CustomTheme = {
+  body: string;
+  lines: string;
+  primaryText: string;
+  labelText: string;
+  inputBackground: string;
+  inputTextColor: string;
+  commentBox: string;
+  menuHoverColor: string;
+};
 
 export const lightTheme: CustomTheme = {
   body: '#ffffff',

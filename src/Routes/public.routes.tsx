@@ -21,13 +21,13 @@ const Routes: React.FC = () => {
       <Switch>
         <ApiErrorsListener>
           <>
-            <Route exact path="/" component={HomePage}>
-              <Redirect to="/posts" />
+            <Route exact path='/' component={HomePage}>
+              <Redirect to='/posts' />
             </Route>
-            <Route path="/login" component={LoginPage} />
+            <Route path='/login' component={LoginPage} />
             <Route path={PublicRoutes.REGISTER} component={UserRegisterPage} />
             <Route path={AuthRoutes.POSTS} component={PostsPage}>
-              {!authUser && <Redirect to="/login" />}
+              {!authUser && <Redirect to='/login' />}
             </Route>
             <Route
               path={`${PublicRoutes.PROFILE}/:id`}

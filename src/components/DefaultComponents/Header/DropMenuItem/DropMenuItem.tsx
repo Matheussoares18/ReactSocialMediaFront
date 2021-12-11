@@ -17,8 +17,8 @@ const DropMenuItem: React.FC<DropMenuItemProps> = ({
 }) => {
   return (
     <Container onClick={onClick}>
-      <div className="content">
-        {Icon && <Icon className="icon" />}
+      <div className='content'>
+        {Icon && <Icon className='icon' />}
         {children}
         <span>{label}</span>
       </div>

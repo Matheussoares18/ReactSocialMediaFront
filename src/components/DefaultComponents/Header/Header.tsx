@@ -1,8 +1,19 @@
-import React, { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import Switch from 'react-switch';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoExitOutline } from 'react-icons/io5';
+import { ReactComponent as Search } from 'assets/Menu/search.svg';
+import { ReactComponent as NotificationIcon } from 'assets/Menu/notificationIcon.svg';
+import { ReactComponent as Messages } from 'assets/Menu/messages.svg';
+import { ReactComponent as ExpandIcon } from 'assets/Menu/expandIcon.svg';
+import { UserPicture } from 'components/DefaultComponents/UserPicture/UserPicture';
+import { AuthUser, Themes } from 'interfaces/AuthUser';
+import { RootState } from 'store/reducers';
+import { logout } from 'store/actions/AuthUserAction';
+import { AuthRoutes, PublicRoutes } from 'Routes/RoutesEnum';
+import DropMenuItem from './DropMenuItem/DropMenuItem';
 import {
   Container,
   Content,
@@ -13,18 +24,8 @@ import {
   Logo,
   SearchContainer,
 } from './styles';
-import { ReactComponent as Search } from 'assets/Menu/search.svg';
-import { ReactComponent as NotificationIcon } from 'assets/Menu/notificationIcon.svg';
-import { ReactComponent as Messages } from 'assets/Menu/messages.svg';
-import { ReactComponent as ExpandIcon } from 'assets/Menu/expandIcon.svg';
-import { UserPicture } from 'components/DefaultComponents/UserPicture/UserPicture';
-import { AuthUser, Themes } from 'interfaces/AuthUser';
-import { RootState } from 'store/reducers';
-import { logout } from 'store/actions/AuthUserAction';
-import DropMenuItem from './DropMenuItem/DropMenuItem';
-import { AuthRoutes, PublicRoutes } from 'Routes/RoutesEnum';
 
-export function Header() {
+export function Header(): JSX.Element {
   const authUser: AuthUser | undefined = useSelector(
     (state: RootState) => state.authUser.authUser
   );
@@ -36,8 +37,8 @@ export function Header() {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  function changeTheme(theme?: Themes) {
-    if (theme && theme === 'dark') {
+  function changeTheme(themeParam?: Themes) {
+    if (themeParam && themeParam === 'dark') {
       localStorage.setItem('theme', Themes.LIGHT);
       setTheme(Themes.LIGHT);
       window.location.reload();
@@ -48,32 +49,34 @@ export function Header() {
     setTheme(Themes.DARK);
     window.location.reload();
   }
+  const redirectToHome = () => {
+    window.location.href = `${AuthRoutes.POSTS}`;
+  };
 
   return (
     <Container>
       <Content>
         <SearchContainer>
-          <div className="content">
-            <Search className="search-icon" />
-            <input type="text" placeholder="Pesquisar na SocialMedia" />
+          <div className='content'>
+            <Search className='search-icon' />
+            <input type='text' placeholder='Pesquisar na SocialMedia' />
           </div>
         </SearchContainer>
-        <Logo onClick={() => (window.location.href = `${AuthRoutes.POSTS}`)}>
-          Social Media
-        </Logo>
+        <Logo onClick={redirectToHome}>Social Media</Logo>
         <Links>
-          <label className="profile" htmlFor="user-image-input">
-            <div
-              className="profile-icon"
+          <label className='profile' htmlFor='user-image-input'>
+            <button
+              type='button'
+              className='profile-icon'
               onClick={() =>
                 history.push(`${PublicRoutes.PROFILE}/${authUser?.id}/posts`)
               }
             >
               <UserPicture source={authUser?.image} />
               <input
-                type="file"
+                type='file'
                 style={{ display: 'none' }}
-                id="user-image-input"
+                id='user-image-input'
                 /* onChange={(e) => {
                   console.log(e);
                   handleUpdateUserImage(e.target!.files![0]!);
@@ -84,44 +87,44 @@ export function Header() {
                   ? authUser!.name!.substring(0, 7)
                   : authUser!.name}
               </span>
-            </div>
+            </button>
           </label>
-          <div className="container">
-            <Link className="commom-icons" to="/notifications">
-              <NotificationIcon className="icon" />
+          <div className='container'>
+            <Link className='commom-icons' to='/notifications'>
+              <NotificationIcon className='icon' />
             </Link>
-            <Link className="commom-icons" to="#">
-              <Messages className="icon" />
+            <Link className='commom-icons' to='/'>
+              <Messages className='icon' />
             </Link>
 
             <button
-              type="button"
-              className="commom-icons"
+              type='button'
+              className='commom-icons'
               style={{ cursor: 'pointer' }}
               onClick={() => setMenuIsVisible(!menuIsVisible)}
             >
-              <ExpandIcon className="icon" />
+              <ExpandIcon className='icon' />
             </button>
             {menuIsVisible && (
               <DropMenuContainer>
                 <DropMenu>
-                  <DropMenuItem label="Modo escuro">
+                  <DropMenuItem label='Modo escuro'>
                     <Switch
                       onChange={() =>
                         changeTheme(
                           localStorage.getItem('theme') as Themes | undefined
                         )
                       }
-                      checked={theme === Themes.DARK ? true : false}
+                      checked={theme === Themes.DARK}
                       height={20}
                       uncheckedIcon={false}
                       checkedIcon={false}
-                      onColor="#0caacd"
+                      onColor='#0caacd'
                       width={40}
                     />
                   </DropMenuItem>
                   <DropMenuItem
-                    label="Sair"
+                    label='Sair'
                     icon={IoExitOutline}
                     onClick={() => dispatch(logout())}
                   />

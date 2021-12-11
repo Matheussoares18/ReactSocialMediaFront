@@ -27,11 +27,14 @@ export const Container = styled.form`
       height: 27px;
     }
 
-    span {
+    button {
       font-family: var(--roboto-font-family);
       color: var(--blue);
       font-size: 1.125rem;
       font-weight: 400;
+
+      border: none;
+      background: transparent;
     }
   }
 `;

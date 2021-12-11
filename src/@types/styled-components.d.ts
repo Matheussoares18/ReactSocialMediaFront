@@ -1,6 +1,7 @@
-export type CustomTheme = {
-  body: string;
+import 'styled-components';
 
+type CustomTheme = {
+  body: string;
   lines: string;
   primaryText: string;
   labelText: string;
@@ -11,5 +12,6 @@ export type CustomTheme = {
 };
 
 declare module 'styled-components' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   export interface DefaultTheme extends CustomTheme {}
 }

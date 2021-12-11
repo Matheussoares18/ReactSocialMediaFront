@@ -14,7 +14,7 @@ interface SecondStepProps {
   errors?: DeepMap<FormsFields, FieldError>;
 }
 
-export function SecondStep({ register, errors }: SecondStepProps) {
+export function SecondStep({ register, errors }: SecondStepProps): JSX.Element {
   const userRegisterValues: UserRegisterValues = useSelector(
     (state: RootState) => state.userRegisterValues.userRegisterValues
   );
@@ -23,8 +23,8 @@ export function SecondStep({ register, errors }: SecondStepProps) {
   return (
     <>
       <Input
-        label="Celular:"
-        placeholder="(DD) 99999-9999"
+        label='Celular:'
+        placeholder='(DD) 99999-9999'
         hasError={!!errors?.phone}
         value={
           userRegisterValues.phone.length > 0
@@ -48,11 +48,11 @@ export function SecondStep({ register, errors }: SecondStepProps) {
         })}
         errorMessage={errors?.phone?.message}
       />
-      <div className="input-row">
+      <div className='input-row'>
         <Input
-          label="Data de nascimento:"
-          placeholder="DD/MM/AAAA"
-          type="date"
+          label='Data de nascimento:'
+          placeholder='DD/MM/AAAA'
+          type='date'
           hasError={!!errors?.birth_date}
           defaultValue={userRegisterValues.birthDate}
           {...register('birth_date', {
@@ -61,7 +61,7 @@ export function SecondStep({ register, errors }: SecondStepProps) {
           errorMessage={errors?.birth_date?.message}
         />
         <Select
-          label="Gênero"
+          label='Gênero'
           errorMessage={errors?.gender?.message}
           hasError={!!errors?.gender}
           options={[
@@ -71,8 +71,8 @@ export function SecondStep({ register, errors }: SecondStepProps) {
           {...register('gender', {
             required: 'Este campo é obrigatório',
           })}
-          placeholder="Selecione"
-          maxWidth="100px"
+          placeholder='Selecione'
+          maxWidth='100px'
         />
       </div>
     </>

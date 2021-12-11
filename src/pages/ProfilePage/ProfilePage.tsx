@@ -6,7 +6,7 @@ import { RootState } from 'store/reducers';
 
 import { Container } from './styles';
 
-export function ProfilePage() {
+export function ProfilePage(): JSX.Element {
   const authUser: AuthUser | undefined = useSelector(
     (state: RootState) => state.authUser.authUser
   );

@@ -1,18 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AxiosResponse } from 'axios';
 import { useState } from 'react';
 import api from 'Services/api';
+
+export enum RequestHttpType {
+  post = 'post',
+  put = 'put',
+  patch = 'patch',
+  delete = 'delete',
+}
 
 interface UseMutationProps<FunctionReturn = any> {
   path: string;
   requestType: RequestHttpType;
   onComplete?: (result: FunctionReturn) => void;
   onError?: (error: Error) => void;
-}
-export enum RequestHttpType {
-  post = 'post',
-  put = 'put',
-  patch = 'patch',
-  delete = 'delete',
 }
 
 interface UseMutationReturn<FunctionRequest = any, FunctionResponse = any> {

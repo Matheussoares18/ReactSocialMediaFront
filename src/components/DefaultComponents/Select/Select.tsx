@@ -23,7 +23,7 @@ interface SelectProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Select: React.ForwardRefRenderFunction<HTMLInputElement, SelectProps> = (
-  { placeholder, options, maxWidth, label, errorMessage, hasError, ...rest },
+  { options, maxWidth, label, errorMessage, hasError, ...rest },
   ref
 ) => {
   const [selectedItem, setSelectedItem] = useState<SelectItem>({
@@ -43,29 +43,29 @@ const Select: React.ForwardRefRenderFunction<HTMLInputElement, SelectProps> = (
       maxWidth={maxWidth}
       onClick={() => setOptionsVisible(!optionsIsVisible)}
     >
-      <label htmlFor=""> {label} </label>
+      <span> {label} </span>
       <SelectContainer hasError={hasError}>
         <input
           value={test}
           ref={ref}
           onBlur={rest.onBlur}
           onChange={rest.onChange}
-          autoComplete="off"
+          autoComplete='off'
           name={rest.name}
           {...rest}
         />
 
-        <ExpandMore className="expand-more" />
+        <ExpandMore className='expand-more' />
       </SelectContainer>
       {hasError && (
-        <div className="error-message-container">
+        <div className='error-message-container'>
           <span>{errorMessage}</span>
         </div>
       )}
       {optionsIsVisible && (
         <>
           <ItemsList>
-            <div className="content">
+            <div className='content'>
               {options?.map((item) => (
                 <Item onClick={() => setSelectedItem(item)} key={item.label}>
                   <span>{item.label}</span>

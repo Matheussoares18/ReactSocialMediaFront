@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -8,6 +9,7 @@ import api from 'Services/api';
 import { insertUser, logout } from 'store/actions/AuthUserAction';
 import { RootState } from 'store/reducers';
 import axios from 'axios';
+
 interface ApiErrorsListenerProps {
   children?: React.ReactElement;
 }
@@ -59,13 +61,13 @@ export function ApiErrorsListener({
             });
 
             return Promise.resolve(res);
-          } catch (error) {
+          } catch {
             dispatch(logout());
             history.push(PublicRoutes.LOGIN);
           }
 
           return await Promise.resolve();
-        } catch (error) {
+        } catch {
           dispatch(logout());
           history.push(PublicRoutes.LOGIN);
         }
@@ -74,5 +76,6 @@ export function ApiErrorsListener({
       }
     }
   );
+  // eslint-disable-next-line react/jsx-no-useless-fragment
   return <>{children}</>;
 }

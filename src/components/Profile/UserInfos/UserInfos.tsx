@@ -1,12 +1,12 @@
+import { useState } from 'react';
+import { MdOutlineModeEditOutline } from 'react-icons/md';
+import { useSelector } from 'react-redux';
 import { UserPicture } from '../../DefaultComponents/UserPicture/UserPicture';
 import { FollowersInfo } from './FollowersInfo/FollowersInfo';
 import { Container, LeftSide, RightSide } from './styles';
-import { MdOutlineModeEditOutline } from 'react-icons/md';
-import { useSelector } from 'react-redux';
 import { AuthUser } from '../../../interfaces/AuthUser';
 import { RootState } from '../../../store/reducers';
 import { EditProfileModal } from './EditProfileModal/EditProfileModal';
-import { useState } from 'react';
 import { Post } from '../../../interfaces/Posts';
 
 interface UserInfosProps {
@@ -38,19 +38,19 @@ export function UserInfos({
   id,
   refetch,
   refetchPosts,
-}: UserInfosProps) {
+}: UserInfosProps): JSX.Element {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const authUser: AuthUser | undefined = useSelector(
     (state: RootState) => state.authUser.authUser
   );
 
-  function handleCloseModal() {
+  const handleCloseModal = () => {
     setModalIsOpen(false);
-  }
+  };
 
-  function handleOpenModal() {
+  const handleOpenModal = () => {
     setModalIsOpen(true);
-  }
+  };
 
   return (
     <Container>
@@ -64,19 +64,19 @@ export function UserInfos({
         />
       )}
       <LeftSide>
-        <UserPicture classname="user-img" source={image} />
-        <div className="followers-container">
-          <FollowersInfo value={0} text="Posts" />
-          <FollowersInfo value={0} text="Seguidores" />
-          <FollowersInfo value={0} text="Seguindo" />
+        <UserPicture classname='user-img' source={image} />
+        <div className='followers-container'>
+          <FollowersInfo value={0} text='Posts' />
+          <FollowersInfo value={0} text='Seguidores' />
+          <FollowersInfo value={0} text='Seguindo' />
         </div>
       </LeftSide>
       <RightSide>
-        <div className="username">
+        <div className='username'>
           <h2>{name}</h2>{' '}
           {authUser?.id === id && (
             <MdOutlineModeEditOutline
-              className="icon"
+              className='icon'
               onClick={handleOpenModal}
             />
           )}

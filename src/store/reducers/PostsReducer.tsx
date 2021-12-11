@@ -5,8 +5,8 @@ const INITIAL_STATE: PostsState = {
 };
 
 export default function postsReducer(
-  state = INITIAL_STATE,
-  action: PostsActionTypes
+  action: PostsActionTypes,
+  state = INITIAL_STATE
 ): PostsState {
   switch (action.type) {
     case 'INSERT_POSTS':

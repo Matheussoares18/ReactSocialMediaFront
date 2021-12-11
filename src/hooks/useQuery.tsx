@@ -1,6 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AxiosResponse } from 'axios';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import api from 'Services/api';
+
+interface Params {
+  name: string;
+  value: unknown;
+}
 
 export type RefetchType<RequestReturnType = any> = (
   newPath: string,
@@ -13,10 +19,6 @@ interface UseQueryReturnType<RequestReturnType = any> {
   data: RequestReturnType | null;
   refetch: RefetchType<RequestReturnType>;
 }
-interface Params {
-  name: string;
-  value: unknown;
-}
 
 interface UseQueryProps<T> {
   path: string;
@@ -28,19 +30,15 @@ interface UseQueryProps<T> {
 export function useQuery<RequestReturnType = any>({
   path,
   params,
-  onComplete = () => {
-    return;
-  },
-  onError = () => {
-    return;
-  },
+  onComplete,
+  onError,
 }: UseQueryProps<RequestReturnType>): UseQueryReturnType<RequestReturnType> {
   const [isError, setError] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<RequestReturnType | null>(null);
 
   const makeRequest = useCallback(
-    async (pathParam: string, params?: Params[], changeState = true) => {
+    async (pathParam: string, paramsFunc?: Params[], changeState = true) => {
       try {
         if (changeState) {
           setLoading(true);
@@ -49,13 +47,15 @@ export function useQuery<RequestReturnType = any>({
           pathParam,
           {
             params: {
-              ...params?.map((param) => ({
+              ...paramsFunc?.map((param) => ({
                 [param.name]: [param.value],
               })),
             },
           }
         );
-        onComplete(result.data);
+        if (onComplete) {
+          onComplete(result.data);
+        }
         if (changeState) {
           setLoading(false);
         }
@@ -64,7 +64,9 @@ export function useQuery<RequestReturnType = any>({
       } catch (error) {
         setError(true);
         setLoading(false);
-        onError(error);
+        if (onError) {
+          onError(error);
+        }
         return null;
       }
     },
@@ -84,7 +86,7 @@ export function useQuery<RequestReturnType = any>({
   async function refetch(
     newPath: string,
     newParams?: Params[],
-    changeState: boolean = true
+    changeState = true
   ): Promise<RequestReturnType | null> {
     const result = await makeRequest(newPath, newParams, changeState);
     setData(result);

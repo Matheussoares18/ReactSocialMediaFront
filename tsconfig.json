@@ -21,6 +21,8 @@
     "jsx": "react-jsx",
     "baseUrl": "src",
     
+    
   },
-  "include": ["src"]
+  "include": ["src"],
+  "files":["src/@types/styled-components.d.ts"]
 }
