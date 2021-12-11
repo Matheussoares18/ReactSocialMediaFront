@@ -36,6 +36,7 @@ export function Login(): JSX.Element {
     requestType: RequestHttpType.post,
     onComplete: (result) => {
       dispatch(insertUser({ ...result }));
+      localStorage.setItem('token', result?.token as string);
       window.location.href = AuthRoutes.POSTS;
     },
     onError: (error) => {
