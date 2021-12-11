@@ -119,7 +119,7 @@ export const Container = styled.div`
       display: flex;
       align-items: center;
       border: none;
-      background: color;
+      background: transparent;
 
       &:hover {
         cursor: pointer;

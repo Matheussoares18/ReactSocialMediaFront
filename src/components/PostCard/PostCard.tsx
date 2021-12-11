@@ -63,7 +63,7 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
           <UserPicture source={post.post_likes[0].user.image} />
           <span>
             Curtido por
-            <p className='user-name'>{post.post_likes[0]?.user?.name}</p>
+            <span className='user-name'>{post.post_likes[0]?.user?.name}</span>
           </span>
         </>
       );
@@ -77,8 +77,8 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
         <UserPicture source={post.post_likes[0].user.image} />
         <span>
           Curtido por
-          <p className='user-name'>{post.post_likes[0]?.user?.name}</p>e mais{' '}
-          {likesAmount}
+          <span className='user-name'>{post.post_likes[0]?.user?.name}</span>e
+          mais {likesAmount}
         </span>
       </>
     );
