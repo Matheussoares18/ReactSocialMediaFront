@@ -19,8 +19,8 @@ import {
   BackendErrors,
   backendErrorTranslate,
 } from 'utils/backendErrorTranslate';
-import { Container, Content, SubmitButtonContainer } from './styles';
 import { CONSTANTS } from 'utils/constants';
+import { Container, Content, SubmitButtonContainer } from './styles';
 
 export interface FormsFields {
   name?: string;
