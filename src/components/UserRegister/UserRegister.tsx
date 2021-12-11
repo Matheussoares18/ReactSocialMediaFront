@@ -1,11 +1,9 @@
 /* eslint-disable camelcase */
-import React from 'react';
 import { ReactComponent as ArrowBack } from 'assets/RegisterPage/arrow_back.svg';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
-import * as UserServices from 'Services/UserServices/UserServices';
 import { PublicRoutes } from 'Routes/RoutesEnum';
 import { FirstStep } from 'components/UserRegister/FirstStep/FirstStep';
 import { SecondStep } from 'components/UserRegister/SecondStep/SecondStep';
@@ -13,7 +11,16 @@ import { ThirdStep } from 'components/UserRegister/ThirdStep/ThirdStep';
 import { updateUserValues } from 'store/actions/UserRegisterActions';
 import { RootState } from 'store/reducers';
 import { UserRegisterValues } from 'interfaces/UserRegister';
+import { Button } from 'components/DefaultComponents/Button/Button';
+import { RequestHttpType, useMutation } from 'hooks/useMutation';
+import { ApiRoutes } from 'Services/ApiRoutes';
+import { AuthUser } from 'interfaces/AuthUser';
+import {
+  BackendErrors,
+  backendErrorTranslate,
+} from 'utils/backendErrorTranslate';
 import { Container, Content, SubmitButtonContainer } from './styles';
+import { CONSTANTS } from 'utils/constants';
 
 export interface FormsFields {
   name?: string;
@@ -36,31 +43,45 @@ export function UserRegister(): JSX.Element {
   const userRegisterValues: UserRegisterValues = useSelector(
     (state: RootState) => state.userRegisterValues.userRegisterValues
   );
+  const { request, isLoading } = useMutation<UserRegisterValues, AuthUser>({
+    path: `${ApiRoutes.USERS}`,
+    requestType: RequestHttpType.post,
+    onComplete: () => {
+      dispatch(
+        updateUserValues({
+          birth_date: '',
+          email: '',
+          gender: '',
+          name: '',
+          phone: '',
+          password: '',
+        })
+      );
+      history.push('/login');
+    },
+    onError: (error) => {
+      const errorType = backendErrorTranslate(error.response?.data.message);
+      toast.error(errorType.translatedError, {
+        position: 'top-right',
+        autoClose: CONSTANTS.alertDefaultTime,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      if (errorType.errorType === BackendErrors.EMAIL_ALREADY_EXISTS) {
+        history.push(
+          `${PublicRoutes.REGISTER}${PublicRoutes.REGISTER_USER_INFOS}`
+        );
+      }
+    },
+  });
   const { url } = useRouteMatch();
   const dispatch = useDispatch();
 
   async function handleCreateUser() {
-    try {
-      await UserServices.createUser(userRegisterValues);
-
-      history.push('/login');
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      toast.error(
-        error?.response.data.error === 'User with that email already exists'
-          ? 'Email já cadastrado'
-          : 'Falha ao realizar o cadastro',
-        {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        }
-      );
-    }
+    await request(userRegisterValues);
   }
 
   const routesGuideTranslate = {
@@ -82,7 +103,14 @@ export function UserRegister(): JSX.Element {
     },
     [`${PublicRoutes.REGISTER}${PublicRoutes.REGISTER_PASSWORD}`]: {
       forward: (data: FormsFields) => {
-        dispatch(updateUserValues({ ...userRegisterValues, ...data }));
+        dispatch(
+          updateUserValues({
+            ...userRegisterValues,
+            ...data,
+            password: data.confirm_password as string,
+          })
+        );
+
         handleCreateUser();
       },
     },
@@ -100,16 +128,6 @@ export function UserRegister(): JSX.Element {
       <ToastContainer />
       <Container onSubmit={handleSubmit(handleSubmitCustom)}>
         <header>
-          <ArrowBack
-            className='arrow-back'
-            style={{
-              visibility: window.location.pathname.includes(
-                PublicRoutes.REGISTER_USER_INFOS
-              )
-                ? 'visible'
-                : 'hidden',
-            }}
-          />{' '}
           <button
             style={{
               visibility: window.location.pathname.includes(
@@ -121,6 +139,16 @@ export function UserRegister(): JSX.Element {
             type='button'
             onClick={() => history.push(PublicRoutes.LOGIN)}
           >
+            <ArrowBack
+              className='arrow-back'
+              style={{
+                visibility: window.location.pathname.includes(
+                  PublicRoutes.REGISTER_USER_INFOS
+                )
+                  ? 'visible'
+                  : 'hidden',
+              }}
+            />{' '}
             Voltar
           </button>
         </header>
@@ -149,19 +177,23 @@ export function UserRegister(): JSX.Element {
           ) && (
             <button
               className='back-button'
+              disabled={isLoading}
               type='button'
-              onClick={() => handleBack()}
+              onClick={handleBack}
             >
-              {' '}
               Voltar
             </button>
           )}
-          <button type='submit' className='button'>
-            {' '}
+          <Button
+            loading={isLoading}
+            disabled={isLoading}
+            type='submit'
+            className='button'
+          >
             {url.includes(PublicRoutes.REGISTER_PASSWORD)
               ? 'Finalizar'
-              : 'Próxima etapa'}{' '}
-          </button>
+              : 'Próxima etapa'}
+          </Button>
         </SubmitButtonContainer>
       </Container>
     </>

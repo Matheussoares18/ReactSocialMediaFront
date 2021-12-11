@@ -2,7 +2,8 @@ export interface UserRegisterValues {
   name: string;
   email: string;
   phone: string;
-  birthDate: string;
+  // eslint-disable-next-line camelcase
+  birth_date: string;
   gender: string;
   password: string;
 }

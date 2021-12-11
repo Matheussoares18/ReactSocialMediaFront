@@ -1,6 +1,7 @@
 import { Provider } from 'react-redux';
 import { useEffect } from 'react';
 import Modal from 'react-modal';
+import { ToastContainer } from 'react-toastify';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from 'styled-components';
 import Routes from 'Routes/public.routes';
@@ -32,6 +33,7 @@ function App(): JSX.Element {
           }
         >
           <Routes />
+          <ToastContainer />
           <GlobalStyle />
         </ThemeProvider>
       </PersistGate>

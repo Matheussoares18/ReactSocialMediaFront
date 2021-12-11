@@ -35,6 +35,8 @@ export const Container = styled.form`
 
       border: none;
       background: transparent;
+      display: flex;
+      align-items: center;
     }
   }
 `;

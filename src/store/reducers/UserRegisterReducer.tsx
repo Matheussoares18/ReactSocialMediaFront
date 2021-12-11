@@ -7,7 +7,7 @@ const INITIAL_STATE: UserRegisterState = {
   userRegisterValues: {
     name: '',
     email: '',
-    birthDate: '',
+    birth_date: '',
     gender: '',
     phone: '',
     password: '',

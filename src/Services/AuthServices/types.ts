@@ -4,6 +4,7 @@ interface User {
   name: string;
   email: string;
   document: string;
+  // eslint-disable-next-line camelcase
   birth_date: string;
   gender: string;
   image: string;

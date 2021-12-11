@@ -13,7 +13,7 @@ export const InputContainer = styled.div<InputContainerProps>`
   width: 100%;
   max-width: ${(prop) => prop.maxWidth};
 
-  label {
+  span {
     font-family: var(--roboto-font-family);
     font-weight: 400;
     font-size: 0.875rem;

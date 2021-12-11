@@ -26,54 +26,56 @@ export function ApiErrorsListener({
   api.interceptors.response.use(
     (response) => response,
     async (error) => {
-      if (error.response.status === 401 && !authUser?.refreshToken) {
-        dispatch(logout());
-        history.push(PublicRoutes.LOGIN);
-      } else if (error.response.status === 401 && authUser?.token) {
-        try {
-          const result = await fetch(`${config.host}/auth/refresh-token`, {
-            method: 'POST',
-            headers: {
-              'Access-Control-Allow-Methods':
-                'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-              refresh_token: authUser.refreshToken as string,
-            },
-          });
-          const { token: newToken, refreshToken: newRefreshtoken } =
-            await result.json();
-          dispatch(
-            insertUser({
-              ...authUser,
-              token: newToken,
-              refreshToken: newRefreshtoken,
-            })
-          );
-
-          const { url, data, method, headers } = error.config;
-
-          headers.authorization = newToken;
+      if (error && error.response) {
+        if (error?.response?.status === 401 && !authUser?.refreshToken) {
+          dispatch(logout());
+          history.push(PublicRoutes.LOGIN);
+        } else if (error?.response?.status === 401 && authUser?.token) {
           try {
-            const res = await axios.request({
-              baseURL: `${config.host}${url}`,
-              method,
-              headers,
-              data,
+            const result = await fetch(`${config.host}/auth/refresh-token`, {
+              method: 'POST',
+              headers: {
+                'Access-Control-Allow-Methods':
+                  'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+                refresh_token: authUser.refreshToken as string,
+              },
             });
+            const { token: newToken, refreshToken: newRefreshtoken } =
+              await result.json();
+            dispatch(
+              insertUser({
+                ...authUser,
+                token: newToken,
+                refreshToken: newRefreshtoken,
+              })
+            );
 
-            return Promise.resolve(res);
+            const { url, data, method, headers } = error.config;
+
+            headers.authorization = newToken;
+            try {
+              const res = await axios.request({
+                baseURL: `${config.host}${url}`,
+                method,
+                headers,
+                data,
+              });
+
+              return Promise.resolve(res);
+            } catch {
+              dispatch(logout());
+              history.push(PublicRoutes.LOGIN);
+            }
+
+            return await Promise.resolve();
           } catch {
             dispatch(logout());
             history.push(PublicRoutes.LOGIN);
           }
-
-          return await Promise.resolve();
-        } catch {
-          dispatch(logout());
-          history.push(PublicRoutes.LOGIN);
         }
-      } else {
-        return Promise.reject(error);
       }
+
+      return Promise.reject(error);
     }
   );
   // eslint-disable-next-line react/jsx-no-useless-fragment

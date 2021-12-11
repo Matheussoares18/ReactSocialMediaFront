@@ -54,7 +54,7 @@ export function SecondStep({ register, errors }: SecondStepProps): JSX.Element {
           placeholder='DD/MM/AAAA'
           type='date'
           hasError={!!errors?.birth_date}
-          defaultValue={userRegisterValues.birthDate}
+          defaultValue={userRegisterValues.birth_date}
           {...register('birth_date', {
             required: 'Este campo é obrigatório',
           })}

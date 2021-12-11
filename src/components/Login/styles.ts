@@ -32,7 +32,7 @@ export const Content = styled.form`
     max-width: 23.75rem;
     margin-top: 40px;
   }
-  button {
+  .submit-button {
     width: 100%;
     max-width: 23.75rem;
     background: #0caacd;

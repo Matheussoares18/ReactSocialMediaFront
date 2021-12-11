@@ -3,11 +3,17 @@ import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { AuthRoutes, PublicRoutes } from 'Routes/RoutesEnum';
 import Input from 'components/DefaultComponents/Input/Input';
-import * as AuthService from 'Services/AuthServices/AuthServices';
-import { ToastContainer, toast } from 'react-toastify';
+
+import { toast } from 'react-toastify';
 
 import { useDispatch } from 'react-redux';
 import { insertUser } from 'store/actions/AuthUserAction';
+import { RequestHttpType, useMutation } from 'hooks/useMutation';
+import { ApiRoutes } from 'Services/ApiRoutes';
+import { AuthUser } from 'interfaces/AuthUser';
+import { backendErrorTranslate } from 'utils/backendErrorTranslate';
+import { Button } from 'components/DefaultComponents/Button/Button';
+import { CONSTANTS } from 'utils/constants';
 import { Container, Content } from './styles';
 
 interface LoginFormFields {
@@ -25,24 +31,19 @@ export function Login(): JSX.Element {
     reValidateMode: 'onChange',
   });
   const dispatch = useDispatch();
-
-  async function onSubmit(data: LoginFormFields) {
-    const { email, password } = data;
-    try {
-      const result = await AuthService.authenticate({ email, password });
-
-      dispatch(insertUser({ ...result.data }));
-      localStorage.setItem('token', result.data.token);
+  const { request, isLoading } = useMutation<LoginFormFields, AuthUser>({
+    path: ApiRoutes.AUTHENTICATE,
+    requestType: RequestHttpType.post,
+    onComplete: (result) => {
+      dispatch(insertUser({ ...result }));
       window.location.href = AuthRoutes.POSTS;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
+    },
+    onError: (error) => {
       toast.error(
-        error?.response.data.message === 'Invalid credentials'
-          ? 'Credenciais inválidas'
-          : 'Falha ao realizar operação',
+        backendErrorTranslate(error.response?.data?.message).translatedError,
         {
           position: 'top-right',
-          autoClose: 5000,
+          autoClose: CONSTANTS.alertDefaultTime,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -50,13 +51,17 @@ export function Login(): JSX.Element {
           progress: undefined,
         }
       );
-    }
+    },
+  });
+
+  async function onSubmit(data: LoginFormFields) {
+    const { email, password } = data;
+
+    await request({ email, password });
   }
 
   return (
     <Container>
-      <ToastContainer />
-
       <Content onSubmit={handleSubmit(onSubmit)}>
         <h1>Social Media</h1>
         <div className='inputs'>
@@ -88,7 +93,14 @@ export function Login(): JSX.Element {
             errorMessage={errors?.password?.message}
           />
         </div>
-        <button type='submit'>Logar</button>
+        <Button
+          type='submit'
+          className='submit-button'
+          loading={isLoading}
+          disabled={isLoading}
+        >
+          Logar
+        </Button>
         <div className='link-container'>
           <span>
             Ainda não possui conta?{' '}

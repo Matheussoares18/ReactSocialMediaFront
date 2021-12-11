@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useState } from 'react';
 import api from 'Services/api';
+import { toast } from 'react-toastify';
 
 export enum RequestHttpType {
   post = 'post',
@@ -14,7 +15,7 @@ interface UseMutationProps<FunctionReturn = any> {
   path: string;
   requestType: RequestHttpType;
   onComplete?: (result: FunctionReturn) => void;
-  onError?: (error: Error) => void;
+  onError?: (error: AxiosError) => void;
 }
 
 interface UseMutationReturn<FunctionRequest = any, FunctionResponse = any> {
@@ -49,9 +50,22 @@ export function useMutation<FunctionRequest = any, FunctionReturn = any>({
       }
       setLoading(false);
       return result.data;
-    } catch (error: any) {
+    } catch (error) {
       setError(true);
-      if (onError) {
+      setLoading(false);
+      if (error instanceof Error && error.message === 'Network Error') {
+        toast.error('Falha ao realizar operação, serviço indisponível', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        return null;
+      }
+      if (onError && axios.isAxiosError(error)) {
         onError(error);
       }
       return null;
