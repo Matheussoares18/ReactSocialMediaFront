@@ -10,7 +10,7 @@ const INITIAL_STATE: UserRegisterState = {
     birth_date: '',
     gender: '',
     phone: '',
-    password: '',
+    confirm_password: '',
   },
 };
 

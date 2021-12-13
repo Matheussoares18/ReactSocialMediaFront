@@ -54,7 +54,7 @@ export function UserRegister(): JSX.Element {
           gender: '',
           name: '',
           phone: '',
-          password: '',
+          confirm_password: '',
         })
       );
       history.push('/login');
