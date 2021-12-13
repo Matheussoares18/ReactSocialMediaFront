@@ -107,7 +107,7 @@ export function UserRegister(): JSX.Element {
           updateUserValues({
             ...userRegisterValues,
             ...data,
-            password: data.confirm_password as string,
+            confirm_password: data.confirm_password as string,
           })
         );
 
