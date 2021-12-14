@@ -6,7 +6,7 @@ export interface UserRegisterValues {
   birth_date: string;
   gender: string;
   // eslint-disable-next-line camelcase
-  confirm_password: string;
+  password: string;
 }
 
 export const UPDATE_VALUES = 'UPDATE_VALUES';
