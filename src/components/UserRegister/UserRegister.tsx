@@ -80,8 +80,15 @@ export function UserRegister(): JSX.Element {
   const { url } = useRouteMatch();
   const dispatch = useDispatch();
 
-  async function handleCreateUser() {
-    await request(userRegisterValues);
+  async function handleCreateUser(data: FormsFields) {
+    await request({
+      birth_date: userRegisterValues.birth_date,
+      email: userRegisterValues.email,
+      gender: userRegisterValues.gender,
+      name: userRegisterValues.name,
+      password: data.password as string,
+      phone: userRegisterValues.phone,
+    });
   }
 
   const routesGuideTranslate = {
@@ -111,7 +118,7 @@ export function UserRegister(): JSX.Element {
           })
         );
 
-        handleCreateUser();
+        handleCreateUser(data);
       },
     },
   };
