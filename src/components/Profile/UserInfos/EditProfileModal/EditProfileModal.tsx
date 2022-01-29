@@ -108,8 +108,8 @@ export function EditProfileModal({
       padding: '0px',
       maxWidth: '1200px',
       maxHeight: '1000px',
-      width: '60%',
-      height: '55%',
+      width: '100%',
+      minHeight: '33rem',
     },
   };
 

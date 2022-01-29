@@ -27,7 +27,8 @@ export const Container = styled.div`
     padding-top: 1rem;
 
     @media ${breakpoints.tablet} {
-      min-width: 5rem;
+      min-width: 4rem;
+      column-gap: 4px;
     }
 
     .icon {
@@ -49,7 +50,8 @@ export const Container = styled.div`
     padding-top: 1rem;
 
     @media ${breakpoints.tablet} {
-      min-width: 5rem;
+      min-width: 4rem;
+      column-gap: 4px;
     }
 
     .icon {
