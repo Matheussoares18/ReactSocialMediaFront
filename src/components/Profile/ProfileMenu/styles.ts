@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { breakpoints } from 'styles/global';
 
 export const Container = styled.div`
   width: 100%;
@@ -9,7 +10,11 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  column-gap: 24px;
+  column-gap: 1.5rem;
+
+  @media ${breakpoints.tablet} {
+    column-gap: 1.375rem;
+  }
 
   .menu-item {
     display: flex;
@@ -20,6 +25,10 @@ export const Container = styled.div`
     color: #7a7a7a;
     min-width: 8rem;
     padding-top: 1rem;
+
+    @media ${breakpoints.tablet} {
+      min-width: 5rem;
+    }
 
     .icon {
       width: 26px;
@@ -37,8 +46,11 @@ export const Container = styled.div`
     color: #0caacd;
     min-width: 8rem;
     border-top: solid 1px #0caacd;
-
     padding-top: 1rem;
+
+    @media ${breakpoints.tablet} {
+      min-width: 5rem;
+    }
 
     .icon {
       width: 26px;

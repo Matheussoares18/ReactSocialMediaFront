@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import Switch from 'react-switch';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { IoExitOutline } from 'react-icons/io5';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { ReactComponent as Search } from 'assets/Menu/search.svg';
@@ -10,10 +10,11 @@ import { ReactComponent as NotificationIcon } from 'assets/Menu/notificationIcon
 import { ReactComponent as Messages } from 'assets/Menu/messages.svg';
 import { ReactComponent as ExpandIcon } from 'assets/Menu/expandIcon.svg';
 import { UserPicture } from 'components/DefaultComponents/UserPicture/UserPicture';
-import { AuthUser, Themes } from 'interfaces/AuthUser';
-import { RootState } from 'store/reducers';
+import { Themes } from 'interfaces/AuthUser';
 import { logout } from 'store/actions/AuthUserAction';
 import { AuthRoutes, PublicRoutes } from 'Routes/RoutesEnum';
+import { useUserInfos } from 'hooks/useUserInfos';
+import MobileMenu from 'components/DefaultComponents/Header/MobileMenu/MobileMenu';
 import DropMenuItem from './DropMenuItem/DropMenuItem';
 import {
   Container,
@@ -23,17 +24,13 @@ import {
   DropMenuContainer,
   Links,
   Logo,
-  MobileContainer,
-  MobileMenuContent,
   MobileMenuIconContainer,
   SearchContainer,
   SearchContainerMobile,
 } from './styles';
 
 export function Header(): JSX.Element {
-  const authUser: AuthUser | undefined = useSelector(
-    (state: RootState) => state.authUser.authUser
-  );
+  const authUser = useUserInfos();
 
   const [menuIsVisible, setMenuIsVisible] = useState<boolean>(false);
   const [theme, setTheme] = useState<Themes>(
@@ -71,22 +68,7 @@ export function Header(): JSX.Element {
 
   return (
     <Container>
-      {mobileMenuIsVisible && (
-        <MobileContainer>
-          <MobileMenuContent>
-            <div className='profile-items'>
-              <UserPicture
-                classname='profile-picture'
-                source={authUser?.image}
-              />
-              <div className='profile-infos'>
-                <span className='username'>{authUser?.name}</span>
-                <span className='profile-link'>Ir para o seu perfil </span>
-              </div>
-            </div>
-          </MobileMenuContent>
-        </MobileContainer>
-      )}
+      {mobileMenuIsVisible && <MobileMenu />}
       <Content>
         <SearchContainer>
           <div className='content'>

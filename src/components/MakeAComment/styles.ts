@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { breakpoints } from 'styles/global';
 
 export const Container = styled.div`
   width: calc(100% - 2.25rem);
@@ -10,6 +11,12 @@ export const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media ${breakpoints.mobileMedium} {
+    flex-direction: column;
+    row-gap: 1.2rem;
+  }
+
   .user-and-input {
     display: flex;
     justify-content: center;
@@ -51,6 +58,10 @@ export const Container = styled.div`
     font-size: 0.813rem;
     color: #ffffff;
     font-weight: bold;
+
+    @media ${breakpoints.mobileMedium} {
+      width: 100%;
+    }
 
     &:hover {
       filter: brightness(0.8);

@@ -7,6 +7,7 @@ export const Container = styled.button`
   align-items: center;
   background: transparent;
   border: none;
+
   &:first-child {
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;

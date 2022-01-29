@@ -82,8 +82,10 @@ export default createGlobalStyle`
 
 interface Breakpoints {
   tablet: string;
+  mobileMedium: string;
 }
 
 export const breakpoints: Breakpoints = {
   tablet: `(max-width: 650px)`,
+  mobileMedium: `(max-width: 380px)`,
 };

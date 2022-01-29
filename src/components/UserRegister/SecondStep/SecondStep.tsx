@@ -26,16 +26,12 @@ export function SecondStep({ register, errors }: SecondStepProps): JSX.Element {
         label='Celular:'
         placeholder='(DD) 99999-9999'
         hasError={!!errors?.phone}
-        value={
-          userRegisterValues.phone.length > 0
-            ? phoneNumber(userRegisterValues.phone)
-            : ''
-        }
+        value={userRegisterValues.phone}
         onInput={(e) =>
           dispatch(
             updateUserValues({
               ...userRegisterValues,
-              phone: e.currentTarget.value,
+              phone: phoneNumber(e.currentTarget.value),
             })
           )
         }
