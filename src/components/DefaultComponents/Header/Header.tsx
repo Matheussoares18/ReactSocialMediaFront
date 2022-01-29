@@ -4,6 +4,7 @@ import { Link, useHistory } from 'react-router-dom';
 import Switch from 'react-switch';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoExitOutline } from 'react-icons/io5';
+import { AiOutlineMenu } from 'react-icons/ai';
 import { ReactComponent as Search } from 'assets/Menu/search.svg';
 import { ReactComponent as NotificationIcon } from 'assets/Menu/notificationIcon.svg';
 import { ReactComponent as Messages } from 'assets/Menu/messages.svg';
@@ -22,7 +23,11 @@ import {
   DropMenuContainer,
   Links,
   Logo,
+  MobileContainer,
+  MobileMenuContent,
+  MobileMenuIconContainer,
   SearchContainer,
+  SearchContainerMobile,
 } from './styles';
 
 export function Header(): JSX.Element {
@@ -34,6 +39,8 @@ export function Header(): JSX.Element {
   const [theme, setTheme] = useState<Themes>(
     localStorage.getItem('theme') as Themes
   );
+  const [mobileMenuIsVisible, setMobileMenuIsVisible] =
+    useState<boolean>(false);
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -49,12 +56,37 @@ export function Header(): JSX.Element {
     setTheme(Themes.DARK);
     window.location.reload();
   }
+  const showMenuMobileMenu = (value: boolean): void => {
+    if (value) {
+      setMobileMenuIsVisible(true);
+      document.body.style.overflow = 'hidden';
+      return;
+    }
+    setMobileMenuIsVisible(false);
+    document.body.style.overflow = 'auto';
+  };
   const redirectToHome = () => {
     window.location.href = `${AuthRoutes.POSTS}`;
   };
 
   return (
     <Container>
+      {mobileMenuIsVisible && (
+        <MobileContainer>
+          <MobileMenuContent>
+            <div className='profile-items'>
+              <UserPicture
+                classname='profile-picture'
+                source={authUser?.image}
+              />
+              <div className='profile-infos'>
+                <span className='username'>{authUser?.name}</span>
+                <span className='profile-link'>Ir para o seu perfil </span>
+              </div>
+            </div>
+          </MobileMenuContent>
+        </MobileContainer>
+      )}
       <Content>
         <SearchContainer>
           <div className='content'>
@@ -62,7 +94,16 @@ export function Header(): JSX.Element {
             <input type='text' placeholder='Pesquisar na SocialMedia' />
           </div>
         </SearchContainer>
+        <SearchContainerMobile>
+          <Search className='search-icon' />
+        </SearchContainerMobile>
         <Logo onClick={redirectToHome}>Social Media</Logo>
+        <MobileMenuIconContainer
+          onClick={() => showMenuMobileMenu(!mobileMenuIsVisible)}
+        >
+          <AiOutlineMenu color='#ffffff' />
+        </MobileMenuIconContainer>
+
         <Links>
           <label className='profile' htmlFor='user-image-input'>
             <button

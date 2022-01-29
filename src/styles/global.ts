@@ -79,3 +79,11 @@ export default createGlobalStyle`
         }
     }
 `;
+
+interface Breakpoints {
+  tablet: string;
+}
+
+export const breakpoints: Breakpoints = {
+  tablet: `(max-width: 650px)`,
+};

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { breakpoints } from 'styles/global';
 
 export const Container = styled.form`
   width: 100%;
@@ -53,6 +54,10 @@ export const Content = styled.div`
     font-size: 96px;
     font-weight: 400;
     color: #0caacd;
+
+    @media ${breakpoints.tablet} {
+      font-size: 3.5rem;
+    }
   }
 
   .inputs {
@@ -63,6 +68,14 @@ export const Content = styled.div`
     padding-top: 3.75rem;
     min-width: 500px;
     row-gap: 24px;
+
+    width: 100%;
+    max-width: 50rem;
+
+    @media ${breakpoints.tablet} {
+      width: 80%;
+      min-width: 0;
+    }
 
     .input-row {
       display: flex;
@@ -82,6 +95,13 @@ export const SubmitButtonContainer = styled.div`
   width: calc(100% - 240px);
   height: 100%;
 
+  @media ${breakpoints.tablet} {
+    width: 85%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .back-button {
     width: 120px;
     height: 45px;
@@ -96,6 +116,13 @@ export const SubmitButtonContainer = styled.div`
     font-weight: 700;
     font-size: 0.875rem;
     font-family: var(--roboto-font-family);
+
+    @media ${breakpoints.tablet} {
+      width: 167px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   .button {

@@ -43,7 +43,7 @@ export const CustomInput = styled.input<CustomInputProps>`
   background: ${({ theme }) => theme.inputBackground};
 
   border: solid 1px ${(prop) => (prop.hasError ? '#952c2c' : prop.theme.lines)};
-  padding-left: 5px;
+
   color: ${({ theme }) => theme.inputTextColor};
 
   font-family: var(--roboto-font-family);
