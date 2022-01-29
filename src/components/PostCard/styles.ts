@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { breakpoints } from 'styles/global';
 
 export const Container = styled.div`
   border: 1px solid ${({ theme }) => theme.lines};
@@ -115,6 +116,11 @@ export const Container = styled.div`
     margin-bottom: 0.938rem;
     border-bottom: 0.063rem solid ${({ theme }) => theme.lines};
 
+    @media ${breakpoints.tablet} {
+      flex-direction: column;
+      row-gap: 1.5rem;
+    }
+
     .likes {
       display: flex;
       align-items: center;
@@ -153,6 +159,10 @@ export const Container = styled.div`
       justify-content: flex-end;
 
       column-gap: 2.75rem;
+
+      @media ${breakpoints.tablet} {
+        justify-content: space-evenly;
+      }
 
       .icon {
         fill: #0caacd;

@@ -1,12 +1,12 @@
+/* eslint-disable camelcase */
 export interface UserRegisterValues {
   name: string;
   email: string;
   phone: string;
-  // eslint-disable-next-line camelcase
   birth_date: string;
   gender: string;
-  // eslint-disable-next-line camelcase
   password: string;
+  contact_name?: string;
 }
 
 export const UPDATE_VALUES = 'UPDATE_VALUES';

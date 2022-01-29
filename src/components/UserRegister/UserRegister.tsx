@@ -89,6 +89,7 @@ export function UserRegister(): JSX.Element {
       name: userRegisterValues.name,
       password: data.password as string,
       phone: userRegisterValues.phone,
+      contact_name: 'Principal',
     });
   }
 

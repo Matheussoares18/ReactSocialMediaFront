@@ -10,7 +10,11 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  column-gap: 24px;
+  column-gap: 1.5rem;
+
+  @media ${breakpoints.tablet} {
+    column-gap: 1.375rem;
+  }
 
   .menu-item {
     display: flex;
@@ -23,8 +27,7 @@ export const Container = styled.div`
     padding-top: 1rem;
 
     @media ${breakpoints.tablet} {
-      min-width: 4rem;
-      column-gap: 4px;
+      min-width: 5rem;
     }
 
     .icon {
@@ -47,6 +50,10 @@ export const Container = styled.div`
     @media ${breakpoints.tablet} {
       min-width: 4rem;
       column-gap: 4px;
+    }
+
+    @media ${breakpoints.tablet} {
+      min-width: 5rem;
     }
 
     .icon {
