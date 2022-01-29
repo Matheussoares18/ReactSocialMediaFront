@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { colors } from 'styles/colors';
+import { breakpoints } from 'styles/global';
 
 export const Container = styled.header`
   width: 100%;
@@ -28,11 +30,15 @@ export const SearchContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  max-width: 11.875rem;
+
+  @media ${breakpoints.tablet} {
+    display: none;
+  }
 
   .content {
     width: calc(100% - 20px);
     height: 100%;
-
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -59,11 +65,95 @@ export const SearchContainer = styled.div`
     }
   }
 `;
+export const SearchContainerMobile = styled.button`
+  height: 2.188rem;
+  width: 2.188rem;
+  border-radius: 50%;
+  background: ${({ theme }) => theme.commentBox};
+  color: ${({ theme }) => theme.inputTextColor};
+  border: none;
+  display: none;
+
+  @media ${breakpoints.tablet} {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .search-icon {
+    fill: #b4b4b5;
+    height: 20px;
+    width: 20px;
+  }
+`;
+export const MobileMenuIconContainer = styled.button`
+  height: 2.188rem;
+  width: 2.188rem;
+  background: ${colors.mainBlue};
+  border-radius: 23px;
+  text-decoration: none;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  display: none;
+
+  @media ${breakpoints.tablet} {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+export const MobileContainer = styled.div`
+  background: ${({ theme }) => theme.body};
+  position: absolute;
+  top: 3.5rem;
+  height: 100vh;
+  width: 100vw;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 3.125rem;
+`;
+export const MobileMenuContent = styled.nav`
+  width: calc(100% - 3.75rem);
+  height: 100%;
+
+  .profile-items {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    column-gap: 1.5rem;
+    .profile-picture {
+      width: 5rem;
+      height: 5rem;
+      border-radius: 50%;
+    }
+    .profile-infos {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      row-gap: 0.4rem;
+
+      .username {
+        color: ${({ theme }) => theme.primaryText};
+        font-size: 2rem;
+        font-weight: 300;
+      }
+      .profile-link {
+        font-size: 1.2rem;
+        color: ${({ theme }) => theme.labelText};
+        text-decoration: underline;
+      }
+    }
+  }
+`;
 export const Logo = styled.button`
   font-family: 'Pinyon Script', sans-serif;
   font-weight: 400;
   font-size: 2.25rem;
-  color: #0caacd;
+  color: ${colors.mainBlue};
   align-self: end;
   background: transparent;
   border: none;
@@ -73,10 +163,13 @@ export const Links = styled.div`
   justify-content: flex-start;
   align-items: center;
   column-gap: 0.875rem;
+  @media ${breakpoints.tablet} {
+    display: none;
+  }
   .profile {
     width: 7.688rem;
     height: 2.188rem;
-    background: #0caacd;
+    background: ${colors.mainBlue};
     border-radius: 23px;
     text-decoration: none;
 
@@ -119,7 +212,7 @@ export const Links = styled.div`
     column-gap: 0.438rem;
 
     .commom-icons {
-      background: #0caacd;
+      background: ${colors.mainBlue};
       border: none;
       border-radius: 23px;
       height: 2.188rem;

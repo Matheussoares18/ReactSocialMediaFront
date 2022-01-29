@@ -67,6 +67,7 @@ export function useMutation<FunctionRequest = any, FunctionReturn = any>({
       }
       if (onError && axios.isAxiosError(error)) {
         onError(error);
+        return null;
       }
       return null;
     }

@@ -2,7 +2,7 @@
 import { ReactComponent as ArrowBack } from 'assets/RegisterPage/arrow_back.svg';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
 import { PublicRoutes } from 'Routes/RoutesEnum';
 import { FirstStep } from 'components/UserRegister/FirstStep/FirstStep';
@@ -60,7 +60,7 @@ export function UserRegister(): JSX.Element {
       history.push('/login');
     },
     onError: (error) => {
-      const errorType = backendErrorTranslate(error.response?.data.message);
+      const errorType = backendErrorTranslate(error.response?.data.error);
       toast.error(errorType.translatedError, {
         position: 'top-right',
         autoClose: CONSTANTS.alertDefaultTime,
@@ -70,6 +70,7 @@ export function UserRegister(): JSX.Element {
         draggable: true,
         progress: undefined,
       });
+
       if (errorType.errorType === BackendErrors.EMAIL_ALREADY_EXISTS) {
         history.push(
           `${PublicRoutes.REGISTER}${PublicRoutes.REGISTER_USER_INFOS}`
@@ -131,11 +132,21 @@ export function UserRegister(): JSX.Element {
   }
 
   return (
-    <>
-      <ToastContainer />
-      <Container onSubmit={handleSubmit(handleSubmitCustom)}>
-        <header>
-          <button
+    <Container onSubmit={handleSubmit(handleSubmitCustom)}>
+      <header>
+        <button
+          style={{
+            visibility: window.location.pathname.includes(
+              PublicRoutes.REGISTER_USER_INFOS
+            )
+              ? 'visible'
+              : 'hidden',
+          }}
+          type='button'
+          onClick={() => history.push(PublicRoutes.LOGIN)}
+        >
+          <ArrowBack
+            className='arrow-back'
             style={{
               visibility: window.location.pathname.includes(
                 PublicRoutes.REGISTER_USER_INFOS
@@ -143,66 +154,52 @@ export function UserRegister(): JSX.Element {
                 ? 'visible'
                 : 'hidden',
             }}
+          />
+          Voltar
+        </button>
+      </header>
+      <Content>
+        <h1>Cadastre-se</h1>
+        <div className='inputs'>
+          <Route path={`${url}${PublicRoutes.REGISTER_USER_INFOS}`}>
+            <FirstStep register={register} errors={errors} />
+          </Route>
+          <Route path={`${url}${PublicRoutes.REGISTER_BIRTH_DATE}`}>
+            <SecondStep register={register} errors={errors} />
+          </Route>
+          <Route path={`${url}${PublicRoutes.REGISTER_PASSWORD}`}>
+            <ThirdStep
+              getValues={getValues}
+              register={register}
+              errors={errors}
+            />
+          </Route>
+        </div>
+      </Content>
+      <SubmitButtonContainer>
+        {!window.location.pathname.includes(
+          PublicRoutes.REGISTER_USER_INFOS
+        ) && (
+          <button
+            className='back-button'
+            disabled={isLoading}
             type='button'
-            onClick={() => history.push(PublicRoutes.LOGIN)}
+            onClick={handleBack}
           >
-            <ArrowBack
-              className='arrow-back'
-              style={{
-                visibility: window.location.pathname.includes(
-                  PublicRoutes.REGISTER_USER_INFOS
-                )
-                  ? 'visible'
-                  : 'hidden',
-              }}
-            />{' '}
             Voltar
           </button>
-        </header>
-        <Content>
-          <h1>Cadastre-se</h1>
-
-          <div className='inputs'>
-            <Route path={`${url}${PublicRoutes.REGISTER_USER_INFOS}`}>
-              <FirstStep register={register} errors={errors} />
-            </Route>
-            <Route path={`${url}${PublicRoutes.REGISTER_BIRTH_DATE}`}>
-              <SecondStep register={register} errors={errors} />
-            </Route>
-            <Route path={`${url}${PublicRoutes.REGISTER_PASSWORD}`}>
-              <ThirdStep
-                getValues={getValues}
-                register={register}
-                errors={errors}
-              />
-            </Route>
-          </div>
-        </Content>
-        <SubmitButtonContainer>
-          {!window.location.pathname.includes(
-            PublicRoutes.REGISTER_USER_INFOS
-          ) && (
-            <button
-              className='back-button'
-              disabled={isLoading}
-              type='button'
-              onClick={handleBack}
-            >
-              Voltar
-            </button>
-          )}
-          <Button
-            loading={isLoading}
-            disabled={isLoading}
-            type='submit'
-            className='button'
-          >
-            {url.includes(PublicRoutes.REGISTER_PASSWORD)
-              ? 'Finalizar'
-              : 'Próxima etapa'}
-          </Button>
-        </SubmitButtonContainer>
-      </Container>
-    </>
+        )}
+        <Button
+          loading={isLoading}
+          disabled={isLoading}
+          type='submit'
+          className='button'
+        >
+          {url.includes(PublicRoutes.REGISTER_PASSWORD)
+            ? 'Finalizar'
+            : 'Próxima etapa'}
+        </Button>
+      </SubmitButtonContainer>
+    </Container>
   );
 }
