@@ -46,10 +46,12 @@ export function UserInfos({
 
   const handleCloseModal = () => {
     setModalIsOpen(false);
+    document.body.style.overflow = 'auto';
   };
 
   const handleOpenModal = () => {
     setModalIsOpen(true);
+    document.body.style.overflow = 'hidden';
   };
 
   return (

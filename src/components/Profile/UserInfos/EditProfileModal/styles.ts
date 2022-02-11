@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { breakpoints } from 'styles/global';
 
 export const ModalContainer = styled.div`
   display: flex;
@@ -40,6 +41,12 @@ export const ModalContent = styled.form`
     justify-content: center;
     width: calc(100% - 6.5rem);
     column-gap: 50px;
+
+    @media ${breakpoints.tablet} {
+      flex-direction: column;
+      row-gap: 3rem;
+    }
+
     .input-container {
       width: 1px;
     }
@@ -98,13 +105,24 @@ export const ModalActions = styled.div`
   justify-content: center;
   column-gap: 1.25rem;
   padding-bottom: 1.5rem;
+  padding-top: 1.5rem;
+
+  @media ${breakpoints.tablet} {
+    flex-direction: column;
+    align-items: center;
+    row-gap: 1rem;
+  }
 
   .cancel-button,
   .confirm-button {
-    width: 160px;
+    width: 10rem;
     height: 43px;
     border-radius: 83px;
     border: none;
+
+    @media ${breakpoints.tablet} {
+      width: calc(100% - 6.5rem);
+    }
   }
 
   .cancel-button {

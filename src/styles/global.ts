@@ -25,8 +25,6 @@ export default createGlobalStyle`
     font-family: var(--roboto-font-family);
     background:${({ theme }) => theme.body};
   }
-
-
   button{
       user-select: none;
       cursor: pointer;
@@ -42,10 +40,8 @@ export default createGlobalStyle`
     h1, h1, h3, h4, h5, h6, strong{
         font-weight:600;
     }
-
     .react-modal-overlay{
         background: rgba(0, 0, 0, 0.5);
-
         position: fixed;
         top: 0;
         bottom: 0;
@@ -64,7 +60,6 @@ export default createGlobalStyle`
         border-radius:0.25rem ;
         
     }
-
     .react-modal-close{
         position: absolute;
         right: 1.5rem;
@@ -73,9 +68,18 @@ export default createGlobalStyle`
         background: transparent;
         transition: filter 0.2s;
         fill: ${({ theme }) => theme.lines};
-
         &:hover{
             filter: brightness(0.8);
         }
     }
 `;
+
+interface Breakpoints {
+  tablet: string;
+  mobileMedium: string;
+}
+
+export const breakpoints: Breakpoints = {
+  tablet: `(max-width: 650px)`,
+  mobileMedium: `(max-width: 380px)`,
+};
