@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { insertUser } from 'store/actions/AuthUserAction';
 import { RequestHttpType, useMutation } from 'hooks/useMutation';
-import { ApiRoutes } from 'Services/ApiRoutes';
+import { AuthApiRoutes } from 'Services/ApiRoutes';
 import { AuthUser } from 'interfaces/AuthUser';
 import { backendErrorTranslate } from 'utils/backendErrorTranslate';
 import { Button } from 'components/DefaultComponents/Button/Button';
@@ -32,7 +32,7 @@ export function Login(): JSX.Element {
   });
   const dispatch = useDispatch();
   const { request, isLoading } = useMutation<LoginFormFields, AuthUser>({
-    path: ApiRoutes.AUTHENTICATE,
+    path: AuthApiRoutes.AUTHENTICATE,
     requestType: RequestHttpType.post,
     onComplete: (result) => {
       dispatch(insertUser({ ...result }));

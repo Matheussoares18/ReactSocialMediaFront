@@ -13,7 +13,7 @@ import { RootState } from 'store/reducers';
 import { UserRegisterValues } from 'interfaces/UserRegister';
 import { Button } from 'components/DefaultComponents/Button/Button';
 import { RequestHttpType, useMutation } from 'hooks/useMutation';
-import { ApiRoutes } from 'Services/ApiRoutes';
+import { ApiRoutes, AuthApiRoutes } from 'Services/ApiRoutes';
 import { AuthUser } from 'interfaces/AuthUser';
 import {
   BackendErrors,
@@ -32,6 +32,11 @@ export interface FormsFields {
   confirm_password?: string;
 }
 
+interface CreateCredentials {
+  email: string;
+  password: string;
+}
+
 export function UserRegister(): JSX.Element {
   const {
     register,
@@ -43,21 +48,32 @@ export function UserRegister(): JSX.Element {
   const userRegisterValues: UserRegisterValues = useSelector(
     (state: RootState) => state.userRegisterValues.userRegisterValues
   );
+  const { request: createCredentials, isLoading: createCredentialsIsLoading } =
+    useMutation<CreateCredentials, CreateCredentials>({
+      path: `${AuthApiRoutes.CREATE_CREDENTIALS}`,
+      requestType: RequestHttpType.post,
+      onComplete: () => {
+        dispatch(
+          updateUserValues({
+            birth_date: '',
+            email: '',
+            gender: '',
+            name: '',
+            phone: '',
+            password: '',
+          })
+        );
+        history.push('/login');
+      },
+    });
   const { request, isLoading } = useMutation<UserRegisterValues, AuthUser>({
     path: `${ApiRoutes.USERS}`,
     requestType: RequestHttpType.post,
     onComplete: () => {
-      dispatch(
-        updateUserValues({
-          birth_date: '',
-          email: '',
-          gender: '',
-          name: '',
-          phone: '',
-          password: '',
-        })
-      );
-      history.push('/login');
+      createCredentials({
+        email: userRegisterValues.email,
+        password: userRegisterValues.password,
+      });
     },
     onError: (error) => {
       const errorType = backendErrorTranslate(error.response?.data.error);
@@ -191,8 +207,8 @@ export function UserRegister(): JSX.Element {
           </button>
         )}
         <Button
-          loading={isLoading}
-          disabled={isLoading}
+          loading={isLoading || createCredentialsIsLoading}
+          disabled={isLoading || createCredentialsIsLoading}
           type='submit'
           className='button'
         >
