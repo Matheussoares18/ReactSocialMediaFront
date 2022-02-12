@@ -6,6 +6,7 @@ export enum ApiRoutes {
 }
 export enum SocialUsersApiRoutes {
   USERS = '/social-users/users',
+  GET_ME = '/social-users/users/me',
 }
 export enum AuthApiRoutes {
   CREATE_CREDENTIALS = '/auth',

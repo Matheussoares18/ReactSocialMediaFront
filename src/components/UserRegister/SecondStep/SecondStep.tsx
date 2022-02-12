@@ -102,4 +102,4 @@ const SecondStep: React.FC = () => {
   );
 };
 
-export default SecondStep;
+export { SecondStep };

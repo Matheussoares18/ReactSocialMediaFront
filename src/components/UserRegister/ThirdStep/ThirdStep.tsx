@@ -96,4 +96,4 @@ const ThirdStep: React.FC<ThirdStepProps> = ({
   );
 };
 
-export default ThirdStep;
+export { ThirdStep };

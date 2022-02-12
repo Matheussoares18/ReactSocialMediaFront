@@ -69,4 +69,4 @@ const FirstStep: React.FC = () => {
   );
 };
 
-export default FirstStep;
+export { FirstStep };

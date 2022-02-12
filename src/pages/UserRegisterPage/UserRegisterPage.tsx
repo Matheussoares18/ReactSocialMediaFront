@@ -1,9 +1,9 @@
-import UserRegister from 'components/UserRegister/UserRegister';
+import { UserRegister } from 'components/UserRegister/UserRegister';
 import { RequestHttpType, useMutation } from 'hooks/useMutation';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { updateUserValues } from 'store/actions/UserRegisterActions';
-import { AuthApiRoutes, SocialUsersApiRoutes } from 'Services/ApiRoutes';
+import { SocialUsersApiRoutes } from 'Services/ApiRoutes';
 import { UserRegisterValues } from 'interfaces/UserRegister';
 import { AuthUser } from 'interfaces/AuthUser';
 import {

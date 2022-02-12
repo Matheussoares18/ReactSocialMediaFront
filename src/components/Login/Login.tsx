@@ -1,27 +1,25 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import { AuthRoutes, PublicRoutes } from 'Routes/RoutesEnum';
+import { PublicRoutes } from 'Routes/RoutesEnum';
 import Input from 'components/DefaultComponents/Input/Input';
-
-import { toast } from 'react-toastify';
-
-import { useDispatch } from 'react-redux';
-import { insertUser } from 'store/actions/AuthUserAction';
-import { RequestHttpType, useMutation } from 'hooks/useMutation';
-import { AuthApiRoutes } from 'Services/ApiRoutes';
-import { AuthUser } from 'interfaces/AuthUser';
-import { backendErrorTranslate } from 'utils/backendErrorTranslate';
 import { Button } from 'components/DefaultComponents/Button/Button';
-import { CONSTANTS } from 'utils/constants';
 import { Container, Content } from './styles';
+
+interface LoginProps {
+  handleLogin: (data: {
+    email: string;
+    password: string;
+  }) => Promise<{ token: string } | null>;
+  isLoading: boolean;
+}
 
 interface LoginFormFields {
   email: string;
   password: string;
 }
 
-export function Login(): JSX.Element {
+const Login: React.FC<LoginProps> = ({ handleLogin, isLoading }) => {
   const {
     register,
     handleSubmit,
@@ -30,40 +28,12 @@ export function Login(): JSX.Element {
     mode: 'onSubmit',
     reValidateMode: 'onChange',
   });
-  const dispatch = useDispatch();
-  const { request, isLoading } = useMutation<LoginFormFields, AuthUser>({
-    path: AuthApiRoutes.AUTHENTICATE,
-    requestType: RequestHttpType.post,
-    onComplete: (result) => {
-      dispatch(insertUser({ ...result }));
-      localStorage.setItem('token', result?.token as string);
-      window.location.href = AuthRoutes.POSTS;
-    },
-    onError: (error) => {
-      toast.error(
-        backendErrorTranslate(error.response?.data?.message).translatedError,
-        {
-          position: 'top-right',
-          autoClose: CONSTANTS.alertDefaultTime,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        }
-      );
-    },
-  });
-
-  async function onSubmit(data: LoginFormFields) {
-    const { email, password } = data;
-
-    await request({ email, password });
-  }
-
+  const handleOnSubmit = (data: LoginFormFields) => {
+    handleLogin(data);
+  };
   return (
     <Container>
-      <Content onSubmit={handleSubmit(onSubmit)}>
+      <Content onSubmit={handleSubmit(handleOnSubmit)}>
         <h1>Social Media</h1>
         <div className='inputs'>
           <Input
@@ -116,4 +86,6 @@ export function Login(): JSX.Element {
       </Content>
     </Container>
   );
-}
+};
+
+export { Login };

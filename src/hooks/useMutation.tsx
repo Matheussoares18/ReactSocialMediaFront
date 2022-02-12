@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { useState } from 'react';
 import api from 'Services/api';
 import { toast } from 'react-toastify';
@@ -9,17 +9,22 @@ export enum RequestHttpType {
   put = 'put',
   patch = 'patch',
   delete = 'delete',
+  get = 'get',
 }
 
 interface UseMutationProps<FunctionReturn = any> {
   path: string;
   requestType: RequestHttpType;
+  config?: AxiosRequestConfig;
   onComplete?: (result: FunctionReturn) => void;
   onError?: (error: AxiosError) => void;
 }
 
 interface UseMutationReturn<FunctionRequest = any, FunctionResponse = any> {
-  request: (variables: FunctionRequest) => Promise<FunctionResponse | null>;
+  request: (
+    variables?: FunctionRequest,
+    configParam?: AxiosRequestConfig
+  ) => Promise<FunctionResponse | null>;
   hasError: boolean;
   isLoading: boolean;
 }
@@ -28,6 +33,7 @@ export function useMutation<FunctionRequest = any, FunctionReturn = any>({
   path,
   requestType,
   onComplete,
+  config,
   onError,
 }: UseMutationProps<FunctionReturn>): UseMutationReturn<
   FunctionRequest,
@@ -36,11 +42,17 @@ export function useMutation<FunctionRequest = any, FunctionReturn = any>({
   const [isLoading, setLoading] = useState<boolean>(false);
   const [hasError, setError] = useState<boolean>(false);
   async function request(
-    params: FunctionRequest
+    params?: FunctionRequest,
+    configParam?: AxiosRequestConfig
   ): Promise<FunctionReturn | null> {
     try {
       setError(false);
       setLoading(true);
+
+      if (configParam || config) {
+        api.defaults.headers = configParam?.headers || config?.headers;
+      }
+
       const result = await api[requestType]<
         FunctionRequest,
         AxiosResponse<FunctionReturn>

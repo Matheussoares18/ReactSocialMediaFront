@@ -2,9 +2,9 @@
 import { ReactComponent as ArrowBack } from 'assets/RegisterPage/arrow_back.svg';
 import { Route, useHistory, useRouteMatch } from 'react-router-dom';
 import { PublicRoutes } from 'Routes/RoutesEnum';
-import SecondStep from 'components/UserRegister/SecondStep/SecondStep';
-import ThirdStep from 'components/UserRegister/ThirdStep/ThirdStep';
-import FirstStep from 'components/UserRegister/FirstStep/FirstStep';
+import { SecondStep } from 'components/UserRegister/SecondStep/SecondStep';
+import { ThirdStep } from 'components/UserRegister/ThirdStep/ThirdStep';
+import { FirstStep } from 'components/UserRegister/FirstStep/FirstStep';
 import { Container, Content } from './styles';
 
 interface UserRegisterProps {
@@ -77,4 +77,4 @@ const UserRegister: React.FC<UserRegisterProps> = ({
   );
 };
 
-export default UserRegister;
+export { UserRegister };
