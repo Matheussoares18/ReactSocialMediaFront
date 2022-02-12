@@ -1,25 +1,49 @@
-import {
-  DeepMap,
-  FieldError,
-  UseFormGetValues,
-  UseFormRegister,
-} from 'react-hook-form';
+/* eslint-disable camelcase */
+import { Button } from 'components/DefaultComponents/Button/Button';
+import { useRegisterInfos } from 'hooks/useRegisterInfos';
+import { Form, SubmitButtonContainer } from 'components/UserRegister/styles';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { updateUserValues } from 'store/actions/UserRegisterActions';
 import Input from '../../DefaultComponents/Input/Input';
-import { FormsFields } from '../UserRegister';
 
 interface ThirdStepProps {
-  register: UseFormRegister<FormsFields>;
-  errors?: DeepMap<FormsFields, FieldError>;
-  getValues: UseFormGetValues<FormsFields>;
+  handleCreateUser: () => Promise<void>;
+  isLoading: boolean;
+}
+interface FormFields {
+  password: string;
+  // eslint-disable-next-line camelcase
+  confirm_password: string;
 }
 
-export function ThirdStep({
-  register,
-  errors,
-  getValues,
-}: ThirdStepProps): JSX.Element {
+const ThirdStep: React.FC<ThirdStepProps> = ({
+  handleCreateUser,
+  isLoading,
+}) => {
+  const userRegisterValues = useRegisterInfos();
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm<FormFields>({ mode: 'onSubmit', reValidateMode: 'onChange' });
+
+  const handleOnSubmit = async (data: FormFields) => {
+    dispatch(
+      updateUserValues({
+        ...userRegisterValues,
+        ...data,
+        password: data.password as string,
+      })
+    );
+    await handleCreateUser();
+  };
   return (
-    <>
+    <Form onSubmit={handleSubmit(handleOnSubmit)}>
       <Input
         label='Senha:'
         placeholder='Senha'
@@ -48,6 +72,28 @@ export function ThirdStep({
           },
         })}
       />
-    </>
+      <SubmitButtonContainer>
+        <Button
+          loading={false}
+          className='back-button'
+          disabled={isLoading}
+          type='button'
+          onClick={() => history.goBack()}
+        >
+          Voltar
+        </Button>
+
+        <Button
+          loading={isLoading}
+          disabled={isLoading}
+          type='submit'
+          className='button'
+        >
+          Concluir(3/3)
+        </Button>
+      </SubmitButtonContainer>
+    </Form>
   );
-}
+};
+
+export default ThirdStep;

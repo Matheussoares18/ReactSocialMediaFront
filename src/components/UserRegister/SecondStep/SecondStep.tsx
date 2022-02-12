@@ -1,27 +1,40 @@
+/* eslint-disable camelcase */
+import { Button } from 'components/DefaultComponents/Button/Button';
+import { useRegisterInfos } from 'hooks/useRegisterInfos';
+import { Form, SubmitButtonContainer } from 'components/UserRegister/styles';
 import React from 'react';
-import { DeepMap, FieldError, UseFormRegister } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-import { UserRegisterValues } from '../../../interfaces/UserRegister';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { PublicRoutes } from 'Routes/RoutesEnum';
 import { updateUserValues } from '../../../store/actions/UserRegisterActions';
-import { RootState } from '../../../store/reducers';
 import { phoneNumber } from '../../../utils/masks';
 import Input from '../../DefaultComponents/Input/Input';
 import Select from '../../DefaultComponents/Select/Select';
-import { FormsFields } from '../UserRegister';
 
-interface SecondStepProps {
-  register: UseFormRegister<FormsFields>;
-  errors?: DeepMap<FormsFields, FieldError>;
+interface FormFields {
+  phone: string;
+  birth_date: string;
+  gender: string;
 }
 
-export function SecondStep({ register, errors }: SecondStepProps): JSX.Element {
-  const userRegisterValues: UserRegisterValues = useSelector(
-    (state: RootState) => state.userRegisterValues.userRegisterValues
-  );
+const SecondStep: React.FC = () => {
+  const userRegisterValues = useRegisterInfos();
   const dispatch = useDispatch();
+  const history = useHistory();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormFields>({ mode: 'onSubmit', reValidateMode: 'onChange' });
+
+  const handleOnSubmit = (data: FormFields) => {
+    dispatch(updateUserValues({ ...userRegisterValues, ...data }));
+    history.push(`${PublicRoutes.REGISTER}${PublicRoutes.REGISTER_PASSWORD}`);
+  };
 
   return (
-    <>
+    <Form onSubmit={handleSubmit(handleOnSubmit)}>
       <Input
         label='Celular:'
         placeholder='(DD) 99999-9999'
@@ -71,6 +84,22 @@ export function SecondStep({ register, errors }: SecondStepProps): JSX.Element {
           maxWidth='100px'
         />
       </div>
-    </>
+      <SubmitButtonContainer>
+        <Button
+          loading={false}
+          className='back-button'
+          type='button'
+          onClick={() => history.goBack()}
+        >
+          Voltar
+        </Button>
+
+        <Button loading={false} type='submit' className='button'>
+          Próxima etapa(2/3)
+        </Button>
+      </SubmitButtonContainer>
+    </Form>
   );
-}
+};
+
+export default SecondStep;

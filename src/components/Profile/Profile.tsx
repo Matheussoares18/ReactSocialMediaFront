@@ -24,7 +24,7 @@ export function Profile(): JSX.Element {
     biography?: string;
     image?: string;
   }>({
-    path: `${ApiRoutes.USERS}/${pageParams.id}`,
+    path: `/users/${pageParams.id}`,
   });
   const {
     data: postsResult,

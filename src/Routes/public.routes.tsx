@@ -1,3 +1,4 @@
+import { UserRegisterPage } from 'pages/UserRegisterPage/UserRegisterPage';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
@@ -8,7 +9,6 @@ import HomePage from '../pages/HomePage/HomePage';
 import LoginPage from '../pages/LoginPage/LoginPage';
 import { PostsPage } from '../pages/PostsPage/PostsPage';
 import { ProfilePage } from '../pages/ProfilePage/ProfilePage';
-import { UserRegisterPage } from '../pages/UserRegisterPage/UserRegisterPage';
 import { RootState } from '../store/reducers';
 import { AuthRoutes, PublicRoutes } from './RoutesEnum';
 

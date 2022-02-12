@@ -1,21 +1,35 @@
-import { useSelector } from 'react-redux';
-import { DeepMap, FieldError, UseFormRegister } from 'react-hook-form';
-import Input from '../../DefaultComponents/Input/Input';
-import { FormsFields } from '../UserRegister';
-import { UserRegisterValues } from '../../../interfaces/UserRegister';
-import { RootState } from '../../../store/reducers';
+import React from 'react';
+import { useRegisterInfos } from 'hooks/useRegisterInfos';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { PublicRoutes } from 'Routes/RoutesEnum';
+import { Button } from 'components/DefaultComponents/Button/Button';
+import { updateUserValues } from 'store/actions/UserRegisterActions';
+import { useHistory } from 'react-router-dom';
+import Input from 'components/DefaultComponents/Input/Input';
+import { Form, SubmitButtonContainer } from 'components/UserRegister/styles';
 
-interface FirstStepProps {
-  register: UseFormRegister<Pick<FormsFields, 'name' | 'email'>>;
-  errors: DeepMap<FormsFields, FieldError>;
+interface FormFields {
+  name: string;
+  email: string;
 }
 
-export function FirstStep({ register, errors }: FirstStepProps): JSX.Element {
-  const userRegisterValues: UserRegisterValues = useSelector(
-    (state: RootState) => state.userRegisterValues.userRegisterValues
-  );
+const FirstStep: React.FC = () => {
+  const userRegisterValues = useRegisterInfos();
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormFields>({ mode: 'onSubmit', reValidateMode: 'onChange' });
+
+  const handleOnSubmit = (data: FormFields) => {
+    dispatch(updateUserValues({ ...userRegisterValues, ...data }));
+    history.push(`${PublicRoutes.REGISTER}${PublicRoutes.REGISTER_BIRTH_DATE}`);
+  };
   return (
-    <>
+    <Form onSubmit={handleSubmit(handleOnSubmit)}>
       <Input
         label='Nome:'
         placeholder='Seu nome'
@@ -41,6 +55,18 @@ export function FirstStep({ register, errors }: FirstStepProps): JSX.Element {
           },
         })}
       />
-    </>
+      <SubmitButtonContainer>
+        <Button
+          loading={false}
+          disabled={false}
+          type='submit'
+          className='button'
+        >
+          Próxima etapa(1/3)
+        </Button>
+      </SubmitButtonContainer>
+    </Form>
   );
-}
+};
+
+export default FirstStep;

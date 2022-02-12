@@ -6,7 +6,7 @@ import { CreateUserRequest, UpdateUserImageRequest } from './types';
 export const createUser: CreateUserRequest = async (
   user: UserRegisterValues
 ) => {
-  return api.post(ApiRoutes.USERS, {
+  return api.post('/users', {
     ...user,
     contact_name: 'Principal',
   });
@@ -15,5 +15,5 @@ export const createUser: CreateUserRequest = async (
 export const updateUserImage: UpdateUserImageRequest = async (
   image: string
 ) => {
-  return api.patch(ApiRoutes.USERS, { image });
+  return api.patch('/users', { image });
 };

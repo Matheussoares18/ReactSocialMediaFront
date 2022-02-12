@@ -82,11 +82,11 @@ export function EditProfileModal({
     Partial<AuthUser>,
     UpdateUserRequestReturn
   >({
-    path: `${ApiRoutes.USERS}`,
+    path: `/users`,
     requestType: RequestHttpType.patch,
     onComplete: (result) => {
       dispatch(insertUser({ ...authUser, ...result }));
-      refetch(`${ApiRoutes.USERS}/${userInfos.id}`);
+      refetch(`/users/${userInfos.id}`);
       refetchPosts(`${ApiRoutes.GET_POSTS_BY_USER}/${userInfos.id}/${0}`);
       onRequestClose();
     },

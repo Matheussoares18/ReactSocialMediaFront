@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { breakpoints } from 'styles/global';
 
-export const Container = styled.form`
+export const Container = styled.div`
   width: 100%;
   height: 100vh;
 
@@ -87,12 +87,14 @@ export const Content = styled.div`
   }
 `;
 
+export const Form = styled.form`
+  width: 100%;
+`;
 export const SubmitButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
 
   align-items: center;
-  width: calc(100% - 240px);
   height: 100%;
 
   @media ${breakpoints.tablet} {
