@@ -16,6 +16,18 @@ interface LoginFormFields {
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
+
+  const handleError = (errorMessage?: string) => {
+    toast.error(backendErrorTranslate(errorMessage).translatedError, {
+      position: 'top-right',
+      autoClose: CONSTANTS.alertDefaultTime,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
   const { request: getMe, isLoading: getMeLoading } = useMutation<
     unknown,
     AuthUser
@@ -29,18 +41,7 @@ const LoginPage: React.FC = () => {
     },
     onError: (error) => {
       localStorage.removeItem('token');
-      toast.error(
-        backendErrorTranslate(error.response?.data?.message).translatedError,
-        {
-          position: 'top-right',
-          autoClose: CONSTANTS.alertDefaultTime,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        }
-      );
+      handleError(error.response?.data?.message);
     },
   });
   const { request, isLoading } = useMutation<
@@ -65,18 +66,7 @@ const LoginPage: React.FC = () => {
       );
     },
     onError: (error) => {
-      toast.error(
-        backendErrorTranslate(error.response?.data?.message).translatedError,
-        {
-          position: 'top-right',
-          autoClose: CONSTANTS.alertDefaultTime,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        }
-      );
+      handleError(error.response?.data?.message);
     },
   });
 
