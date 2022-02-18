@@ -56,8 +56,8 @@ export function LikesList({
             likesList.map((like) => (
               <div className='item' key={like.id}>
                 <div className='pic-and-name'>
-                  <UserPicture source={like.user.image} />
-                  <span className='name'>{like.user?.name}</span>
+                  <UserPicture source={like.users.image} />
+                  <span className='name'>{like.users?.name}</span>
                 </div>
                 <button type='button' disabled>
                   Seguir

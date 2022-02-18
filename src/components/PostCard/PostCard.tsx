@@ -21,6 +21,7 @@ import { deletePostLike, insertPostLike } from 'store/actions/PostsActions';
 import { LikesList } from 'components/PostCard/LikesList/LikesList';
 import { AllCommentsModal } from 'components/AllCommentsModal/AllCommentsModal';
 import { UserPicture } from 'components/DefaultComponents/UserPicture/UserPicture';
+import { config } from 'config';
 import { CommentsList, Container } from './styles';
 
 interface PostCardProps {
@@ -60,10 +61,10 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
     if (post.post_likes.length === 1) {
       return (
         <>
-          <UserPicture source={post.post_likes[0].user.image} />
+          <UserPicture source={post.post_likes[0].users.image} />
           <span>
             Curtido por
-            <span className='user-name'>{post.post_likes[0]?.user?.name}</span>
+            <span className='user-name'>{post.post_likes[0]?.users?.name}</span>
           </span>
         </>
       );
@@ -74,10 +75,10 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
     const likesAmount = post.post_likes.length - 1;
     return (
       <>
-        <UserPicture source={post.post_likes[0].user.image} />
+        <UserPicture source={post.post_likes[0].users.image} />
         <span>
           Curtido por
-          <span className='user-name'>{post.post_likes[0]?.user?.name}</span>e
+          <span className='user-name'>{post.post_likes[0]?.users?.name}</span>e
           mais {likesAmount}
         </span>
       </>
@@ -117,6 +118,39 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
   const handleCloseAllCommentsModal = () => {
     setAllCommentsModalOpen(false);
   };
+  const verifyFileFormat = (
+    imageNameParam?: string
+  ): JSX.Element | undefined => {
+    if (imageNameParam) {
+      const imagesFormat = ['.jpg', '.jpeg', '.png', '.tiff'];
+
+      const imageName = imageNameParam.substring(
+        imageNameParam.length,
+        imageNameParam.lastIndexOf('.')
+      );
+
+      if (imagesFormat.find((format) => format === imageName)) {
+        return (
+          <img
+            src={`${config.postImagesPath}/${imageNameParam}`}
+            alt='postimage'
+            className='post-image'
+          />
+        );
+      }
+
+      return (
+        // eslint-disable-next-line jsx-a11y/media-has-caption
+        <video controls className='post-image'>
+          <source
+            src={`${config.postImagesPath}/${imageNameParam}`}
+            type='video/mp4'
+          />
+        </video>
+      );
+    }
+    return undefined;
+  };
 
   return (
     <>
@@ -130,13 +164,14 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
         isOpen={allCommentsModalOpen}
         onRequestClose={handleCloseAllCommentsModal}
       />
+
       <Container>
         <div className='top'>
           <div className='user-and-post-infos'>
-            <UserPicture source={post.user?.image} />
-            <h3 className='name'>{post.user.name}</h3>
+            <UserPicture source={post.users?.image} />
+            <h3 className='name'>{post.users.name}</h3>
             <time>
-              {formatDistance(new Date(post.created_at), new Date(), {
+              {formatDistance(new Date(post.createdAt), new Date(), {
                 locale: brazil,
               })}
             </time>
@@ -155,11 +190,8 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
               </button>
             )}
 
-            <img
-              src={orderImagesArray[selectedImage]?.image}
-              alt='postimage'
-              className='post-image'
-            />
+            {verifyFileFormat(orderImagesArray[selectedImage]?.image)}
+
             {selectedImage + 1 < orderImagesArray.length && (
               <button
                 type='button'
@@ -199,7 +231,7 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
           </div>
         </div>
         <div className='post-content'>
-          <h3>{post.user.name}</h3>
+          <h3>{post.users.name}</h3>
           <p>{post.content}</p>
         </div>
         <MakeAComment postId={post.id} />

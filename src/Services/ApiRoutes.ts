@@ -12,3 +12,6 @@ export enum AuthApiRoutes {
   CREATE_CREDENTIALS = '/auth',
   AUTHENTICATE = '/auth/login',
 }
+export enum SocialPostsApiRoutes {
+  POSTS = '/social-posts/posts',
+}

@@ -55,12 +55,12 @@ export function Comment({ comment }: CommentProps): JSX.Element {
         confirmationModalText='Deseja excluir o comentário?'
         next={handleDeleteComment}
       />
-      <UserPicture source={comment.user?.image} />
+      <UserPicture source={comment.users?.image} />
       <div className='name-and-comment'>
         <h3>
-          {comment.user?.name.length > 10
-            ? `${comment.user?.name.substring(0, 10)}`
-            : comment.user?.name}
+          {comment.users?.name.length > 10
+            ? `${comment.users?.name.substring(0, 10)}`
+            : comment.users?.name}
         </h3>
         <div className='comment-container'>
           <p>{comment.comment}</p>

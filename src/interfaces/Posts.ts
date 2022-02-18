@@ -1,10 +1,11 @@
+/* eslint-disable camelcase */
 import { PostComment } from './PostComment';
 
 export interface PostLikes {
   id: string;
   post_id: string;
   user_id: string;
-  user: {
+  users: {
     name: string;
     image: string;
   };
@@ -13,8 +14,8 @@ export interface Post {
   id: string;
   content: string;
   image: string;
-  created_at: string;
-  updated_at: string;
+  createdAt: string;
+  updatedAt: string;
   user_id: string;
   post_images: Array<{
     image: string;
@@ -22,13 +23,9 @@ export interface Post {
   }>;
   post_likes: PostLikes[];
   post_comments: PostComment[];
-  user: {
+  users: {
     id: string;
     name: string;
-    email: string;
-    birth_date: string;
-    gender: string;
-    password: string;
     image: string;
   };
 }

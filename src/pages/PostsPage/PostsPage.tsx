@@ -7,7 +7,7 @@ import { insertPosts } from 'store/actions/PostsActions';
 import { RootState } from 'store/reducers';
 import { Post } from 'interfaces/Posts';
 import { useQuery } from 'hooks/useQuery';
-import { ApiRoutes } from 'Services/ApiRoutes';
+import { ApiRoutes, SocialPostsApiRoutes } from 'Services/ApiRoutes';
 import { LoadingOrError } from 'components/DefaultComponents/LoadingOrError/LoadingOrError';
 import { PostsLoader } from 'components/DefaultComponents/PostsLoader/PostsLoader';
 import { GenericPostsError } from 'components/DefaultComponents/GenericPostsError/GenericPostsError';
@@ -22,10 +22,10 @@ export function PostsPage(): JSX.Element {
     total: number;
     posts: Post[];
   }>({
-    path: `${ApiRoutes.POSTS}/0`,
+    path: `${SocialPostsApiRoutes.POSTS}/0`,
     onComplete: (result) => {
       setTotalPosts(result.total);
-      setSkip(skip + 15);
+      setSkip(skip + 30);
       dispatch(insertPosts([...posts, ...result.posts]));
     },
   });
@@ -42,7 +42,7 @@ export function PostsPage(): JSX.Element {
       const result = await refetch(`${ApiRoutes.POSTS}/${skip}`);
 
       if (result && !isError) {
-        const updateSkipNumber = skip + 15;
+        const updateSkipNumber = skip + 30;
         setSkip(updateSkipNumber);
       }
     }
