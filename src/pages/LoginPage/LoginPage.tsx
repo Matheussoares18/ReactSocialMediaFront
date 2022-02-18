@@ -1,7 +1,9 @@
 import { Login } from 'components/Login/Login';
 import { RequestHttpType, useMutation } from 'hooks/useMutation';
 import { AuthUser } from 'interfaces/AuthUser';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { AuthRoutes } from 'Routes/RoutesEnum';
 import { AuthApiRoutes, SocialUsersApiRoutes } from 'Services/ApiRoutes';
@@ -16,7 +18,9 @@ interface LoginFormFields {
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
+  const [isLoading, setIsloading] = useState(false);
 
+  const location = useLocation<{ from: { pathname: string } }>();
   const handleError = (errorMessage?: string) => {
     toast.error(backendErrorTranslate(errorMessage).translatedError, {
       position: 'top-right',
@@ -28,23 +32,31 @@ const LoginPage: React.FC = () => {
       progress: undefined,
     });
   };
-  const { request: getMe, isLoading: getMeLoading } = useMutation<
-    unknown,
-    AuthUser
-  >({
+  const handleCreateUser = async (data: LoginFormFields): Promise<void> => {
+    setIsloading(true);
+    request(data);
+  };
+  const { request: getMe } = useMutation<unknown, AuthUser>({
     path: SocialUsersApiRoutes.GET_ME,
     requestType: RequestHttpType.get,
 
     onComplete: (result) => {
+      setIsloading(false);
       dispatch(insertUser({ ...result }));
-      window.location.href = AuthRoutes.POSTS;
+
+      let redirectTo: string = AuthRoutes.POSTS;
+      if (location.state?.from.pathname) {
+        redirectTo = location.state?.from.pathname;
+      }
+      window.location.href = redirectTo;
     },
     onError: (error) => {
+      setIsloading(false);
       localStorage.removeItem('token');
       handleError(error.response?.data?.message);
     },
   });
-  const { request, isLoading } = useMutation<
+  const { request } = useMutation<
     LoginFormFields,
     { email: string; token: string }
   >({
@@ -66,11 +78,12 @@ const LoginPage: React.FC = () => {
       );
     },
     onError: (error) => {
+      setIsloading(false);
       handleError(error.response?.data?.message);
     },
   });
 
-  return <Login handleLogin={request} isLoading={isLoading || getMeLoading} />;
+  return <Login handleLogin={handleCreateUser} isLoading={isLoading} />;
 };
 
 export default LoginPage;

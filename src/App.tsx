@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 import { ToastContainer } from 'react-toastify';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from 'styled-components';
-import Routes from 'Routes/public.routes';
+import Routes from 'Routes/routes';
 import { Themes } from 'interfaces/AuthUser';
 import store, { persistor } from 'store';
 import GlobalStyle from 'styles/global';

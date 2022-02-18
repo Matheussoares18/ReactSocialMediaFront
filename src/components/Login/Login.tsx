@@ -7,10 +7,7 @@ import { Button } from 'components/DefaultComponents/Button/Button';
 import { Container, Content } from './styles';
 
 interface LoginProps {
-  handleLogin: (data: {
-    email: string;
-    password: string;
-  }) => Promise<{ token: string } | null>;
+  handleLogin: (data: { email: string; password: string }) => Promise<void>;
   isLoading: boolean;
 }
 
