@@ -16,6 +16,11 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
 
+  video {
+    width: 200px;
+    height: 200px;
+  }
+
   .content {
     width: calc(100% - 2rem);
     height: calc(100% - 1.125rem);
@@ -60,28 +65,12 @@ export const Container = styled.div`
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding-bottom: 0.5rem;
       .collections-icon {
         fill: #0caacd;
 
         &:hover {
           cursor: pointer;
-        }
-      }
-      button {
-        width: 6.5rem;
-        height: 2.063rem;
-        background: #0caacd;
-
-        border-radius: 1.063rem;
-        border: none;
-
-        font-family: var(--roboto-font-family);
-        font-size: 0.813rem;
-        font-weight: bold;
-        color: #ffffff;
-
-        &:hover {
-          filter: brightness(0.8);
         }
       }
     }
@@ -103,5 +92,50 @@ export const Container = styled.div`
       object-fit: cover;
       object-position: center;
     }
+  }
+`;
+
+enum UploadStatus {
+  IDLE = 'idle',
+  LOADING = 'loading',
+  SUCCESS = 'success',
+  ERROR = 'error',
+}
+interface ProgressButtonProps {
+  status: UploadStatus;
+  progress: number;
+}
+const progressBarStatusMap = {
+  [UploadStatus.SUCCESS]: 'rgba(0, 255, 0, 0.5)',
+  [UploadStatus.ERROR]: 'rgba(255,0,0, 0.5)',
+  [UploadStatus.IDLE]: '#0caacd',
+  [UploadStatus.LOADING]: 'rgba(0, 255, 0, 0.5)',
+};
+export const ProgressButton = styled.button<ProgressButtonProps>`
+  background: #0caacd;
+  border: none;
+  height: 2.6rem;
+  width: 6.5rem;
+  font-family: var(--roboto-font-family);
+  font-size: 0.813rem;
+  font-weight: bold;
+  color: #ffffff;
+  border-radius: 0.2rem;
+  position: relative;
+
+  span {
+    position: relative;
+    z-index: 10;
+  }
+
+  .progress-bar {
+    position: absolute;
+    background: ${(prop) => progressBarStatusMap[prop.status]};
+    width: ${(prop) => prop.progress}%;
+    height: 100%;
+    top: 0px;
+    border-radius: 0.2rem;
+    z-index: 2;
+    transition: all 0.5s;
   }
 `;

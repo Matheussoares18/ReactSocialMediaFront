@@ -236,13 +236,12 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
         </div>
         <MakeAComment postId={post.id} />
         <CommentsList>
-          {post.post_comments
-            .slice(post.post_comments.length - 3, post.post_comments.length)
-            .map((item) => (
-              <Comment comment={item} />
-            ))}
+          {post?.post_comments?.length > 0 &&
+            post.post_comments
+              .slice(post.post_comments.length - 3, post.post_comments?.length)
+              .map((item) => <Comment comment={item} />)}
 
-          {post.post_comments.length > 3 && (
+          {post?.post_comments?.length > 3 && (
             <button
               type='button'
               className='see-all-coments'

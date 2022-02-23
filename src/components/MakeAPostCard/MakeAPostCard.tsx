@@ -1,50 +1,57 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { useEffect, useState } from 'react';
 import { UserPicture } from 'components/DefaultComponents/UserPicture/UserPicture';
+import { useDispatch } from 'react-redux';
 import { ReactComponent as CollectionsIcons } from 'assets/MakeAPost/collectionsIcons.svg';
-import { useState } from 'react';
+import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
-import * as PostsServices from 'Services/PostServices/PostServices';
-
-import { useDispatch, useSelector } from 'react-redux';
+import { SocialPostsApiRoutes } from 'Services/ApiRoutes';
+import api from 'Services/api';
+import { useUserInfos } from 'hooks/useUserInfos';
 import { insertPost } from 'store/actions/PostsActions';
-import { AuthUser } from 'interfaces/AuthUser';
-import { RootState } from 'store/reducers';
-import { Container } from './styles';
+import { Container, ProgressButton } from './styles';
+
+enum UploadStatus {
+  IDLE = 'idle',
+  LOADING = 'loading',
+  SUCCESS = 'success',
+  ERROR = 'error',
+}
 
 export function MakeAPostCard(): JSX.Element {
-  const authUser: AuthUser | undefined = useSelector(
-    (state: RootState) => state.authUser.authUser
-  );
-  const [images, setImages] = useState<string[]>([]);
+  const authUser = useUserInfos();
   const [content, setContent] = useState('');
   const [imagesPreview, setImagesPreview] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [videosPreview, setVideosPreview] = useState<string[]>([]);
+  const [filesToUpload, setFilesToUpload] = useState<File[]>([]);
+  const [uploadStatusAndProgress, setUploadStatusAndProgress] = useState<{
+    status: UploadStatus;
+    progress: number;
+  }>({
+    status: UploadStatus.IDLE,
+    progress: 0,
+  });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const dispatch = useDispatch();
 
-  function getBase64(file: File) {
-    let url = '';
-
-    const reader = new FileReader();
-
-    reader.readAsDataURL(file);
-
-    reader.onload = () => {
-      url = reader.result as string;
-      setImages([...images, url]);
-    };
-  }
   function validatePhoto(file: File) {
     if (
       (file.type.toLowerCase() === 'image/jpg' ||
         file.type.toLowerCase() === 'image/jpeg' ||
         file.type.toLowerCase() === 'image/png' ||
+        file.type.toLowerCase() === 'video/mp4' ||
         file.type.toLowerCase() === 'image/tiff') &&
-      file.size / 1024 / 1024 <= 2
+      file.size / 1024 / 1024 <= 1000
     ) {
-      setImagesPreview([...imagesPreview, URL.createObjectURL(file)]);
-      getBase64(file);
-    } else if (file.size / 1024 / 1024 > 10) {
-      toast.warning('Tamanho máximo 10mb', {
+      if (file.type.toLowerCase() !== 'video/mp4') {
+        setImagesPreview([...imagesPreview, URL.createObjectURL(file)]);
+      } else {
+        setVideosPreview([...videosPreview, URL.createObjectURL(file)]);
+      }
+      setFilesToUpload([...filesToUpload, file]);
+    } else if (file.size / 1024 / 1024 > 1000) {
+      toast.warning('Tamanho máximo 100mb', {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
@@ -67,33 +74,75 @@ export function MakeAPostCard(): JSX.Element {
   }
 
   async function handleSubmit() {
-    setLoading(true);
-    try {
-      const result = await PostsServices.createPost({
-        content,
-        post_images: [
-          ...images.map((item) => {
-            return {
-              image: item,
-            };
-          }),
-        ],
+    // eslint-disable-next-line prefer-const
+    let formData = new FormData();
+    if (filesToUpload.length > 0) {
+      filesToUpload.forEach((file) => {
+        formData.append('images', file);
       });
+    }
+    formData.append('content', content);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+    formData.append('external_id', authUser?.id!);
 
-      dispatch(insertPost(result.data.post));
-      setImages([]);
+    try {
+      setIsLoading(true);
+      setUploadStatusAndProgress({
+        ...uploadStatusAndProgress,
+        status: UploadStatus.LOADING,
+      });
+      const result = await api.post(`${SocialPostsApiRoutes.POSTS}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        onUploadProgress: (event) => {
+          const progress: number = Math.round(
+            (event.loaded * 100) / event.total
+          );
+
+          setUploadStatusAndProgress({
+            status: UploadStatus.LOADING,
+            progress,
+          });
+        },
+      });
+      dispatch(insertPost(result.data));
+
+      setImagesPreview([]);
+      setVideosPreview([]);
+      setFilesToUpload([]);
       setContent('');
-      setLoading(false);
+      setIsLoading(false);
+      setUploadStatusAndProgress({
+        ...uploadStatusAndProgress,
+        status: UploadStatus.SUCCESS,
+      });
     } catch (error) {
-      setLoading(false);
-      toast.error('Falha ao criar post', {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+      if (error instanceof Error && error.message === 'Network Error') {
+        toast.error('Falha ao realizar operação, serviço indisponível', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+      if (axios.isAxiosError(error)) {
+        toast.error('Falha ao criar post, tente novamente', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+      setUploadStatusAndProgress({
+        ...uploadStatusAndProgress,
+        status: UploadStatus.ERROR,
       });
     }
   }
@@ -124,19 +173,39 @@ export function MakeAPostCard(): JSX.Element {
               />
             </label>
 
-            <button
+            <ProgressButton
+              status={uploadStatusAndProgress.status}
+              progress={uploadStatusAndProgress.progress}
               type='button'
               onClick={() => handleSubmit()}
-              disabled={content.length === 0 || loading}
+              disabled={content.length === 0 || isLoading}
             >
-              Publicar
-            </button>
+              <span>
+                {uploadStatusAndProgress.status === UploadStatus.LOADING
+                  ? `Processando...(${uploadStatusAndProgress.progress}%)`
+                  : 'Publicar'}
+              </span>
+              <div className='progress-bar-container'>
+                <div className='progress-bar' />
+              </div>
+            </ProgressButton>
           </div>
         </div>
-        {images.length > 0 && (
+        {imagesPreview.length > 0 && (
           <div className='preview-image-container'>
-            {images.map((image) => (
+            {imagesPreview.map((image) => (
               <img className='preview-image' src={image} alt='' key={image} />
+            ))}
+          </div>
+        )}
+
+        {videosPreview.length > 0 && (
+          <div className='preview-image-container'>
+            {videosPreview.map((video) => (
+              // eslint-disable-next-line jsx-a11y/media-has-caption
+              <video controls>
+                <source src={video} />
+              </video>
             ))}
           </div>
         )}
