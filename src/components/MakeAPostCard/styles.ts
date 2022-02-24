@@ -136,6 +136,5 @@ export const ProgressButton = styled.button<ProgressButtonProps>`
     top: 0px;
     border-radius: 0.2rem;
     z-index: 2;
-    transition: all 0.5s;
   }
 `;

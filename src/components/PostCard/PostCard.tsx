@@ -11,17 +11,16 @@ import { Comment } from 'components/Comment/Comment';
 
 import brazil from 'date-fns/locale/pt-BR';
 import { formatDistance } from 'date-fns';
-import { useState } from 'react';
+import { useEffect, useRef, useState, VideoHTMLAttributes } from 'react';
 import { Post } from 'interfaces/Posts';
-import { AuthUser } from 'interfaces/AuthUser';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'store/reducers';
+import { useDispatch } from 'react-redux';
 import * as PostServices from 'Services/PostServices/PostServices';
 import { deletePostLike, insertPostLike } from 'store/actions/PostsActions';
 import { LikesList } from 'components/PostCard/LikesList/LikesList';
 import { AllCommentsModal } from 'components/AllCommentsModal/AllCommentsModal';
 import { UserPicture } from 'components/DefaultComponents/UserPicture/UserPicture';
 import { config } from 'config';
+import { useUserInfos } from 'hooks/useUserInfos';
 import { CommentsList, Container } from './styles';
 
 interface PostCardProps {
@@ -29,9 +28,7 @@ interface PostCardProps {
 }
 
 export function PostCard({ post }: PostCardProps): JSX.Element {
-  const authUser: AuthUser | undefined = useSelector(
-    (state: RootState) => state.authUser.authUser
-  );
+  const authUser = useUserInfos();
   const [selectedImage, setSelectedImage] = useState(0);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -40,6 +37,7 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
   const [allCommentsModalOpen, setAllCommentsModalOpen] =
     useState<boolean>(false);
   const dispatch = useDispatch();
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   function handleNextImage() {
     if (selectedImage < post.post_images.length) {
@@ -141,7 +139,7 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
 
       return (
         // eslint-disable-next-line jsx-a11y/media-has-caption
-        <video controls className='post-image'>
+        <video controls className='post-image' ref={videoRef}>
           <source
             src={`${config.postImagesPath}/${imageNameParam}`}
             type='video/mp4'
@@ -151,6 +149,17 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
     }
     return undefined;
   };
+
+  useEffect(() => {
+    if (
+      orderImagesArray[selectedImage].image.substring(
+        orderImagesArray[selectedImage].image.lastIndexOf('.'),
+        orderImagesArray[selectedImage].image.length
+      ) === '.mp4'
+    ) {
+      videoRef.current?.load();
+    }
+  }, [selectedImage, orderImagesArray]);
 
   return (
     <>

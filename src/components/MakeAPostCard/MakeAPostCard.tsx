@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { UserPicture } from 'components/DefaultComponents/UserPicture/UserPicture';
 import { useDispatch } from 'react-redux';
 import { ReactComponent as CollectionsIcons } from 'assets/MakeAPost/collectionsIcons.svg';
@@ -9,6 +9,7 @@ import { SocialPostsApiRoutes } from 'Services/ApiRoutes';
 import api from 'Services/api';
 import { useUserInfos } from 'hooks/useUserInfos';
 import { insertPost } from 'store/actions/PostsActions';
+import { CONSTANTS } from 'utils/constants';
 import { Container, ProgressButton } from './styles';
 
 enum UploadStatus {
@@ -36,12 +37,15 @@ export function MakeAPostCard(): JSX.Element {
   const dispatch = useDispatch();
 
   function validatePhoto(file: File) {
+    const validFormats = [
+      'image/jpg',
+      'image/jpeg',
+      'image/png',
+      'video/mp4',
+      'image/tiff',
+    ];
     if (
-      (file.type.toLowerCase() === 'image/jpg' ||
-        file.type.toLowerCase() === 'image/jpeg' ||
-        file.type.toLowerCase() === 'image/png' ||
-        file.type.toLowerCase() === 'video/mp4' ||
-        file.type.toLowerCase() === 'image/tiff') &&
+      validFormats.includes(file.type.toLocaleLowerCase()) &&
       file.size / 1024 / 1024 <= 1000
     ) {
       if (file.type.toLowerCase() !== 'video/mp4') {
@@ -51,9 +55,9 @@ export function MakeAPostCard(): JSX.Element {
       }
       setFilesToUpload([...filesToUpload, file]);
     } else if (file.size / 1024 / 1024 > 1000) {
-      toast.warning('Tamanho máximo 100mb', {
+      toast.warning('Tamanho máximo 300mb', {
         position: 'top-right',
-        autoClose: 5000,
+        autoClose: CONSTANTS.alertDefaultTime,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -63,7 +67,7 @@ export function MakeAPostCard(): JSX.Element {
     } else {
       toast.error('Formato inválido', {
         position: 'top-right',
-        autoClose: 5000,
+        autoClose: CONSTANTS.alertDefaultTime,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,

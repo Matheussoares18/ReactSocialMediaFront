@@ -74,16 +74,14 @@ export const Container = styled.div`
 
       width: 2.313rem;
       height: 2.313rem;
-      background: rgba(233, 233, 233, 0.6);
+      background: rgba(0, 0, 0, 0.5);
       border-radius: 50%;
 
       display: flex;
       justify-content: center;
       align-items: center;
-
-      background: transparent;
       border: none;
-
+      z-index: 1;
       &:hover {
         cursor: pointer;
       }
