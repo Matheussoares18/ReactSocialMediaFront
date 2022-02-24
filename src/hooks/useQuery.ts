@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import api from 'Services/api';
 
 interface Params {
@@ -64,8 +65,21 @@ export function useQuery<RequestReturnType = any>({
       } catch (error) {
         setError(true);
         setLoading(false);
-        if (onError) {
+        if (error instanceof Error && error.message === 'Network Error') {
+          toast.error('Falha ao realizar operação, serviço indisponível', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          return null;
+        }
+        if (onError && axios.isAxiosError(error)) {
           onError(error);
+          return null;
         }
         return null;
       }

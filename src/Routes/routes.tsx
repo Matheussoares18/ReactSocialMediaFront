@@ -18,7 +18,7 @@ const Routes: React.FC = () => {
             <Route exact path='/' component={HomePage}>
               <Redirect to='/posts' />
             </Route>
-            <Route path='/login' component={LoginPage} />
+            <Route path={PublicRoutes.LOGIN} component={LoginPage} />
             <Route path={PublicRoutes.REGISTER} component={UserRegisterPage} />
             <ProtectedRoute path={AuthRoutes.POSTS} component={PostsPage} />
             <ProtectedRoute

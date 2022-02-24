@@ -3,6 +3,7 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { useState } from 'react';
 import api from 'Services/api';
 import { toast } from 'react-toastify';
+import { CONSTANTS } from 'utils/constants';
 
 export enum RequestHttpType {
   post = 'post',
@@ -52,7 +53,6 @@ export function useMutation<FunctionRequest = any, FunctionReturn = any>({
       if (configParam || config) {
         api.defaults.headers = configParam?.headers || config?.headers;
       }
-
       const result = await api[requestType]<
         FunctionRequest,
         AxiosResponse<FunctionReturn>
@@ -68,7 +68,7 @@ export function useMutation<FunctionRequest = any, FunctionReturn = any>({
       if (error instanceof Error && error.message === 'Network Error') {
         toast.error('Falha ao realizar operação, serviço indisponível', {
           position: 'top-right',
-          autoClose: 5000,
+          autoClose: CONSTANTS.alertDefaultTime,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,

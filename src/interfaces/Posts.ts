@@ -8,6 +8,7 @@ export interface PostLikes {
   users: {
     name: string;
     image: string;
+    external_id: string;
   };
 }
 export interface Post {

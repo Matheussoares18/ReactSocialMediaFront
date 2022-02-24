@@ -24,6 +24,10 @@ export interface InsertUser {
   type: typeof INSERT_USER;
   user: AuthUser;
 }
+export interface InsertToken {
+  type: typeof INSERT_USER;
+  user: AuthUser;
+}
 export interface Logout {
   type: typeof LOGOUT;
 }

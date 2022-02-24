@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ReactComponent as More } from 'assets/Post/more.svg';
@@ -11,17 +12,25 @@ import { Comment } from 'components/Comment/Comment';
 
 import brazil from 'date-fns/locale/pt-BR';
 import { formatDistance } from 'date-fns';
-import { useEffect, useRef, useState, VideoHTMLAttributes } from 'react';
-import { Post } from 'interfaces/Posts';
+import { useEffect, useRef, useState } from 'react';
+import { Post, PostLikes } from 'interfaces/Posts';
 import { useDispatch } from 'react-redux';
-import * as PostServices from 'Services/PostServices/PostServices';
 import { deletePostLike, insertPostLike } from 'store/actions/PostsActions';
 import { LikesList } from 'components/PostCard/LikesList/LikesList';
 import { AllCommentsModal } from 'components/AllCommentsModal/AllCommentsModal';
 import { UserPicture } from 'components/DefaultComponents/UserPicture/UserPicture';
 import { config } from 'config';
 import { useUserInfos } from 'hooks/useUserInfos';
+import { useHistory } from 'react-router-dom';
+import { PublicRoutes } from 'Routes/RoutesEnum';
+import { RequestHttpType, useMutation } from 'hooks/useMutation';
+import { SocialPostsApiRoutes } from 'Services/ApiRoutes';
 import { CommentsList, Container } from './styles';
+
+interface CreatePostLikeRequest {
+  post_id: string;
+  external_id: string;
+}
 
 interface PostCardProps {
   post: Post;
@@ -29,13 +38,28 @@ interface PostCardProps {
 
 export function PostCard({ post }: PostCardProps): JSX.Element {
   const authUser = useUserInfos();
+  const { request: createlikePostRequest } = useMutation<
+    CreatePostLikeRequest,
+    PostLikes
+  >({
+    path: `${SocialPostsApiRoutes.CREATE_POST_LIKE}`,
+    requestType: RequestHttpType.post,
+    onComplete: (result) => {
+      setLiked('favorite-filled-animation');
+      dispatch(insertPostLike(result, post.id));
+    },
+  });
+  const { request: destroyPostLikeRequest } = useMutation({
+    path: `${SocialPostsApiRoutes.DELETE_POST_LIKE}`,
+    requestType: RequestHttpType.delete,
+  });
   const [selectedImage, setSelectedImage] = useState(0);
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [liked, setLiked] = useState('');
   const [likesModalIsOpen, setLikesModalState] = useState(false);
   const [allCommentsModalOpen, setAllCommentsModalOpen] =
     useState<boolean>(false);
+  const history = useHistory();
   const dispatch = useDispatch();
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -54,6 +78,14 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
       new Date(a.created_at!).getTime() + new Date(b.created_at!).getTime()
     );
   });
+
+  function handleOpenAllCommentsModal(): void {
+    setAllCommentsModalOpen(true);
+  }
+
+  const handleCloseAllCommentsModal = () => {
+    setAllCommentsModalOpen(false);
+  };
 
   function verifyLikes() {
     if (post.post_likes.length === 1) {
@@ -83,39 +115,30 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
     );
   }
   async function handleLikePost(): Promise<void> {
-    if (!authUser?.token) {
+    if (!authUser || !authUser?.token) {
+      history.push(
+        `${PublicRoutes.REGISTER}${PublicRoutes.REGISTER_USER_INFOS}`
+      );
       return;
     }
     const likeExists = post.post_likes.find(
-      (like) => like.post_id === post.id && like.user_id === authUser!.id
+      (like) =>
+        like.post_id === post.id && like.users.external_id === authUser!.id
     );
 
     if (likeExists) {
-      try {
-        await PostServices.deletePostLike(post.id);
-
-        dispatch(deletePostLike(likeExists.id, post.id));
-        setLiked('');
-      } catch {
-        console.log('Failed');
-      }
+      await destroyPostLikeRequest({ params: { id: likeExists.id } });
+      dispatch(deletePostLike(likeExists.id, post.id));
+      setLiked('');
       return;
     }
-    try {
-      const result = await PostServices.createPostLike(post.id);
-      setLiked('favorite-filled-animation');
-      dispatch(insertPostLike(result.data, post.id));
-    } catch (error) {
-      console.log('Failed');
-    }
-  }
-  function handleOpenAllCommentsModal(): void {
-    setAllCommentsModalOpen(true);
+
+    await createlikePostRequest({
+      post_id: post.id,
+      external_id: authUser.id!,
+    });
   }
 
-  const handleCloseAllCommentsModal = () => {
-    setAllCommentsModalOpen(false);
-  };
   const verifyFileFormat = (
     imageNameParam?: string
   ): JSX.Element | undefined => {
@@ -160,7 +183,7 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
       videoRef.current?.load();
     }
   }, [selectedImage, orderImagesArray]);
-
+  console.log(post.post_likes);
   return (
     <>
       <LikesList
@@ -230,7 +253,8 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
                 authUser?.token &&
                 post.post_likes.find(
                   (like) =>
-                    like.post_id === post.id && like.user_id === authUser!.id
+                    like.post_id === post.id &&
+                    like.users.external_id === authUser!.id
                 )
                   ? 'favorite-filled-animation'
                   : ''

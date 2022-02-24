@@ -14,4 +14,6 @@ export enum AuthApiRoutes {
 }
 export enum SocialPostsApiRoutes {
   POSTS = '/social-posts/posts',
+  CREATE_POST_LIKE = '/social-posts/post-likes',
+  DELETE_POST_LIKE = '/social-posts/post-likes',
 }

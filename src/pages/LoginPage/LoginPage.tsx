@@ -41,8 +41,9 @@ const LoginPage: React.FC = () => {
     requestType: RequestHttpType.get,
 
     onComplete: (result) => {
+      const token = localStorage.getItem('token') ?? '';
       setIsloading(false);
-      dispatch(insertUser({ ...result }));
+      dispatch(insertUser({ ...result, token }));
 
       let redirectTo: string = AuthRoutes.POSTS;
       if (location.state?.from.pathname) {
