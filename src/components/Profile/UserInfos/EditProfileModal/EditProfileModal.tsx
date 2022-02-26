@@ -7,7 +7,10 @@ import { toast, ToastContainer } from 'react-toastify';
 import { RequestHttpType, useMutation } from '../../../../hooks/useMutation';
 import { AuthUser } from '../../../../interfaces/AuthUser';
 import { Post } from '../../../../interfaces/Posts';
-import { ApiRoutes } from '../../../../Services/ApiRoutes';
+import {
+  ApiRoutes,
+  SocialUsersApiRoutes,
+} from '../../../../Services/ApiRoutes';
 import { insertUser } from '../../../../store/actions/AuthUserAction';
 import { RootState } from '../../../../store/reducers';
 import { getBase64 } from '../../../../utils/imageToBase54';
@@ -82,7 +85,7 @@ export function EditProfileModal({
     Partial<AuthUser>,
     UpdateUserRequestReturn
   >({
-    path: `/users`,
+    path: `${SocialUsersApiRoutes.UPDATE_USER}`,
     requestType: RequestHttpType.patch,
     onComplete: (result) => {
       dispatch(insertUser({ ...authUser, ...result }));

@@ -6,6 +6,8 @@ export enum ApiRoutes {
 }
 export enum SocialUsersApiRoutes {
   USERS = '/social-users/users',
+  UPDATE_USER = '/social-users/users',
+  GET_USER = '/social-users/users',
   GET_ME = '/social-users/users/me',
 }
 export enum AuthApiRoutes {
@@ -15,6 +17,7 @@ export enum AuthApiRoutes {
 
 export enum SocialPostsApiRoutes {
   POSTS = '/social-posts/posts',
+  GET_ALL_POSTS_BY_USER = '/social-posts/posts/posts-by-user',
   CREATE_POST_LIKE = '/social-posts/post-likes',
   DELETE_POST_LIKE = '/social-posts/post-likes',
   CREATE_POST_COMMENT = '/social-posts/post-comments',

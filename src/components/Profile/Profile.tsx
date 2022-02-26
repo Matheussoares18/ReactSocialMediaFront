@@ -5,7 +5,7 @@ import { ProfileMenu } from 'components/Profile/ProfileMenu/ProfileMenu';
 import { ProfilePosts } from 'components/Profile/ProfilePosts/ProfilePosts';
 import { UserInfos } from 'components/Profile/UserInfos/UserInfos';
 import { Spinner } from 'components/DefaultComponents/Spinner/Spinner';
-import { ApiRoutes } from 'Services/ApiRoutes';
+import { SocialPostsApiRoutes, SocialUsersApiRoutes } from 'Services/ApiRoutes';
 import { GenericPostsError } from 'components/DefaultComponents/GenericPostsError/GenericPostsError';
 import { useQuery } from 'hooks/useQuery';
 import { Post } from 'interfaces/Posts';
@@ -24,7 +24,7 @@ export function Profile(): JSX.Element {
     biography?: string;
     image?: string;
   }>({
-    path: `/users/${pageParams.id}`,
+    path: `${SocialUsersApiRoutes.GET_USER}?id=${pageParams.id}`,
   });
   const {
     data: postsResult,
@@ -35,14 +35,22 @@ export function Profile(): JSX.Element {
     total: number;
     posts: Post[];
   }>({
-    path: `${ApiRoutes.GET_POSTS_BY_USER}/${pageParams.id}/${0}`,
+    path: `${SocialPostsApiRoutes.GET_ALL_POSTS_BY_USER}?external_id=${
+      pageParams.id
+    }&skip=${0}`,
   });
 
   return (
     <Container>
       <LoadingOrError
-        error={{ component: <GenericPostsError />, isError }}
-        loading={{ component: <Spinner />, isLoading }}
+        error={{
+          component: <GenericPostsError />,
+          isError: isError || isErrorPosts,
+        }}
+        loading={{
+          component: <Spinner />,
+          isLoading: isLoading || isLoadingPosts,
+        }}
       >
         <UserInfos
           id={data?.id as string}
@@ -52,28 +60,17 @@ export function Profile(): JSX.Element {
           refetch={refetch}
           refetchPosts={refetchPosts}
         />
-      </LoadingOrError>
-      <ProfileMenu />
+        <ProfileMenu />
 
-      <Route path={`${url}/posts`}>
-        <LoadingOrError
-          error={{ component: <GenericPostsError />, isError: isErrorPosts }}
-          loading={{
-            component: (
-              <div style={{ marginTop: '30px' }}>
-                <Spinner />
-              </div>
-            ),
-            isLoading: isLoadingPosts,
-          }}
-        >
+        <Route path={`${url}/posts`}>
           <ProfilePosts
             posts={postsResult?.posts as Post[]}
             totalPosts={postsResult?.total as number}
             refetch={refetchPosts}
+            userId={pageParams.id}
           />
-        </LoadingOrError>
-      </Route>
+        </Route>
+      </LoadingOrError>
     </Container>
   );
 }

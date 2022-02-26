@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
-import { useSelector } from 'react-redux';
+import { useUserInfos } from 'hooks/useUserInfos';
 import { UserPicture } from '../../DefaultComponents/UserPicture/UserPicture';
 import { FollowersInfo } from './FollowersInfo/FollowersInfo';
 import { Container, LeftSide, RightSide } from './styles';
-import { AuthUser } from '../../../interfaces/AuthUser';
-import { RootState } from '../../../store/reducers';
 import { EditProfileModal } from './EditProfileModal/EditProfileModal';
 import { Post } from '../../../interfaces/Posts';
 
@@ -40,9 +38,7 @@ export function UserInfos({
   refetchPosts,
 }: UserInfosProps): JSX.Element {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
-  const authUser: AuthUser | undefined = useSelector(
-    (state: RootState) => state.authUser.authUser
-  );
+  const authUser = useUserInfos();
 
   const handleCloseModal = () => {
     setModalIsOpen(false);
