@@ -9,7 +9,7 @@ import { updateUserValues } from 'store/actions/UserRegisterActions';
 import Input from '../../DefaultComponents/Input/Input';
 
 interface ThirdStepProps {
-  handleCreateUser: () => Promise<void>;
+  handleCreateUser: (password: string) => Promise<void>;
   isLoading: boolean;
 }
 interface FormFields {
@@ -37,10 +37,10 @@ const ThirdStep: React.FC<ThirdStepProps> = ({
       updateUserValues({
         ...userRegisterValues,
         ...data,
-        password: data.password as string,
+        password: data.password,
       })
     );
-    await handleCreateUser();
+    await handleCreateUser(data.password);
   };
   return (
     <Form onSubmit={handleSubmit(handleOnSubmit)}>

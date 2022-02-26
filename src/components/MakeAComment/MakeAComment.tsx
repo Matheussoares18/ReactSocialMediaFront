@@ -1,34 +1,47 @@
-/* eslint-disable no-console */
-import { UserPicture } from 'components/DefaultComponents/UserPicture/UserPicture';
-
-import * as PostServices from 'Services/PostServices/PostServices';
+/* eslint-disable camelcase */
 import { useState } from 'react';
-import { AuthUser } from 'interfaces/AuthUser';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'store/reducers';
+import { UserPicture } from 'components/DefaultComponents/UserPicture/UserPicture';
+import { useUserInfos } from 'hooks/useUserInfos';
+import { RequestHttpType, useMutation } from 'hooks/useMutation';
+import { SocialPostsApiRoutes } from 'Services/ApiRoutes';
+import { useDispatch } from 'react-redux';
 import { insertPostComment } from 'store/actions/PostsActions';
+import { PostComment } from 'interfaces/PostComment';
 import { Container } from './styles';
 
 interface MakeACommentProps {
   postId: string;
 }
 
-export function MakeAComment({ postId }: MakeACommentProps): JSX.Element {
-  const authUser: AuthUser | undefined = useSelector(
-    (state: RootState) => state.authUser.authUser
-  );
-  const [comment, setComment] = useState<string>('');
+interface CreatePostCommentRequest {
+  comment: string;
+  post_id: string;
+  external_id: string;
+}
+
+const MakeAComment: React.FC<MakeACommentProps> = ({ postId }) => {
+  const authUser = useUserInfos();
   const dispatch = useDispatch();
+  const [comment, setComment] = useState<string>('');
+  const { request } = useMutation<CreatePostCommentRequest, PostComment>({
+    path: `${SocialPostsApiRoutes.CREATE_POST_COMMENT}`,
+    requestType: RequestHttpType.post,
+    onComplete: (result) => {
+      dispatch(insertPostComment(result, postId));
+      setComment('');
+    },
+  });
 
   async function handleCreateComment() {
-    try {
-      const result = await PostServices.createPostComment(postId, comment);
-
-      dispatch(insertPostComment(result.data, postId));
-      setComment('');
-    } catch (error) {
-      console.log('Failed');
+    if (!authUser) {
+      return;
     }
+    await request({
+      post_id: postId,
+      comment,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      external_id: authUser!.id!,
+    });
   }
   return (
     <Container
@@ -49,12 +62,14 @@ export function MakeAComment({ postId }: MakeACommentProps): JSX.Element {
       <button
         type='button'
         disabled={
-          comment.length === 0 || comment.length > 300 || !authUser?.token
+          comment.length === 0 || comment.length > 240 || !authUser?.token
         }
         onClick={() => handleCreateComment()}
       >
-        {`(${comment.length}/300)`}Comentar
+        {`(${comment.length}/240)`}Comentar
       </button>
     </Container>
   );
-}
+};
+
+export { MakeAComment };

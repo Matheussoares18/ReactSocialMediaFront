@@ -7,10 +7,11 @@ import { insertPosts } from 'store/actions/PostsActions';
 import { RootState } from 'store/reducers';
 import { Post } from 'interfaces/Posts';
 import { useQuery } from 'hooks/useQuery';
-import { ApiRoutes, SocialPostsApiRoutes } from 'Services/ApiRoutes';
+import { SocialPostsApiRoutes } from 'Services/ApiRoutes';
 import { LoadingOrError } from 'components/DefaultComponents/LoadingOrError/LoadingOrError';
 import { PostsLoader } from 'components/DefaultComponents/PostsLoader/PostsLoader';
 import { GenericPostsError } from 'components/DefaultComponents/GenericPostsError/GenericPostsError';
+import { CONSTANTS } from 'utils/constants';
 import { Container, PostsList } from './styles';
 
 export function PostsPage(): JSX.Element {
@@ -22,11 +23,12 @@ export function PostsPage(): JSX.Element {
     total: number;
     posts: Post[];
   }>({
-    path: `${SocialPostsApiRoutes.POSTS}/0`,
+    path: `${SocialPostsApiRoutes.POSTS}?skip=0`,
     onComplete: (result) => {
       setTotalPosts(result.total);
-      setSkip(skip + 30);
-      dispatch(insertPosts([...posts, ...result.posts]));
+      setSkip(skip + CONSTANTS.postsAmountPerRequest);
+
+      dispatch(insertPosts(result.posts));
     },
   });
   const postListsRef = useRef<HTMLDivElement>(null);
@@ -38,15 +40,17 @@ export function PostsPage(): JSX.Element {
     const hasPostsYet = skip < totalPosts;
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    if (currentPosition >= postsListHeight! && hasPostsYet) {
-      const result = await refetch(`${ApiRoutes.POSTS}/${skip}`);
+    if (!isLoading && currentPosition >= postsListHeight! && hasPostsYet) {
+      const result = await refetch(
+        `${SocialPostsApiRoutes.POSTS}?skip=${skip}`
+      );
 
       if (result && !isError) {
-        const updateSkipNumber = skip + 30;
+        const updateSkipNumber = skip + CONSTANTS.postsAmountPerRequest;
         setSkip(updateSkipNumber);
       }
     }
-  }, [skip, totalPosts, isError, refetch]);
+  }, [skip, totalPosts, isError, refetch, isLoading]);
 
   useEffect(() => {
     window.onscroll = getDivHeight;
@@ -63,7 +67,7 @@ export function PostsPage(): JSX.Element {
             component: <GenericPostsError />,
           }}
           loading={{
-            isLoading,
+            isLoading: isLoading && skip === 0,
             component: (
               <>
                 <PostsLoader />

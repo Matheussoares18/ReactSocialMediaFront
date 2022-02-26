@@ -2,10 +2,11 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Modal from 'react-modal';
 import { GrClose } from 'react-icons/gr';
 import { PostComment } from 'interfaces/PostComment';
-import * as PostCommentsServices from 'Services/PostCommentsServices/PostCommentsServices';
 import { Comment } from 'components/Comment/Comment';
 import { SpinnerContainer } from 'pages/PostsPage/styles';
 import { Spinner } from 'components/DefaultComponents/Spinner/Spinner';
+import { SocialPostsApiRoutes } from 'Services/ApiRoutes';
+import { useQuery } from 'hooks/useQuery';
 import { PostCommentsContainer } from './styles';
 
 interface AllCommentsModalProps {
@@ -22,48 +23,57 @@ export function AllCommentsModal({
   const [comments, setComments] = useState<PostComment[]>([]);
   const [skip, setSkip] = useState<number>(0);
   const [totalComments, setTotalComments] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(false);
   const postCommentsListsRef = useRef<HTMLDivElement>(null);
 
-  const getAllComments = useCallback(async () => {
-    if (isOpen) {
-      const result = await PostCommentsServices.getAllPostComments(postId, 0);
+  const postCommentsFetchingAmount = 30;
 
-      setTotalComments(result.data.total);
-      setComments(result.data.postComments);
-    }
-  }, [postId, isOpen]);
+  const { isLoading, refetch } = useQuery<{
+    total: number;
+    postComments: PostComment[];
+  }>({
+    path: `${SocialPostsApiRoutes.GET_ALL_POST_COMMENTS}?id=${postId}&skip=0`,
+    onComplete: (result) => {
+      setTotalComments(result.total);
+      setSkip(skip + postCommentsFetchingAmount);
+      setComments((previousValue) => [
+        ...previousValue,
+        ...result.postComments,
+      ]);
+    },
+    enabled: false,
+  });
+  const postListsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    getAllComments();
-  }, [getAllComments]);
-
-  const getDivHeight = useCallback(() => {
+  const getDivHeight = useCallback(async () => {
     const currentPosition = window.scrollY + window.innerHeight;
-    const postsListHeight = postCommentsListsRef.current?.offsetHeight;
+    const postsListHeight = postListsRef.current?.offsetHeight;
 
     const hasPostsYet = skip < totalComments;
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    if (currentPosition >= postsListHeight! && hasPostsYet) {
-      setLoading(true);
-      const updateSkipNumber = skip + 15;
-
-      PostCommentsServices.getAllPostComments(postId, updateSkipNumber).then(
-        (res) => {
-          setComments([...comments, ...res.data.postComments]);
-          setTotalComments(res.data.total);
-          setSkip(updateSkipNumber);
-        }
+    if (!isLoading && currentPosition >= postsListHeight! && hasPostsYet) {
+      await refetch(
+        `${SocialPostsApiRoutes.GET_ALL_POST_COMMENTS}?id=${postId}&skip=${skip}`
       );
-      return;
     }
-    setLoading(false);
-  }, [setLoading, comments, skip, totalComments, postId]);
+  }, [skip, totalComments, refetch, isLoading, postId]);
 
   useEffect(() => {
     window.onscroll = getDivHeight;
   }, [getDivHeight]);
+
+  const shouldFetchData = useCallback(() => {
+    if (isOpen) {
+      refetch(
+        `${SocialPostsApiRoutes.GET_ALL_POST_COMMENTS}?id=${postId}&skip=${skip}`
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, postId, skip]);
+
+  useEffect(() => {
+    shouldFetchData();
+  }, [isOpen, shouldFetchData]);
 
   return (
     <Modal
@@ -85,7 +95,7 @@ export function AllCommentsModal({
           <Comment comment={comment} />
         ))}
       </PostCommentsContainer>
-      {loading && (
+      {isLoading && (
         <SpinnerContainer>
           <Spinner />
         </SpinnerContainer>

@@ -24,6 +24,7 @@ interface UseQueryReturnType<RequestReturnType = any> {
 interface UseQueryProps<T> {
   path: string;
   params?: Params[];
+  enabled?: boolean;
   onComplete?: (result: T) => void;
   onError?: (error: unknown) => void;
 }
@@ -33,6 +34,7 @@ export function useQuery<RequestReturnType = any>({
   params,
   onComplete,
   onError,
+  enabled = true,
 }: UseQueryProps<RequestReturnType>): UseQueryReturnType<RequestReturnType> {
   const [isError, setError] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -94,8 +96,10 @@ export function useQuery<RequestReturnType = any>({
 
       setData(result);
     }
-    doRequest();
-  }, [params, path, makeRequest]);
+    if (enabled) {
+      doRequest();
+    }
+  }, [params, path, makeRequest, enabled]);
 
   async function refetch(
     newPath: string,

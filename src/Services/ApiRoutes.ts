@@ -12,8 +12,11 @@ export enum AuthApiRoutes {
   CREATE_CREDENTIALS = '/auth',
   AUTHENTICATE = '/auth/login',
 }
+
 export enum SocialPostsApiRoutes {
   POSTS = '/social-posts/posts',
   CREATE_POST_LIKE = '/social-posts/post-likes',
   DELETE_POST_LIKE = '/social-posts/post-likes',
+  CREATE_POST_COMMENT = '/social-posts/post-comments',
+  GET_ALL_POST_COMMENTS = '/social-posts/post-comments',
 }

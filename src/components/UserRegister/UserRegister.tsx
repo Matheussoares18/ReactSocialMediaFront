@@ -8,7 +8,7 @@ import { FirstStep } from 'components/UserRegister/FirstStep/FirstStep';
 import { Container, Content } from './styles';
 
 interface UserRegisterProps {
-  handleCreateUser: () => Promise<void>;
+  handleCreateUser: (password: string) => Promise<void>;
   isLoading: boolean;
 }
 export interface FormsFields {

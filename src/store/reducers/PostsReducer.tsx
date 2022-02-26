@@ -13,7 +13,7 @@ export default function postsReducer(
     case 'INSERT_POSTS':
       return {
         ...state,
-        posts: action.posts,
+        posts: [...state.posts, ...action.posts],
       };
     case 'INSERT_POST':
       return {

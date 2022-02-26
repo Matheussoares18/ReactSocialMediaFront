@@ -267,7 +267,7 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
           <h3>{post.users.name}</h3>
           <p>{post.content}</p>
         </div>
-        <MakeAComment postId={post.id} />
+        {authUser && authUser.token && <MakeAComment postId={post.id} />}
         <CommentsList>
           {post?.post_comments?.length > 0 &&
             post.post_comments

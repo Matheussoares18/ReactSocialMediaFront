@@ -21,8 +21,8 @@ const UserRegisterPage: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const handleCreateUser = async () => {
-    request(userRegisterValues);
+  const handleCreateUser = async (password: string) => {
+    request({ ...userRegisterValues, password });
   };
 
   const { request, isLoading } = useMutation<UserRegisterValues, AuthUser>({
