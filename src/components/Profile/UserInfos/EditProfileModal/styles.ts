@@ -128,7 +128,7 @@ export const ModalActions = styled.div`
   .cancel-button {
     background-color: #d0d0d0;
     font-weight: bold;
-    color: #000000;
+    color: ${({ theme }) => theme.labelText};
   }
   .confirm-button {
     background-color: #0caacd;

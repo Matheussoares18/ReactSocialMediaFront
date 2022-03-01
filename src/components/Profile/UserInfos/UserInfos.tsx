@@ -3,7 +3,7 @@ import { MdOutlineModeEditOutline } from 'react-icons/md';
 import { useUserInfos } from 'hooks/useUserInfos';
 import { UserPicture } from '../../DefaultComponents/UserPicture/UserPicture';
 import { FollowersInfo } from './FollowersInfo/FollowersInfo';
-import { Container, LeftSide, RightSide } from './styles';
+import { Container, Top, Bottom } from './styles';
 import { EditProfileModal } from './EditProfileModal/EditProfileModal';
 import { Post } from '../../../interfaces/Posts';
 
@@ -61,30 +61,32 @@ export function UserInfos({
           userInfos={{ name, biography, image, id }}
         />
       )}
-      <LeftSide>
+      <Top>
         <UserPicture classname='user-img' source={image} />
+        <div className='user-infos'>
+          <div className='username'>
+            <h2>{name}</h2>{' '}
+            {authUser?.id === id && (
+              <MdOutlineModeEditOutline
+                className='icon'
+                onClick={handleOpenModal}
+              />
+            )}
+          </div>
+          <p>
+            {biography && biography?.length > 0
+              ? biography
+              : `Sua biografia aqui...`}
+          </p>
+        </div>
+      </Top>
+
+      <Bottom>
         <div className='followers-container'>
-          <FollowersInfo value={0} text='Posts' />
           <FollowersInfo value={0} text='Seguidores' />
           <FollowersInfo value={0} text='Seguindo' />
         </div>
-      </LeftSide>
-      <RightSide>
-        <div className='username'>
-          <h2>{name}</h2>{' '}
-          {authUser?.id === id && (
-            <MdOutlineModeEditOutline
-              className='icon'
-              onClick={handleOpenModal}
-            />
-          )}
-        </div>
-        <p>
-          {biography && biography?.length > 0
-            ? biography
-            : `Sua biografia aqui...`}
-        </p>
-      </RightSide>
+      </Bottom>
     </Container>
   );
 }

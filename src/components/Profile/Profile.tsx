@@ -1,7 +1,5 @@
-import { Route, useParams, useRouteMatch } from 'react-router-dom';
-
+import { useParams } from 'react-router-dom';
 import { LoadingOrError } from 'components/DefaultComponents/LoadingOrError/LoadingOrError';
-import { ProfileMenu } from 'components/Profile/ProfileMenu/ProfileMenu';
 import { ProfilePosts } from 'components/Profile/ProfilePosts/ProfilePosts';
 import { UserInfos } from 'components/Profile/UserInfos/UserInfos';
 import { Spinner } from 'components/DefaultComponents/Spinner/Spinner';
@@ -17,7 +15,6 @@ interface ProfileParams {
 
 export function Profile(): JSX.Element {
   const pageParams = useParams<ProfileParams>();
-  const { url } = useRouteMatch();
   const { data, isError, isLoading, refetch } = useQuery<{
     id: string;
     name: string;
@@ -60,16 +57,16 @@ export function Profile(): JSX.Element {
           refetch={refetch}
           refetchPosts={refetchPosts}
         />
-        <ProfileMenu />
+        {/* <ProfileMenu /> */}
 
-        <Route path={`${url}/posts`}>
-          <ProfilePosts
-            posts={postsResult?.posts as Post[]}
-            totalPosts={postsResult?.total as number}
-            refetch={refetchPosts}
-            userId={pageParams.id}
-          />
-        </Route>
+        {/* <Route path={`${url}/posts`}> */}
+        <ProfilePosts
+          posts={postsResult?.posts as Post[]}
+          totalPosts={postsResult?.total as number}
+          refetch={refetchPosts}
+          userId={pageParams.id}
+        />
+        {/* </Route> */}
       </LoadingOrError>
     </Container>
   );

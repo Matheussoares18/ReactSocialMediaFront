@@ -12,7 +12,7 @@ export function FollowersInfo({
   return (
     <Container>
       <strong className='value'>{value}</strong>
-      {text}
+      <span className='label'>{text}</span>
     </Container>
   );
 }

@@ -1,25 +1,29 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
+import { Button } from 'components/DefaultComponents/Button/Button';
+import { useUserInfos } from 'hooks/useUserInfos';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { GrClose } from 'react-icons/gr';
 import Modal from 'react-modal';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
+import { PublicRoutes } from 'Routes/RoutesEnum';
+import { isValidFile } from 'utils/isValidFile';
 import { RequestHttpType, useMutation } from '../../../../hooks/useMutation';
 import { AuthUser } from '../../../../interfaces/AuthUser';
 import { Post } from '../../../../interfaces/Posts';
 import {
-  ApiRoutes,
+  SocialPostsApiRoutes,
   SocialUsersApiRoutes,
 } from '../../../../Services/ApiRoutes';
 import { insertUser } from '../../../../store/actions/AuthUserAction';
-import { RootState } from '../../../../store/reducers';
 import { getBase64 } from '../../../../utils/imageToBase54';
 import Input from '../../../DefaultComponents/Input/Input';
 import { Spinner } from '../../../DefaultComponents/Spinner/Spinner';
 import { UserPicture } from '../../../DefaultComponents/UserPicture/UserPicture';
 import {
   BiographInputContainer,
-  InputFile,
   ModalActions,
   ModalContainer,
   ModalContent,
@@ -69,10 +73,10 @@ export function EditProfileModal({
   refetch,
   refetchPosts,
 }: EditProfileModalProps): JSX.Element {
-  const authUser: AuthUser | undefined = useSelector(
-    (state: RootState) => state.authUser.authUser
-  );
+  const authUser = useUserInfos();
   const dispatch = useDispatch();
+  const [fileToUpload, setFileToUpload] = useState<File>();
+  const [imagePreview, setImagePreview] = useState<string | undefined>();
   const {
     register,
     handleSubmit,
@@ -81,16 +85,21 @@ export function EditProfileModal({
     mode: 'onSubmit',
     reValidateMode: 'onChange',
   });
+  const history = useHistory();
   const { isLoading, request: updateUser } = useMutation<
-    Partial<AuthUser>,
+    Partial<AuthUser & { userId: string }>,
     UpdateUserRequestReturn
   >({
-    path: `${SocialUsersApiRoutes.UPDATE_USER}`,
+    path: `${SocialUsersApiRoutes.UPDATE_USER}?id=${authUser?.id}`,
     requestType: RequestHttpType.patch,
-    onComplete: (result) => {
+    onComplete: async (result) => {
       dispatch(insertUser({ ...authUser, ...result }));
-      refetch(`/users/${userInfos.id}`);
-      refetchPosts(`${ApiRoutes.GET_POSTS_BY_USER}/${userInfos.id}/${0}`);
+      await refetch(`${SocialUsersApiRoutes.UPDATE_USER}?id=${userInfos.id}`);
+      await refetchPosts(
+        `${SocialPostsApiRoutes.GET_ALL_POSTS_BY_USER}?external_id=${
+          userInfos.id
+        }&skip=${0}`
+      );
       onRequestClose();
     },
     onError: () => {
@@ -117,15 +126,27 @@ export function EditProfileModal({
   };
 
   async function onSubmit(data: UpdateUserFormFields) {
+    if (!authUser || !authUser.id) {
+      history.push(`${PublicRoutes.LOGIN}`, {
+        state: { from: `${PublicRoutes.PROFILE}` },
+      });
+    }
     let image;
-    if (data.image[0]) {
-      const file = data.image[0];
+    if (fileToUpload) {
+      const file = fileToUpload;
 
       image = await getBase64(file);
     }
 
-    await updateUser({ ...data, image });
+    await updateUser({ ...data, image, userId: authUser?.id });
   }
+  const showImagePreview = (image: File) => {
+    const validFormats = ['image/jpg', 'image/jpeg', 'image/png', 'image/tiff'];
+    if (isValidFile(image, validFormats, 40)) {
+      setFileToUpload(image);
+      setImagePreview(URL.createObjectURL(image));
+    }
+  };
   return (
     <Modal
       isOpen={isOpen}
@@ -140,6 +161,7 @@ export function EditProfileModal({
           className='react-modal-close'
           onClick={() => onRequestClose()}
           type='button'
+          disabled={isLoading}
         >
           <GrClose />
         </button>
@@ -152,13 +174,16 @@ export function EditProfileModal({
               htmlFor='user-image-input'
               style={{ display: 'flex', flexDirection: 'column' }}
             >
-              <UserPicture classname='user-img' source={userInfos.image} />
+              <UserPicture
+                classname='user-img'
+                source={imagePreview ?? userInfos.image}
+              />
 
-              <InputFile
+              <input
                 type='file'
                 id='user-image-input'
-                {...register('image')}
-                /*  style={{ display: 'none' }} */
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                onChange={(e) => showImagePreview(e.target.files![0]!)}
               />
             </label>
 
@@ -205,16 +230,17 @@ export function EditProfileModal({
               type='button'
               className='cancel-button'
               onClick={onRequestClose}
+              disabled={isLoading}
             >
               Cancelar
             </button>
-            <button
+            <Button
               type='submit'
               className='confirm-button'
-              disabled={isLoading}
+              loading={isLoading}
             >
               {isLoading ? <Spinner /> : 'Confirmar'}
-            </button>
+            </Button>
           </ModalActions>
         </ModalContent>
       </ModalContainer>

@@ -1,4 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { insertPosts } from 'store/actions/PostsActions';
+import { RootState } from 'store/reducers';
 import { RefetchType } from '../../../hooks/useQuery';
 import { Post } from '../../../interfaces/Posts';
 import { SocialPostsApiRoutes } from '../../../Services/ApiRoutes';
@@ -19,8 +22,9 @@ export function ProfilePosts({
   userId,
 }: ProfilePostsProps): JSX.Element {
   const [skip, setSkip] = useState<number>(posts?.length);
-  const [paginatedPosts, setPaginatedPosts] = useState<Post[] | undefined>(
-    posts
+  const dispatch = useDispatch();
+  const reduxPosts: Post[] = useSelector(
+    (state: RootState) => state.posts.posts
   );
 
   const postListsRef = useRef<HTMLDivElement>(null);
@@ -42,10 +46,19 @@ export function ProfilePosts({
       if (result) {
         const updateSkipNumber = skip + 30;
         setSkip(updateSkipNumber);
-        setPaginatedPosts([...posts, ...result.posts]);
+        dispatch(insertPosts([...posts, ...result.posts]));
       }
     }
-  }, [skip, totalPosts, refetch, posts, userId]);
+  }, [skip, totalPosts, refetch, posts, userId, dispatch]);
+
+  const loadPosts = useCallback(() => {
+    if (posts && posts.length > 0) {
+      dispatch(insertPosts(posts));
+    }
+  }, [dispatch, posts]);
+  useEffect(() => {
+    loadPosts();
+  }, [loadPosts]);
 
   useEffect(() => {
     window.onscroll = getDivHeight;
@@ -53,7 +66,7 @@ export function ProfilePosts({
 
   return (
     <Container ref={postListsRef}>
-      {paginatedPosts?.map((post) => (
+      {reduxPosts?.map((post) => (
         <PostCard post={post} key={post.id} />
       ))}
     </Container>

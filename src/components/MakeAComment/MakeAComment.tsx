@@ -27,6 +27,7 @@ const MakeAComment: React.FC<MakeACommentProps> = ({ postId }) => {
     path: `${SocialPostsApiRoutes.CREATE_POST_COMMENT}`,
     requestType: RequestHttpType.post,
     onComplete: (result) => {
+      console.log(result);
       dispatch(insertPostComment(result, postId));
       setComment('');
     },

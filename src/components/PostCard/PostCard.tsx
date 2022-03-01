@@ -183,7 +183,6 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
       videoRef.current?.load();
     }
   }, [selectedImage, orderImagesArray]);
-  console.log(post.post_likes);
   return (
     <>
       <LikesList

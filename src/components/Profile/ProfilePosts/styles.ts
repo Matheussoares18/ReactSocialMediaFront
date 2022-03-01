@@ -6,6 +6,7 @@ export const Container = styled.div`
   align-items: center;
 
   width: 100%;
-
   padding-top: 3.75rem;
+  margin-top: 3.75rem;
+  border-top: solid 1px ${({ theme }) => theme.lines};
 `;

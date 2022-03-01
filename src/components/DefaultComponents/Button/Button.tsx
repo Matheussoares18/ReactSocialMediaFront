@@ -23,6 +23,7 @@ export function Button({
         justifyContent: 'center',
         alignItems: 'center',
       }}
+      disabled={rest.disabled ?? loading}
     >
       {loading ? <Spinner /> : children}
     </button>
