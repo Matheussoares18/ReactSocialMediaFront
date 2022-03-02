@@ -1,16 +1,23 @@
+/* eslint-disable camelcase */
 export enum Themes {
   DARK = 'dark',
   LIGHT = 'light',
+}
+export interface UserFollower {
+  id: string;
+  follower_id: string;
+  user_id: string;
+  follower: Partial<Omit<AuthUser, 'token' | 'refresh_token' | 'theme'>>;
 }
 export interface AuthUser {
   name?: string;
   email?: string;
   phone?: string;
-  // eslint-disable-next-line camelcase
   birth_date?: string;
   gender?: string;
   id?: string;
   image?: string;
+  user_followers?: UserFollower[];
   theme?: Themes;
   token?: string;
   refreshToken?: string;

@@ -9,6 +9,9 @@ export enum SocialUsersApiRoutes {
   UPDATE_USER = '/social-users/users',
   GET_USER = '/social-users/users',
   GET_ME = '/social-users/users/me',
+  GET_FOLLOW = '/social-users/followers',
+  UNFOLLOW_USER = '/social-users/followers',
+  FOLLOW_USER = '/social-users/followers',
 }
 export enum AuthApiRoutes {
   CREATE_CREDENTIALS = '/auth',

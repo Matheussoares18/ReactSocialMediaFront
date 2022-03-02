@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import api from 'Services/api';
@@ -26,7 +26,7 @@ interface UseQueryProps<T> {
   params?: Params[];
   enabled?: boolean;
   onComplete?: (result: T) => void;
-  onError?: (error: unknown) => void;
+  onError?: (error: AxiosError) => void;
 }
 
 export function useQuery<RequestReturnType = any>({

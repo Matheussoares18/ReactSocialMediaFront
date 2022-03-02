@@ -7,6 +7,7 @@ import { SocialPostsApiRoutes, SocialUsersApiRoutes } from 'Services/ApiRoutes';
 import { GenericPostsError } from 'components/DefaultComponents/GenericPostsError/GenericPostsError';
 import { useQuery } from 'hooks/useQuery';
 import { Post } from 'interfaces/Posts';
+import { UserFollower } from 'interfaces/AuthUser';
 import { Container } from './styles';
 
 interface ProfileParams {
@@ -20,6 +21,9 @@ export function Profile(): JSX.Element {
     name: string;
     biography?: string;
     image?: string;
+    // eslint-disable-next-line camelcase
+    user_followers: UserFollower[];
+    followersAmount: number;
   }>({
     path: `${SocialUsersApiRoutes.GET_USER}?id=${pageParams.id}`,
   });
@@ -50,23 +54,22 @@ export function Profile(): JSX.Element {
         }}
       >
         <UserInfos
+          followersAmount={data?.followersAmount ?? 0}
           id={data?.id as string}
           name={data?.name as string}
           biography={data?.biography}
           image={data?.image}
           refetch={refetch}
           refetchPosts={refetchPosts}
+          userFollowers={data?.user_followers ?? []}
         />
-        {/* <ProfileMenu /> */}
 
-        {/* <Route path={`${url}/posts`}> */}
         <ProfilePosts
           posts={postsResult?.posts as Post[]}
           totalPosts={postsResult?.total as number}
           refetch={refetchPosts}
           userId={pageParams.id}
         />
-        {/* </Route> */}
       </LoadingOrError>
     </Container>
   );
