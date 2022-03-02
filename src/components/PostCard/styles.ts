@@ -42,9 +42,15 @@ export const Container = styled.div`
         font-family: var(--roboto-font-family);
         color: ${({ theme }) => theme.primaryText};
         font-size: 0.813rem;
+        font-weight: bold;
         border-right: 1px solid ${({ theme }) => theme.lines};
         padding-right: 15px;
         margin-right: 15px;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
 
       time {

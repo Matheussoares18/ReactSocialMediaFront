@@ -25,6 +25,7 @@ import { useHistory } from 'react-router-dom';
 import { PublicRoutes } from 'Routes/RoutesEnum';
 import { RequestHttpType, useMutation } from 'hooks/useMutation';
 import { SocialPostsApiRoutes } from 'Services/ApiRoutes';
+import Username from 'components/DefaultComponents/Username/Username';
 import { CommentsList, Container } from './styles';
 
 interface CreatePostLikeRequest {
@@ -200,7 +201,9 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
         <div className='top'>
           <div className='user-and-post-infos'>
             <UserPicture source={post.users?.image} />
-            <h3 className='name'>{post.users.name}</h3>
+            <Username className='name' id={post.users.external_id}>
+              {post.users.name}
+            </Username>
             <time>
               {formatDistance(new Date(post.createdAt), new Date(), {
                 locale: brazil,
