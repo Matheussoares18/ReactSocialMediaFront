@@ -8,6 +8,7 @@ import {
   InsertPosts,
   Post,
   PostLikes,
+  RemovePosts,
 } from '../../interfaces/Posts';
 
 export function insertPosts(posts: Post[]): InsertPosts {
@@ -20,6 +21,11 @@ export function insertPost(post: Post): InsertPost {
   return {
     type: 'INSERT_POST',
     post,
+  };
+}
+export function removePosts(): RemovePosts {
+  return {
+    type: 'REMOVE_POSTS',
   };
 }
 

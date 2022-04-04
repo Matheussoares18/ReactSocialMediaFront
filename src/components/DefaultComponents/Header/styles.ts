@@ -6,7 +6,8 @@ export const Container = styled.header`
   width: 100%;
   box-shadow: 0px 4px 4px rgba(153, 153, 153, 0.25);
   height: 3.5rem;
-
+  min-height: 3.5rem;
+  max-height: 3.5rem;
   display: flex;
   justify-content: center;
   align-items: center;

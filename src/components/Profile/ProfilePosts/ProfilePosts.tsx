@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { insertPosts } from 'store/actions/PostsActions';
+import { insertPosts, removePosts } from 'store/actions/PostsActions';
 import { RootState } from 'store/reducers';
 import { RefetchType } from '../../../hooks/useQuery';
 import { Post } from '../../../interfaces/Posts';
@@ -53,6 +53,7 @@ export function ProfilePosts({
 
   const loadPosts = useCallback(() => {
     if (posts && posts.length > 0) {
+      dispatch(removePosts());
       dispatch(insertPosts(posts));
     }
   }, [dispatch, posts]);

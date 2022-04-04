@@ -35,6 +35,8 @@ export interface Post {
 export const INSERT_POSTS = 'INSERT_POSTS';
 export const INSERT_POST = 'INSERT_POST';
 
+export const REMOVE_POSTS = 'REMOVE_POSTS';
+
 export const INSERT_POST_LIKE = 'INSERT_POST_LIKE';
 export const DELETE_POST_LIKE = 'DELETE_POST_LIKE';
 
@@ -50,6 +52,10 @@ export interface InsertPost {
   type: typeof INSERT_POST;
   post: Post;
 }
+export interface RemovePosts {
+  type: typeof REMOVE_POSTS;
+}
+
 export interface InsertPostLike {
   type: typeof INSERT_POST_LIKE;
   postId: string;
@@ -81,4 +87,5 @@ export type PostsActionTypes =
   | InsertPostLike
   | DeletePostLike
   | InsertPostComment
-  | DeletePostComment;
+  | DeletePostComment
+  | RemovePosts;

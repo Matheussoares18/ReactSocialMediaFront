@@ -10,6 +10,11 @@ export default function postsReducer(
   action: PostsActionTypes
 ): PostsState {
   switch (action.type) {
+    case 'REMOVE_POSTS':
+      return {
+        ...state,
+        posts: [],
+      };
     case 'INSERT_POSTS':
       return {
         ...state,
