@@ -8,4 +8,5 @@ export enum PublicRoutes {
 }
 export enum AuthRoutes {
   POSTS = '/posts',
+  POST = '/post',
 }

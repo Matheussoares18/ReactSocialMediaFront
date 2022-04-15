@@ -167,6 +167,19 @@ export const Container = styled.div`
       @media ${breakpoints.tablet} {
         justify-content: space-evenly;
       }
+      .copied-animation {
+        display: flex;
+        animation: copied 1s normal forwards;
+
+        @keyframes copied {
+          25% {
+            transform: rotate(120deg);
+          }
+          100% {
+            transform: rotate(-360deg);
+          }
+        }
+      }
 
       .icon {
         fill: #0caacd;

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -9,13 +8,13 @@ interface Params {
   value: unknown;
 }
 
-export type RefetchType<RequestReturnType = any> = (
+export type RefetchType<RequestReturnType = unknown> = (
   newPath: string,
   newParams?: Params[],
   changeState?: boolean
 ) => Promise<RequestReturnType | null>;
-interface UseQueryReturnType<RequestReturnType = any> {
-  isError: boolean;
+interface UseQueryReturnType<RequestReturnType = unknown> {
+  hasError: boolean;
   isLoading: boolean;
   data: RequestReturnType | null;
   refetch: RefetchType<RequestReturnType>;
@@ -29,14 +28,14 @@ interface UseQueryProps<T> {
   onError?: (error: AxiosError) => void;
 }
 
-export function useQuery<RequestReturnType = any>({
+export function useQuery<RequestReturnType = unknown>({
   path,
   params,
   onComplete,
   onError,
   enabled = true,
 }: UseQueryProps<RequestReturnType>): UseQueryReturnType<RequestReturnType> {
-  const [isError, setError] = useState<boolean>(false);
+  const [hasError, setHasError] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<RequestReturnType | null>(null);
 
@@ -46,7 +45,7 @@ export function useQuery<RequestReturnType = any>({
         if (changeState) {
           setLoading(true);
         }
-        const result = await api.get<any, AxiosResponse<RequestReturnType>>(
+        const result = await api.get<unknown, AxiosResponse<RequestReturnType>>(
           pathParam,
           {
             params: {
@@ -65,7 +64,7 @@ export function useQuery<RequestReturnType = any>({
 
         return result.data;
       } catch (error) {
-        setError(true);
+        setHasError(true);
         setLoading(false);
         if (error instanceof Error && error.message === 'Network Error') {
           toast.error('Falha ao realizar operação, serviço indisponível', {
@@ -112,7 +111,7 @@ export function useQuery<RequestReturnType = any>({
   }
 
   return {
-    isError,
+    hasError,
     isLoading,
     data,
     refetch,

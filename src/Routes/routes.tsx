@@ -1,3 +1,4 @@
+import { IndividualPostPage } from 'pages/IndividualPostPage/IndividualPostPage';
 import { UserRegisterPage } from 'pages/UserRegisterPage/UserRegisterPage';
 import React from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
@@ -20,6 +21,10 @@ const Routes: React.FC = () => {
             </Route>
             <Route path={PublicRoutes.LOGIN} component={LoginPage} />
             <Route path={PublicRoutes.REGISTER} component={UserRegisterPage} />
+            <ProtectedRoute
+              path={`${AuthRoutes.POST}/:postId`}
+              component={IndividualPostPage}
+            />
             <ProtectedRoute path={AuthRoutes.POSTS} component={PostsPage} />
             <ProtectedRoute
               path={`${PublicRoutes.PROFILE}/:id`}

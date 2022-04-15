@@ -1,7 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { insertPosts, removePosts } from 'store/actions/PostsActions';
-import { RootState } from 'store/reducers';
 import { RefetchType } from '../../../hooks/useQuery';
 import { Post } from '../../../interfaces/Posts';
 import { SocialPostsApiRoutes } from '../../../Services/ApiRoutes';
@@ -12,7 +9,7 @@ interface ProfilePostsProps {
   posts: Post[];
   totalPosts: number;
   userId: string;
-  refetch: RefetchType;
+  refetch: RefetchType<{ total: number; posts: Post[] }>;
 }
 
 export function ProfilePosts({
@@ -21,11 +18,8 @@ export function ProfilePosts({
   refetch,
   userId,
 }: ProfilePostsProps): JSX.Element {
+  const [postsState, setPosts] = useState<Post[]>([]);
   const [skip, setSkip] = useState<number>(posts?.length);
-  const dispatch = useDispatch();
-  const reduxPosts: Post[] = useSelector(
-    (state: RootState) => state.posts.posts
-  );
 
   const postListsRef = useRef<HTMLDivElement>(null);
 
@@ -46,17 +40,17 @@ export function ProfilePosts({
       if (result) {
         const updateSkipNumber = skip + 30;
         setSkip(updateSkipNumber);
-        dispatch(insertPosts([...posts, ...result.posts]));
+        setPosts([...postsState, ...result.posts]);
       }
     }
-  }, [skip, totalPosts, refetch, posts, userId, dispatch]);
+  }, [skip, totalPosts, refetch, userId, setPosts, postsState]);
 
   const loadPosts = useCallback(() => {
     if (posts && posts.length > 0) {
-      dispatch(removePosts());
-      dispatch(insertPosts(posts));
+      setPosts([]);
+      setPosts(posts);
     }
-  }, [dispatch, posts]);
+  }, [setPosts, posts]);
   useEffect(() => {
     loadPosts();
   }, [loadPosts]);
@@ -67,7 +61,7 @@ export function ProfilePosts({
 
   return (
     <Container ref={postListsRef}>
-      {reduxPosts?.map((post) => (
+      {postsState?.map((post) => (
         <PostCard post={post} key={post.id} />
       ))}
     </Container>

@@ -9,7 +9,7 @@ enum States {
 
 interface LoadingOrErrorProps {
   error: {
-    isError: boolean;
+    hasError: boolean;
     component: JSX.Element;
   };
   loading: {
@@ -27,17 +27,17 @@ export function LoadingOrError({
   const [state, setState] = useState<States>(States.LOADING);
 
   useEffect(() => {
-    const isloading = loading.isLoading && !error.isError;
-    const iserror = !loading.isLoading && error.isError;
+    const isloading = loading.isLoading && !error.hasError;
+    const hasErrorLocal = !loading.isLoading && error.hasError;
 
     if (isloading) {
       setState(States.LOADING);
-    } else if (iserror) {
+    } else if (hasErrorLocal) {
       setState(States.ERROR);
     } else {
       setState(States.DEFAULT);
     }
-  }, [error, loading]);
+  }, [error.hasError, loading.isLoading]);
   return (
     <>
       {

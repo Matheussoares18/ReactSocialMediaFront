@@ -22,10 +22,12 @@ import { UserPicture } from 'components/DefaultComponents/UserPicture/UserPictur
 import { config } from 'config';
 import { useUserInfos } from 'hooks/useUserInfos';
 import { useHistory } from 'react-router-dom';
-import { PublicRoutes } from 'Routes/RoutesEnum';
+import { AuthRoutes, PublicRoutes } from 'Routes/RoutesEnum';
 import { RequestHttpType, useMutation } from 'hooks/useMutation';
 import { SocialPostsApiRoutes } from 'Services/ApiRoutes';
 import Username from 'components/DefaultComponents/Username/Username';
+import { toast } from 'react-toastify';
+import { CONSTANTS } from 'utils/constants';
 import { CommentsList, Container } from './styles';
 
 interface CreatePostLikeRequest {
@@ -57,6 +59,7 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
   const [selectedImage, setSelectedImage] = useState(0);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [liked, setLiked] = useState('');
+  const [copied, setCopied] = useState<boolean>(false);
   const [likesModalIsOpen, setLikesModalState] = useState(false);
   const [allCommentsModalOpen, setAllCommentsModalOpen] =
     useState<boolean>(false);
@@ -173,14 +176,45 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
     }
     return undefined;
   };
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(
+        // eslint-disable-next-line no-restricted-globals
+        `${location.origin}${AuthRoutes.POST}/${post.id}`
+      );
+      setCopied(true);
+      toast.success('Link copiado para a Área de transferência!', {
+        position: 'top-right',
+        autoClose: CONSTANTS.alertDefaultTime,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      setTimeout(() => {
+        setCopied(false);
+      }, 1000);
+    } catch (error) {
+      toast.error('Falha ao copiar o link', {
+        position: 'top-right',
+        autoClose: CONSTANTS.alertDefaultTime,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  };
 
   useEffect(() => {
-    if (
+    const selectedFileIsAVideo =
       orderImagesArray[selectedImage].image.substring(
         orderImagesArray[selectedImage].image.lastIndexOf('.'),
         orderImagesArray[selectedImage].image.length
-      ) === '.mp4'
-    ) {
+      ) === '.mp4';
+    if (selectedFileIsAVideo) {
       videoRef.current?.load();
     }
   }, [selectedImage, orderImagesArray]);
@@ -246,7 +280,10 @@ export function PostCard({ post }: PostCardProps): JSX.Element {
             {verifyLikes()}
           </button>
           <div className='actions'>
-            <Share className='icon' />
+            <Share
+              className={`icon ${copied ? 'copied-animation' : ''}`}
+              onClick={copyToClipboard}
+            />
             <Send className='icon' style={{ marginRight: '-10px' }} />
 
             <FavoriteFilled

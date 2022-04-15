@@ -16,7 +16,7 @@ interface ProfileParams {
 
 export function Profile(): JSX.Element {
   const pageParams = useParams<ProfileParams>();
-  const { data, isError, isLoading, refetch } = useQuery<{
+  const { data, hasError, isLoading, refetch } = useQuery<{
     id: string;
     name: string;
     biography?: string;
@@ -29,7 +29,7 @@ export function Profile(): JSX.Element {
   });
   const {
     data: postsResult,
-    isError: isErrorPosts,
+    hasError: isErrorPosts,
     isLoading: isLoadingPosts,
     refetch: refetchPosts,
   } = useQuery<{
@@ -46,7 +46,7 @@ export function Profile(): JSX.Element {
       <LoadingOrError
         error={{
           component: <GenericPostsError />,
-          isError: isError || isErrorPosts,
+          hasError: hasError || isErrorPosts,
         }}
         loading={{
           component: <Spinner />,

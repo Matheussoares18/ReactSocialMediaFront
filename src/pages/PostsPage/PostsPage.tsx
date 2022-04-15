@@ -19,7 +19,7 @@ export function PostsPage(): JSX.Element {
   const [skip, setSkip] = useState<number>(0);
   const dispatch = useDispatch();
   const [totalPosts, setTotalPosts] = useState<number>(0);
-  const { isLoading, isError, refetch } = useQuery<{
+  const { isLoading, hasError, refetch } = useQuery<{
     total: number;
     posts: Post[];
   }>({
@@ -45,12 +45,12 @@ export function PostsPage(): JSX.Element {
         `${SocialPostsApiRoutes.POSTS}?skip=${skip}`
       );
 
-      if (result && !isError) {
+      if (result && !hasError) {
         const updateSkipNumber = skip + CONSTANTS.postsAmountPerRequest;
         setSkip(updateSkipNumber);
       }
     }
-  }, [skip, totalPosts, isError, refetch, isLoading]);
+  }, [skip, totalPosts, hasError, refetch, isLoading]);
 
   useEffect(() => {
     window.onscroll = getDivHeight;
@@ -63,7 +63,7 @@ export function PostsPage(): JSX.Element {
       <PostsList ref={postListsRef}>
         <LoadingOrError
           error={{
-            isError,
+            hasError,
             component: <GenericPostsError />,
           }}
           loading={{

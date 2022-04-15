@@ -20,6 +20,7 @@ export enum AuthApiRoutes {
 
 export enum SocialPostsApiRoutes {
   POSTS = '/social-posts/posts',
+  GET_POST = '/social-posts/posts/get-post',
   GET_ALL_POSTS_BY_USER = '/social-posts/posts/posts-by-user',
   CREATE_POST_LIKE = '/social-posts/post-likes',
   DELETE_POST_LIKE = '/social-posts/post-likes',

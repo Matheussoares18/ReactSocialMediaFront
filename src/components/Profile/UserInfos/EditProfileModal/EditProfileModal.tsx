@@ -135,6 +135,8 @@ export function EditProfileModal({
     if (fileToUpload) {
       const file = fileToUpload;
 
+      // isValidFile(fileToUpload, ['.png', '.jpg', '.jpeg'], 0.5);
+
       image = await getBase64(file);
     }
 
