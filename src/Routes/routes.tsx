@@ -1,4 +1,5 @@
 import { IndividualPostPage } from 'pages/IndividualPostPage/IndividualPostPage';
+import { MessagesPage } from 'pages/MessagesPage/MessagesPage';
 import { UserRegisterPage } from 'pages/UserRegisterPage/UserRegisterPage';
 import React from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
@@ -29,6 +30,10 @@ const Routes: React.FC = () => {
             <ProtectedRoute
               path={`${PublicRoutes.PROFILE}/:id`}
               component={ProfilePage}
+            />
+            <ProtectedRoute
+              path={AuthRoutes.MESSAGES}
+              component={MessagesPage}
             />
           </>
         </ApiErrorsListener>
