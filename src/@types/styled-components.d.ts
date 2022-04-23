@@ -5,10 +5,12 @@ type CustomTheme = {
   lines: string;
   primaryText: string;
   labelText: string;
+  iconsColor: string;
   inputBackground: string;
   inputTextColor: string;
   commentBox: string;
   menuHoverColor: string;
+  buttonsBackground: string;
 };
 
 declare module 'styled-components' {

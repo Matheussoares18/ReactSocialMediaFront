@@ -8,6 +8,8 @@ type CustomTheme = {
   inputTextColor: string;
   commentBox: string;
   menuHoverColor: string;
+  iconsColor: string;
+  buttonsBackground: string;
 };
 
 export const lightTheme: CustomTheme = {
@@ -20,10 +22,11 @@ export const lightTheme: CustomTheme = {
   inputTextColor: '#000000',
   commentBox: '#eaeaea',
   menuHoverColor: '#f7f7f7',
+  iconsColor: '#8e9090',
+  buttonsBackground: '#0caacd',
 };
 export const darkTheme: CustomTheme = {
   body: '#363537',
-
   lines: '#717171',
   primaryText: '#FAFAFA',
   labelText: '#7a7a7a',
@@ -31,4 +34,6 @@ export const darkTheme: CustomTheme = {
   inputTextColor: '#ffffff',
   commentBox: '#414141',
   menuHoverColor: '#545454',
+  iconsColor: '#8e9090',
+  buttonsBackground: '#0caacd',
 };
