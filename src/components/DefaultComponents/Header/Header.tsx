@@ -116,7 +116,7 @@ export function Header(): JSX.Element {
             <Link className='commom-icons' to='/notifications'>
               <NotificationIcon className='icon' />
             </Link>
-            <Link className='commom-icons' to='/'>
+            <Link className='commom-icons' to='/messages'>
               <Messages className='icon' />
             </Link>
 
